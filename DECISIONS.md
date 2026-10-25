@@ -16,3 +16,12 @@
 - `!tc start` and `!tc skip` require Twitch broadcaster or moderator badges. `!tc score` and `!g` are available to all viewers. A moderator from either channel controls the shared round.
 - Chat sends use one serial queue across both channels, with a one-second default gap and Twitch `Retry-After` handling for HTTP 429.
 - Twitch integration is interface-driven and unit-tested with fake EventSub sockets, fake Helix, and fake HTTP token/chat responses. Real credentials are required for live Twitch operation and were not available for this slice.
+
+## Slice 3a and 3b decisions
+
+- Blind audits use the configured OpenAI-compatible endpoint and make three sequential requests per puzzle so half A, half B, and the pair are independent. A pass requires the referee to reject each solo best answer and accept the combined best answer. The audit stores clue-content fingerprints so edited clue pairs cannot reuse stale results.
+- `AUDIT_MODEL` can override `LLM_MODEL`; the audit script falls back to `LLM_MODEL` only when the audit model returns 404. Audit output is committed under `src/puzzle/audit-report.json`, while resumable checkpoints stay in ignored `data/`.
+- The configured Groq endpoint's available Qwen model was used at low concurrency after its free tier rate limited larger models. Its current blind audit passed 20 of 60 puzzles (33.3%). This is a measured failure, not a release-ready pack; the report lists every failing clue and reason in `docs/PUZZLE_AUDIT.md`.
+- Overlays receive a side-specific state: only the active community's half is sent, while guess activity is sent as anonymous per-side counts. Full clues, answer, names of first solvers, and that side's also-fits list appear only at reveal. CSS transitions and the countdown run in the browser.
+- The panel talks to the same in-memory controller as Twitch and the overlay. Settings constrain round length to 30–600 seconds and category/difficulty choices to the built-in pack. The local demo uses a fresh non-persistent session and scripted fake guesses, and labels the pages DEMO.
+- The HTTP control panel is intended for local streamer use and currently has no login or CSRF protection; it should be bound behind a trusted local setup before public exposure.

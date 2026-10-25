@@ -3,31 +3,35 @@ import Fastify from 'fastify';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { Session } from './game/session.js';
-import { Round } from './game/round.js';
 import { puzzlePack } from './puzzle/pack.js';
 import { parseCommand } from './app/commands.js';
-import { registerAuthRoutes, type AuthRole } from './twitch/auth.js';
+import { GameController } from './app/controller.js';
+import { registerWebRoutes } from './app/web.js';
+import { registerAuthRoutes } from './twitch/auth.js';
 import { EventSubClient } from './twitch/eventsub.js';
 import { TwitchChat } from './twitch/chat.js';
 import { TwitchHelix } from './twitch/helix.js';
 
 const EnvSchema=z.object({TWITCH_CLIENT_ID:z.string().min(1),TWITCH_CLIENT_SECRET:z.string().min(1),PUBLIC_URL:z.string().url(),CHANNEL_A:z.string().min(1),CHANNEL_B:z.string().min(1),PORT:z.string().optional()});
-export async function buildServer(env:NodeJS.ProcessEnv=process.env){
-  const config=EnvSchema.parse(env);const app=Fastify();
-  const auth=registerAuthRoutes(app,{clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,publicUrl:config.PUBLIC_URL,onAuthorized:()=>startEventSub()});
-  const realHelix=new TwitchHelix({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,tokens:auth.store});
-  const session=await Session.load().catch(()=>new Session());let active:Round|undefined=[...session.rounds].reverse().find(round=>round.status==='active');let puzzleIndex=session.rounds.length;let eventsub:EventSubClient|undefined;
-  async function startEventSub():Promise<void>{if(eventsub||!auth.store.get('bot')||!auth.store.get('a')||!auth.store.get('b'))return;const [a,b,bot]=await Promise.all([realHelix.userId(config.CHANNEL_A,'a'),realHelix.userId(config.CHANNEL_B,'b'),realHelix.userId(undefined,'bot')]);
-    const wiredChat=new TwitchChat({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,tokens:auth.store,channelA:a,channelB:b,botUserId:bot});
-    eventsub=new EventSubClient({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,channelA:a,channelB:b,botUserId:bot,tokens:auth.store,helix:realHelix,onChat:(message)=>{const cmd=parseCommand({channel:message.channel==='a'?'A':'B',user:message.user,text:message.text,badges:message.badges},{A:a,B:b});const send=(ch:'a'|'b',text:string)=>{void wiredChat.send(ch,text).catch(()=>undefined);};
-      if(cmd.type==='start'){if(active?.status==='active'){send(message.channel,'A round is already running.');return;}active=new Round(puzzlePack[puzzleIndex++%puzzlePack.length]!);active.start();session.addRound(active);void session.save();send(message.channel,'A new Twinclue round has started.');}
-      else if(cmd.type==='skip'){active?.timeout();if(active)session.recordResult(active);active=undefined;void session.save();send(message.channel,'Round skipped.');}
-      else if(cmd.type==='score'){const score=session.scoreboard;send(message.channel,`Score: ${score.wins} wins and a ${score.streak} round streak.`);}
-      else if(cmd.type==='denied')send(message.channel,'Only a broadcaster or moderator can use that command.');
-      else if(cmd.type==='guess'){const result=active?.guess(cmd.channel,cmd.user,cmd.text);if(result==='accepted'){if(active?.status==='won'){session.recordResult(active);send('a',`${active.firstSolver.A} and ${active.firstSolver.B} solved it together!`);send('b',`${active.firstSolver.A} and ${active.firstSolver.B} solved it together!`);}else send(message.channel,'Correct. The other community still needs to solve it.');void session.save();}else if(result==='unclear')send(message.channel,'That is close. Try another spelling.');}
-    }});eventsub.connect();}
-  await auth.load();if(auth.store.get('bot')&&auth.store.get('a')&&auth.store.get('b'))await startEventSub();
-  app.get('/health',async()=>({ok:true}));app.addHook('onClose',async()=>eventsub?.stop());
-  return {app,session,auth,listen:()=>app.listen({host:'0.0.0.0',port:Number(config.PORT??3000)})};
+async function createServer(demo:boolean,env:NodeJS.ProcessEnv){
+  const config=demo?undefined:EnvSchema.parse(env);const app=Fastify();const session=demo?new Session():await Session.load().catch(()=>new Session());const controller=new GameController(session,puzzlePack,demo,Date.now,!demo);let eventsub:EventSubClient|undefined;
+  if(config){
+    let startEventSub:()=>Promise<void>=async()=>{};
+    const auth=registerAuthRoutes(app,{clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,publicUrl:config.PUBLIC_URL,onAuthorized:()=>startEventSub()});
+    const helix=new TwitchHelix({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,tokens:auth.store});
+    startEventSub=async()=>{if(eventsub||!auth.store.get('bot')||!auth.store.get('a')||!auth.store.get('b'))return;const [a,b,bot]=await Promise.all([helix.userId(config.CHANNEL_A,'a'),helix.userId(config.CHANNEL_B,'b'),helix.userId(undefined,'bot')]);const chat=new TwitchChat({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,tokens:auth.store,channelA:a,channelB:b,botUserId:bot});
+      eventsub=new EventSubClient({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,channelA:a,channelB:b,botUserId:bot,tokens:auth.store,helix,onConnection:connected=>{controller.setChannelStatus('a',connected);controller.setChannelStatus('b',connected);},onChat:message=>{const side=message.channel==='a'?'A':'B';const command=parseCommand({channel:side,user:message.user,text:message.text,badges:message.badges},{A:a,B:b});const send=(channel:'a'|'b',text:string)=>{void chat.send(channel,text).catch(()=>undefined);};
+        if(command.type==='start'){try{controller.startRound();send(message.channel,'A new Twinclue round has started.');}catch{send(message.channel,'A round is already running.');}}
+        else if(command.type==='skip'){controller.skipRound();send(message.channel,'Round skipped.');}
+        else if(command.type==='score'){const score=session.scoreboard;send(message.channel,`Score: ${score.wins} wins and a ${score.streak} round streak.`);}
+        else if(command.type==='denied')send(message.channel,'Only a broadcaster or moderator can use that command.');
+        else if(command.type==='guess'){const result=controller.guess(command.channel,command.user,command.text);if(result==='accepted'){if(controller.activeRound?.status==='won'){const solvers=controller.activeRound.firstSolver;send('a',`${solvers.A} and ${solvers.B} solved it together!`);send('b',`${solvers.A} and ${solvers.B} solved it together!`);}else send(message.channel,'Correct. The other community still needs to solve it.');}else if(result==='unclear')send(message.channel,'That is close. Try another spelling.');}
+      }});eventsub.connect();};
+    await auth.load();if(auth.store.get('bot')&&auth.store.get('a')&&auth.store.get('b'))await startEventSub();
+  }
+  registerWebRoutes(app,controller);app.get('/health',async()=>({ok:true}));app.addHook('onClose',async()=>{eventsub?.stop();controller.close();});
+  return {app,session,controller,listen:()=>app.listen({host:'0.0.0.0',port:Number(config?.PORT??env.PORT??3000)})};
 }
+export function buildServer(env:NodeJS.ProcessEnv=process.env){return createServer(false,env);}
+export function buildDemoServer(env:NodeJS.ProcessEnv=process.env){return createServer(true,env);}
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){const server=await buildServer();await server.listen();}

@@ -1,0 +1,13 @@
+import 'dotenv/config';
+import { buildDemoServer } from './server.js';
+const server=await buildDemoServer();
+const address=await server.listen();
+console.log(`Twinclue DEMO is running at ${address}`);
+console.log(`Overlay A: ${address}/overlay/a`);
+console.log(`Overlay B: ${address}/overlay/b`);
+console.log(`Control panel: ${address}/panel`);
+server.controller.setSettings({category:'games',difficulty:'easy',roundLengthSeconds:120});
+const round=server.controller.startRound();
+setTimeout(()=>{server.controller.guess('A','DemoViewerA','not the answer');},700);
+setTimeout(()=>{server.controller.guess('B','DemoViewerB',round.puzzle.answer);},2200);
+setTimeout(()=>{server.controller.guess('A','DemoViewerA',round.puzzle.answer);},3900);
