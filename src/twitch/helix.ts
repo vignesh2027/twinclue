@@ -1,0 +1,7 @@
+import type { AuthRole, TokenStore } from './auth.js';
+import type { HelixApi } from './eventsub.js';
+export class TwitchHelix implements HelixApi {
+  constructor(private readonly config:{clientId:string;clientSecret:string;tokens:TokenStore;fetcher?:typeof fetch}){}
+  async request(path:string,body:unknown,role:AuthRole):Promise<unknown>{const token=await this.config.tokens.valid(role,this.config.clientId,this.config.clientSecret);const response=await (this.config.fetcher??fetch)(`https://api.twitch.tv/helix${path}`,{method:'POST',headers:{'client-id':this.config.clientId,authorization:`Bearer ${token.access_token}`,'content-type':'application/json'},body:JSON.stringify(body)});if(!response.ok)throw new Error(`Twitch Helix request failed (${response.status}).`);return response.status===204?undefined:response.json();}
+  async userId(login:string|undefined,role:AuthRole):Promise<string>{const token=await this.config.tokens.valid(role,this.config.clientId,this.config.clientSecret);const query=login?`?login=${encodeURIComponent(login)}`:'';const response=await (this.config.fetcher??fetch)(`https://api.twitch.tv/helix/users${query}`,{headers:{'client-id':this.config.clientId,authorization:`Bearer ${token.access_token}`}});if(!response.ok)throw new Error(`Twitch user lookup failed (${response.status}).`);const result=await response.json() as {data?:Array<{id:string}>};const id=result.data?.[0]?.id;if(!id)throw new Error(`Twitch user ${login??'for this token'} was not found.`);return id;}
+}

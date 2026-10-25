@@ -1,0 +1,9 @@
+import type { AuthRole, TokenStore } from './auth.js';
+
+export interface ChatConfig {clientId:string;clientSecret:string;tokens:TokenStore;channelA:string;channelB:string;botUserId:string;fetcher?:typeof fetch;minimumIntervalMs?:number;sleep?:(ms:number)=>Promise<void>;}
+export class TwitchChat {
+  private queue: {channel:'a'|'b';text:string;resolve:()=>void;reject:(error:Error)=>void}[]=[];private draining=false;private readonly fetcher:typeof fetch;private readonly sleep:(ms:number)=>Promise<void>;
+  constructor(private readonly config:ChatConfig){this.fetcher=config.fetcher??fetch;this.sleep=config.sleep??((ms)=>new Promise(resolve=>setTimeout(resolve,ms)));}
+  send(channel:'a'|'b',text:string):Promise<void>{return new Promise((resolve,reject)=>{this.queue.push({channel,text,resolve,reject});void this.drain();});}
+  private async drain():Promise<void>{if(this.draining)return;this.draining=true;try{while(this.queue.length){const item=this.queue.shift()!;try{const token=await this.config.tokens.valid('bot',this.config.clientId,this.config.clientSecret);const broadcaster_id=item.channel==='a'?this.config.channelA:this.config.channelB;const response=await this.fetcher('https://api.twitch.tv/helix/chat/messages',{method:'POST',headers:{'client-id':this.config.clientId,authorization:`Bearer ${token.access_token}`,'content-type':'application/json'},body:JSON.stringify({broadcaster_id,sender_id:this.config.botUserId,message:item.text})});if(response.status===429){this.queue.unshift(item);await this.sleep(Number(response.headers.get('retry-after')??1)*1000);continue;}if(!response.ok)throw new Error(`Twitch chat send failed (${response.status}).`);item.resolve();if(this.queue.length)await this.sleep(this.config.minimumIntervalMs??1000);}catch(error){item.reject(error instanceof Error?error:new Error(String(error)));}}}finally{this.draining=false;if(this.queue.length)void this.drain();}}
+}
