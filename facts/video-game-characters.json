@@ -10,21 +10,23 @@
     {
       "name": "Mario",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "franchise": "Super Mario"
       }
     },
     {
       "name": "Luigi",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "franchise": "Super Mario"
       }
     },
     {
@@ -50,7 +52,7 @@
     {
       "name": "Kirby",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
@@ -60,7 +62,7 @@
     {
       "name": "Pikachu",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
@@ -70,13 +72,14 @@
     {
       "name": "Link",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "human",
+        "speciesOrType": "Hylian",
         "wieldsSword": true,
-        "silentProtagonist": true
+        "silentProtagonist": true,
+        "franchise": "The Legend of Zelda"
       }
     },
     {
@@ -86,7 +89,8 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "franchise": "The Legend of Zelda"
       }
     },
     {
@@ -102,12 +106,13 @@
     {
       "name": "Samus",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
         "speciesOrType": "human",
-        "silentProtagonist": true
+        "silentProtagonist": true,
+        "franchise": "Metroid"
       }
     },
     {
@@ -143,12 +148,13 @@
     {
       "name": "Ganondorf",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
         "speciesOrType": "human",
-        "wieldsSword": true
+        "wieldsSword": true,
+        "franchise": "The Legend of Zelda"
       }
     },
     {
@@ -158,7 +164,8 @@
       "attributes": {
         "publisher": "Sony",
         "debutDecade": "2000s",
-        "speciesOrType": "human"
+        "speciesOrType": "demigod",
+        "franchise": "God of War"
       }
     },
     {
@@ -193,7 +200,7 @@
     {
       "name": "Mega Man",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Capcom",
         "debutDecade": "1980s"
@@ -202,27 +209,29 @@
     {
       "name": "Ryu",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Capcom",
         "debutDecade": "1980s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "franchise": "Street Fighter"
       }
     },
     {
       "name": "Chun-Li",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Capcom",
         "debutDecade": "1990s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "franchise": "Street Fighter"
       }
     },
     {
       "name": "Cloud Strife",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Square Enix",
         "debutDecade": "1990s",
@@ -244,7 +253,7 @@
     {
       "name": "Nathan Drake",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Sony",
         "speciesOrType": "human"
@@ -253,7 +262,7 @@
     {
       "name": "Ellie",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Sony",
         "speciesOrType": "human"
@@ -262,7 +271,7 @@
     {
       "name": "Joel",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Sony",
         "speciesOrType": "human"
@@ -275,7 +284,8 @@
       "attributes": {
         "publisher": "Sony",
         "debutDecade": "2010s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "franchise": "Horizon"
       }
     },
     {
@@ -363,7 +373,7 @@
     {
       "name": "Tracer",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "debutDecade": "2010s",
         "speciesOrType": "human"
@@ -424,8 +434,7 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "2000s",
-        "speciesOrType": "human"
+        "debutDecade": "2000s"
       }
     },
     {
@@ -470,7 +479,7 @@
     {
       "name": "Jin Sakai",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "debutDecade": "2020s",
         "speciesOrType": "human",
@@ -481,7 +490,7 @@
     {
       "name": "Leon Kennedy",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Capcom",
         "speciesOrType": "human"
@@ -490,7 +499,7 @@
     {
       "name": "Jill Valentine",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "publisher": "Capcom",
         "speciesOrType": "human"

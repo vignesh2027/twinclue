@@ -9,6 +9,7 @@ export function validatePuzzle(puzzle: Puzzle): string[] {
   const halves = [puzzle.halfA, puzzle.halfB];
   if (halves.some((half) => !half.trim())) reasons.push('Both halves must be non-empty.');
   if (halves.some((half) => half.length >= 160)) reasons.push('Each half must be under 160 characters.');
+  if (halves.some((half) => half.trim().split(/\s+/).length > 14)) reasons.push('Each half must use at most 14 words.');
   if (puzzle.answer.trim().split(/\s+/).length > 4) reasons.push('The answer must be at most four words.');
   const terms = [puzzle.answer, ...puzzle.aliases].map(normalisePuzzleText).filter(Boolean);
   for (const [label, alternatives] of [['Half A', puzzle.halfAAlsoFits], ['Half B', puzzle.halfBAlsoFits]] as const) {

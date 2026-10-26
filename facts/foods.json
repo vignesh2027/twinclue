@@ -10,7 +10,7 @@
     {
       "name": "pizza",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "wheat",
@@ -20,7 +20,7 @@
     {
       "name": "sushi",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "originCountry": "Japan",
         "mainIngredient": "rice",
@@ -40,7 +40,7 @@
       "aliases": [
         "biriyani"
       ],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "originCountry": "India",
         "mainIngredient": "rice",
@@ -91,7 +91,7 @@
     {
       "name": "ramen",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "originCountry": "Japan",
         "mainIngredient": "rice",
@@ -156,7 +156,7 @@
     {
       "name": "risotto",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "rice",
@@ -166,7 +166,7 @@
     {
       "name": "pasta",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "wheat",
@@ -176,7 +176,7 @@
     {
       "name": "lasagna",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "wheat",

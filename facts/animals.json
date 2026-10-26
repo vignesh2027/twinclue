@@ -10,10 +10,9 @@
     {
       "name": "lion",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -21,10 +20,9 @@
     {
       "name": "tiger",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -35,7 +33,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": true
       }
@@ -46,7 +43,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -57,7 +53,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -65,10 +60,9 @@
     {
       "name": "panda",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -79,7 +73,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -90,7 +83,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -101,7 +93,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -112,7 +103,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -123,7 +113,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -134,7 +123,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -145,7 +133,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -156,7 +143,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -167,7 +153,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -178,7 +163,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -189,7 +173,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -200,7 +183,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -211,7 +193,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -222,7 +203,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -233,7 +213,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -244,7 +223,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -255,7 +233,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -266,7 +243,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "herbivore",
         "canFly": false,
         "swims": false
       }
@@ -277,7 +253,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -288,7 +263,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -296,10 +270,9 @@
     {
       "name": "duck",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": true
       }
@@ -310,7 +283,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": true
       }
@@ -321,7 +293,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": true
       }
@@ -329,10 +300,9 @@
     {
       "name": "eagle",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -343,7 +313,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -354,7 +323,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -362,10 +330,9 @@
     {
       "name": "penguin",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -376,7 +343,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -387,7 +353,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -398,7 +363,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "reptile",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -409,7 +373,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "reptile",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -420,7 +383,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "reptile",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -431,7 +393,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "reptile",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -442,7 +403,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -450,10 +410,9 @@
     {
       "name": "dolphin",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -461,10 +420,9 @@
     {
       "name": "whale",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -475,7 +433,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "fish",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -486,7 +443,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mollusc",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -494,10 +450,9 @@
     {
       "name": "seal",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -508,7 +463,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -519,7 +473,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -527,10 +480,9 @@
     {
       "name": "bat",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -538,10 +490,9 @@
     {
       "name": "butterfly",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "insect",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -549,10 +500,9 @@
     {
       "name": "bee",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "animalClass": "insect",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -563,7 +513,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "insect",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -574,7 +523,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "insect",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -585,7 +533,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "fish",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -596,7 +543,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "fish",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -607,7 +553,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -618,7 +563,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": true
       }
@@ -629,7 +573,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "diet": "omnivore",
         "canFly": true,
         "swims": false
       }
@@ -640,7 +583,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -651,7 +593,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }
@@ -662,7 +603,6 @@
       "fame": 2,
       "attributes": {
         "animalClass": "mammal",
-        "diet": "omnivore",
         "canFly": false,
         "swims": false
       }

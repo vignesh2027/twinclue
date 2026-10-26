@@ -53,5 +53,13 @@
 - The forge search is deterministic and uses only one or two typed attribute predicates per half. Each predicate set needs at least five entities, and at least two entities in each set must have fame at least equal to the answer.
 - Audit v2.1 uses provider-prefixed Gemini and Groq model names. Gemini calls use its OpenAI-compatible endpoint and a separate key. The gpt-oss solver uses low reasoning. Model and audit version are included in fingerprints.
 - Forge checkpoints now retain the selected candidate wording, completed puzzle results, and per-model token totals so a quota resume audits the same clues.
-- Candidate text is written to the active pack only after at least 40 puzzles have matching v2.1 passes. The old pack remains in docs/archive/slice-5. The current quota stop has no completed v2.1 audit results, so no forged puzzles were kept.
-- Demo mode uses a small clearly labeled sample pack only when no audited pack is available. It does not reintroduce the retired pack into the production game.
+- The old pack remains in docs/archive/slice-5. The production game reads only the forged audited pack, including when it contains fewer than 40 puzzles. It never falls back to unaudited clues. Demo mode appends a small unaudited sample pack and marks those rounds in the overlay.
+
+## Slice 5c decisions
+
+- Candidate selection is one puzzle per normalized answer, globally across source tables. The canonical unordered predicate pair prevents swapped mirrors from surviving.
+- The 80 puzzle target uses fixed category quotas: games 18, geography 14, animals 12, food 12, music 8, space 8, and sports 8. A quota shortfall is reported. The forge does not duplicate answers to fill it.
+- Clue text comes from category-specific predicate templates. Model polishing is disabled because a prior saved candidate changed Chun-Li's Capcom predicate into Sony wording. Each half must remain within 14 words, and series or franchise names cannot appear in game clues.
+- The fact checker stores one cached verdict per answer and attribute value in `facts/verdicts.json`. A false or unsure check removes the candidate. Table cleanup set Link to Hylian and Kratos to demigod, and removed Waluigi's disputed species value and the unreliable broad animal diet field.
+- Provider request pacing is configurable through `AUDIT_RPM_GEMINI`, `AUDIT_RPM_GROQ`, and `AUDIT_RPM_OPENAI`. Gemini retry metadata is respected. A solver failure does not stop the remaining solver panel; if none can finish, the checkpoint is retained and the forge exits.
+- The current tables produce 25 unique candidates. Provider quotas prevented a complete audit, so none are shipped yet. Gemini models used zero tokens; Groq used 1,843 tokens during partial attempts. The empty production pack remains safe, while demo mode labels sample rounds as unaudited.

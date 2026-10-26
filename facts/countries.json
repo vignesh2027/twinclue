@@ -80,7 +80,7 @@
     {
       "name": "Australia",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "Oceania",
         "landlocked": false,
@@ -227,7 +227,7 @@
     {
       "name": "Canada",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "North America",
         "landlocked": false,
@@ -259,7 +259,7 @@
     {
       "name": "China",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
@@ -307,7 +307,7 @@
     {
       "name": "Cuba",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "North America",
         "landlocked": false,
@@ -340,7 +340,7 @@
     {
       "name": "Denmark",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
@@ -410,7 +410,7 @@
     {
       "name": "France",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
@@ -592,7 +592,7 @@
     {
       "name": "Jamaica",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "North America",
         "landlocked": false,
@@ -602,7 +602,7 @@
     {
       "name": "Japan",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
@@ -694,7 +694,7 @@
     {
       "name": "Mexico",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "North America",
         "landlocked": false,
@@ -1027,7 +1027,7 @@
     {
       "name": "Türkiye",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
@@ -1080,7 +1080,7 @@
         "USA",
         "US"
       ],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "continent": "North America",
         "landlocked": false,

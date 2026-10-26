@@ -1,13 +1,13 @@
 {
   "auditVersion": 2.1,
-  "generatedAt": "2026-10-26T13:12:38.462Z",
+  "generatedAt": "2026-10-26T13:56:39.579Z",
   "solverModels": [
     "gemini:gemini-3.5-flash",
     "gemini:gemini-2.5-flash",
     "groq:openai/gpt-oss-20b"
   ],
   "factModel": "groq:openai/gpt-oss-20b",
-  "passRule": "A majority of solvers must reject each half alone; a majority must accept both halves; both facts must be verified true.",
+  "passRule": "A majority of available solvers must reject each half alone; a majority must accept both halves; both facts must be verified true.",
   "total": 0,
   "passed": 0,
   "passRate": null,
@@ -25,14 +25,9 @@
       "totalTokens": 0
     },
     "groq:openai/gpt-oss-20b": {
-      "promptTokens": 2285,
-      "completionTokens": 636,
-      "totalTokens": 2921
-    },
-    "openai/gpt-oss-120b": {
-      "promptTokens": 1159,
-      "completionTokens": 408,
-      "totalTokens": 1567
+      "promptTokens": 1485,
+      "completionTokens": 1408,
+      "totalTokens": 2893
     }
   },
   "results": [],

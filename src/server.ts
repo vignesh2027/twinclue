@@ -15,7 +15,7 @@ import { TwitchHelix } from './twitch/helix.js';
 
 const EnvSchema=z.object({TWITCH_CLIENT_ID:z.string().min(1),TWITCH_CLIENT_SECRET:z.string().min(1),PUBLIC_URL:z.string().url(),CHANNEL_A:z.string().min(1),CHANNEL_B:z.string().min(1),PORT:z.string().optional(),COMMAND_PREFIX:z.string().min(1).max(20).default('!g')});
 async function createServer(demo:boolean,env:NodeJS.ProcessEnv){
-  const config=demo?undefined:EnvSchema.parse(env);const app=Fastify();const session=demo?new Session():await Session.load().catch(()=>new Session());const controller=new GameController(session,demo&&!puzzlePack.length?demoPuzzlePack:puzzlePack,demo,Date.now,!demo);let eventsub:EventSubClient|undefined;
+  const config=demo?undefined:EnvSchema.parse(env);const app=Fastify();const session=demo?new Session():await Session.load().catch(()=>new Session());const controller=new GameController(session,demo?[...puzzlePack,...demoPuzzlePack]:puzzlePack,demo,Date.now,!demo);let eventsub:EventSubClient|undefined;
   if(config){
     let startEventSub:()=>Promise<void>=async()=>{};
     const auth=registerAuthRoutes(app,{clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,publicUrl:config.PUBLIC_URL,onAuthorized:()=>startEventSub()});
