@@ -25,3 +25,12 @@
 - Overlays receive a side-specific state: only the active community's half is sent, while guess activity is sent as anonymous per-side counts. Full clues, answer, names of first solvers, and that side's also-fits list appear only at reveal. CSS transitions and the countdown run in the browser.
 - The panel talks to the same in-memory controller as Twitch and the overlay. Settings constrain round length to 30–600 seconds and category/difficulty choices to the built-in pack. The local demo uses a fresh non-persistent session and scripted fake guesses, and labels the pages DEMO.
 - The HTTP control panel is intended for local streamer use and currently has no login or CSRF protection; it should be bound behind a trusted local setup before public exposure.
+
+## Slice 4 decisions
+
+- Pack repair retained only the 32 hand-written puzzles whose current clue fingerprints passed the blind audit. Failed IDs are replaced by model-generated candidates; the referee and audit prompt remain unchanged.
+- The generator asks `LLM_MODEL` for batches of up to four candidates, rejects structural violations and duplicate answers, then sends each valid candidate through the serial blind auditor. It persists candidate progress under ignored `data/` so an interrupted free-tier run can resume. Passing candidates are selected to balance categories and difficulty, with at least five India-friendly generated puzzles to bring the full pack to eight or more.
+- Generation also rejects an also-fits entry that the existing referee would accept as the intended answer, which catches near-typos such as a one-letter miss.
+- Overlays are compact lower thirds anchored to their community's outer edge. A completed round expands for a short celebration and reveal, then collapses. Teal and coral identify each community, and both colours meet on the shared-link animation.
+- The demo runs a cooperative round with a ten-second wait between the first and second community solves, then a timeout round, with a short idle beat between rounds. Its controller is in-memory and non-persistent.
+- The streamer panel embeds both live overlay pages as side-by-side previews and keeps start, skip, category, difficulty and duration controls in large hit targets.

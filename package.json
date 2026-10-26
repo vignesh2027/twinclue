@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {"dev":"tsx watch src/server.ts", "build":"tsc", "start":"node dist/server.js", "demo":"tsx src/demo.ts", "audit:pack":"tsx src/puzzle/audit-pack.ts", "test":"vitest run", "typecheck":"tsc --noEmit"},
+  "scripts": {"dev":"tsx watch src/server.ts", "build":"tsc", "start":"node dist/server.js", "demo":"tsx src/demo.ts", "audit:pack":"tsx src/puzzle/audit-pack.ts", "generate:pack":"tsx src/puzzle/generate-pack.ts", "test":"vitest run", "typecheck":"tsc --noEmit"},
   "dependencies": {"dotenv":"^16.4.7","fastify":"^5.2.1","ws":"^8.18.0","zod":"^3.24.2"},
   "devDependencies": {"@types/node":"^22.13.4","@types/ws":"^8.5.14","tsx":"^4.19.3","typescript":"^5.7.3","vitest":"^3.0.7"}
 }

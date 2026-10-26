@@ -13,6 +13,7 @@ export function registerWebRoutes(app:FastifyInstance,controller:GameController)
   app.get('/overlay/b',async(_request,reply)=>reply.type('text/html; charset=utf-8').send(await readFile(resolve('public/overlay.html'),'utf8')));
   app.get('/overlay.css',async(_request,reply)=>reply.type('text/css; charset=utf-8').send(await readFile(resolve('public/overlay.css'),'utf8')));
   app.get('/overlay.js',async(_request,reply)=>reply.type('application/javascript; charset=utf-8').send(await readFile(resolve('public/overlay.js'),'utf8')));
+  app.get('/logo.svg',async(_request,reply)=>reply.type('image/svg+xml; charset=utf-8').send(await readFile(resolve('public/logo.svg'),'utf8')));
   app.get('/panel',async(_request,reply)=>reply.type('text/html; charset=utf-8').send(await readFile(resolve('public/panel.html'),'utf8')));
   app.get('/panel.css',async(_request,reply)=>reply.type('text/css; charset=utf-8').send(await readFile(resolve('public/panel.css'),'utf8')));
   app.get('/panel.js',async(_request,reply)=>reply.type('application/javascript; charset=utf-8').send(await readFile(resolve('public/panel.js'),'utf8')));

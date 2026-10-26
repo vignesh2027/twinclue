@@ -7,3 +7,5 @@ export const PuzzleSchema = z.object({
   halfAAlsoFits: z.array(z.string()), halfBAlsoFits: z.array(z.string()),
 });
 export type Puzzle = z.infer<typeof PuzzleSchema>;
+export type PuzzleCategory=Puzzle['category'];
+export type PuzzleDifficulty=Puzzle['difficulty'];

@@ -10,7 +10,7 @@ const AnswerSchema=z.object({best_answer:z.string().min(1),alternatives:z.array(
 export interface BlindAnswer {best_answer:string;alternatives:[string,string];}
 export interface AuditPromptResult {best_answer:string;alternatives:[string,string];referee:'accepted'|'rejected'|'unclear';}
 export interface PuzzleAuditResult {id:string;fingerprint:string;answer:string;passed:boolean;halfA:AuditPromptResult;halfB:AuditPromptResult;both:AuditPromptResult;failures:string[];}
-export interface AuditReport {generatedAt:string;model:string;total:number;passed:number;passRate:number;results:PuzzleAuditResult[];}
+export interface AuditReport {generatedAt:string;model:string;total:number;passed:number;passRate:number;results:PuzzleAuditResult[];rounds?:Array<{round:number;puzzlesAudited:number;passed:number}>;}
 export interface PuzzleAuditor { audit(puzzle:Puzzle):Promise<PuzzleAuditResult>; }
 export function puzzleFingerprint(puzzle:Puzzle):string{return createHash('sha256').update(JSON.stringify([puzzle.id,puzzle.answer,puzzle.aliases,puzzle.halfA,puzzle.halfB])).digest('hex');}
 export class BlindPuzzleAuditor implements PuzzleAuditor {
