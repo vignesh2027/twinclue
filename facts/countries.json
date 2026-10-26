@@ -1,0 +1,1104 @@
+{
+  "_meta": {
+    "category": "countries",
+    "sources": [
+      "Curated from publicly documented general-reference facts; see facts/README.md"
+    ],
+    "license": "CC0 1.0 for this curated compilation"
+  },
+  "entities": [
+    {
+      "name": "Afghanistan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Albania",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Algeria",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Andorra",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Angola",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Argentina",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "South America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Armenia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Australia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Oceania",
+        "landlocked": false,
+        "drivingSide": "left",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "Austria",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": true,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "Azerbaijan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Bangladesh",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Belarus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Belgium",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Bhutan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Bolivia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "South America",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Botswana",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": true,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Brazil",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "South America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Bulgaria",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Cambodia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Cameroon",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Canada",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "North America",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "Chile",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "South America",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "China",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "Colombia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "South America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Costa Rica",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "North America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Croatia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Cuba",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "North America",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "Czechia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": true,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Denmark",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ],
+        "flagFeatures": [
+          "cross"
+        ]
+      }
+    },
+    {
+      "name": "Ecuador",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "South America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Egypt",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Ethiopia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Fiji",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Oceania",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Finland",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagFeatures": [
+          "cross"
+        ]
+      }
+    },
+    {
+      "name": "France",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Georgia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "Germany",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Ghana",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "Greece",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagFeatures": [
+          "cross"
+        ]
+      }
+    },
+    {
+      "name": "Hungary",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": true,
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Iceland",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "cross"
+        ]
+      }
+    },
+    {
+      "name": "India",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Indonesia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "Iran",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Iraq",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Ireland",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Israel",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Italy",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Jamaica",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "North America",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Japan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "Jordan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Kazakhstan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Kenya",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Laos",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Lebanon",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Malaysia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left",
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "Maldives",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Mexico",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "North America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Mongolia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Morocco",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Myanmar",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Nepal",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": true,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Netherlands",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "New Zealand",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Oceania",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Nigeria",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "North Korea",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Norway",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "cross"
+        ]
+      }
+    },
+    {
+      "name": "Pakistan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left",
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "Panama",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "North America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Peru",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "South America",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "Philippines",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Poland",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "Portugal",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Romania",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Russia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Saudi Arabia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Serbia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": true,
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Singapore",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left",
+        "flagColors": [
+          "red",
+          "white"
+        ]
+      }
+    },
+    {
+      "name": "South Africa",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Africa",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "South Korea",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Spain",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Sri Lanka",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "Sweden",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagFeatures": [
+          "cross"
+        ]
+      }
+    },
+    {
+      "name": "Switzerland",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": true,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ],
+        "flagFeatures": [
+          "cross"
+        ]
+      }
+    },
+    {
+      "name": "Thailand",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "left",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ]
+      }
+    },
+    {
+      "name": "Türkiye",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white"
+        ],
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    },
+    {
+      "name": "Ukraine",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "United Arab Emirates",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "United Kingdom",
+      "aliases": [
+        "UK",
+        "Britain"
+      ],
+      "fame": 2,
+      "attributes": {
+        "continent": "Europe",
+        "landlocked": false,
+        "drivingSide": "left"
+      }
+    },
+    {
+      "name": "United States",
+      "aliases": [
+        "USA",
+        "US"
+      ],
+      "fame": 2,
+      "attributes": {
+        "continent": "North America",
+        "landlocked": false,
+        "drivingSide": "right"
+      }
+    },
+    {
+      "name": "Vietnam",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "continent": "Asia",
+        "landlocked": false,
+        "drivingSide": "right",
+        "flagFeatures": [
+          "star"
+        ]
+      }
+    }
+  ]
+}

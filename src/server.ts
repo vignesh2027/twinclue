@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { Session } from './game/session.js';
 import { puzzlePack } from './puzzle/pack.js';
+import {demoPuzzlePack} from './puzzle/demo-pack.js';
 import { parseCommand } from './app/commands.js';
 import { GameController } from './app/controller.js';
 import { registerWebRoutes } from './app/web.js';
@@ -14,7 +15,7 @@ import { TwitchHelix } from './twitch/helix.js';
 
 const EnvSchema=z.object({TWITCH_CLIENT_ID:z.string().min(1),TWITCH_CLIENT_SECRET:z.string().min(1),PUBLIC_URL:z.string().url(),CHANNEL_A:z.string().min(1),CHANNEL_B:z.string().min(1),PORT:z.string().optional(),COMMAND_PREFIX:z.string().min(1).max(20).default('!g')});
 async function createServer(demo:boolean,env:NodeJS.ProcessEnv){
-  const config=demo?undefined:EnvSchema.parse(env);const app=Fastify();const session=demo?new Session():await Session.load().catch(()=>new Session());const controller=new GameController(session,puzzlePack,demo,Date.now,!demo);let eventsub:EventSubClient|undefined;
+  const config=demo?undefined:EnvSchema.parse(env);const app=Fastify();const session=demo?new Session():await Session.load().catch(()=>new Session());const controller=new GameController(session,demo&&!puzzlePack.length?demoPuzzlePack:puzzlePack,demo,Date.now,!demo);let eventsub:EventSubClient|undefined;
   if(config){
     let startEventSub:()=>Promise<void>=async()=>{};
     const auth=registerAuthRoutes(app,{clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,publicUrl:config.PUBLIC_URL,onAuthorized:()=>startEventSub()});
@@ -23,9 +24,10 @@ async function createServer(demo:boolean,env:NodeJS.ProcessEnv){
       eventsub=new EventSubClient({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,channelA:a,channelB:b,botUserId:bot,tokens:auth.store,helix,onConnection:connected=>{controller.setChannelStatus('a',connected);controller.setChannelStatus('b',connected);},onChat:message=>{const side=message.channel==='a'?'A':'B';const command=parseCommand({channel:side,user:message.user,text:message.text,badges:message.badges},{A:a,B:b},config.COMMAND_PREFIX);const send=(channel:'a'|'b',text:string)=>{void chat.send(channel,text).catch(()=>undefined);};
         if(command.type==='start'){try{controller.startRound();send(message.channel,'A new Twinclue round has started.');}catch{send(message.channel,'A round is already running.');}}
         else if(command.type==='skip'){controller.skipRound();send(message.channel,'Round skipped.');}
+        else if(command.type==='lock'){controller.lockRound();send(message.channel,'Votes locked.');}
         else if(command.type==='score'){const score=session.scoreboard;send(message.channel,`Score: ${score.wins} ${score.wins===1?'win':'wins'} and a ${score.streak} round streak.`);}
         else if(command.type==='denied')send(message.channel,'Only a broadcaster or moderator can use that command.');
-        else if(command.type==='guess'){const result=controller.guess(command.channel,command.user,command.text);if(result==='accepted'){if(controller.activeRound?.status==='won'){const solvers=controller.activeRound.firstSolver;send('a',`${solvers.A} and ${solvers.B} solved it together!`);send('b',`${solvers.A} and ${solvers.B} solved it together!`);}else send(message.channel,'Correct. The other community still needs to solve it.');}else if(result==='unclear')send(message.channel,'That is close. Try another spelling.');}
+        else if(command.type==='guess'){controller.vote(command.channel,command.user,command.text);}
       }});eventsub.connect();};
     await auth.load();if(auth.store.get('bot')&&auth.store.get('a')&&auth.store.get('b'))await startEventSub();
   }

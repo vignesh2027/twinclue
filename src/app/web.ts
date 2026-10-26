@@ -5,7 +5,7 @@ import { WebSocketServer,WebSocket } from 'ws';
 import { z } from 'zod';
 import { GameController,type OverlayView } from './controller.js';
 
-const SettingsSchema=z.object({category:z.enum(['general','games','music','science','sport','food','geography','movies']).optional(),difficulty:z.enum(['easy','medium','hard']).optional(),roundLengthSeconds:z.number().int().min(30).max(600).optional()});
+const SettingsSchema=z.object({category:z.enum(['general','games','music','science','sport','food','geography','movies','custom']).optional(),difficulty:z.enum(['easy','medium','hard']).optional(),roundLengthSeconds:z.number().int().min(30).max(600).optional()});
 export function registerWebRoutes(app:FastifyInstance,controller:GameController):WebSocketServer{
   const wss=new WebSocketServer({noServer:true});
   app.server.on('upgrade',(request,socket,head)=>{const url=new URL(request.url??'/',`http://${request.headers.host??'localhost'}`);const view=url.pathname.match(/^\/overlay\/ws\/(a|b|panel)$/)?.[1];if(!view){socket.destroy();return;}wss.handleUpgrade(request,socket,head,ws=>{const stop=controller.subscribe(view as OverlayView|'panel',message=>{if(ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify(message));});ws.on('close',stop);});});
@@ -20,6 +20,7 @@ export function registerWebRoutes(app:FastifyInstance,controller:GameController)
   app.get('/api/state',async()=>controller.panelState());
   app.post('/api/round/start',async(_request,reply)=>{try{controller.startRound();return controller.panelState();}catch(error){return reply.code(409).send({error:error instanceof Error?error.message:'Could not start round.'});}});
   app.post('/api/round/skip',async()=>{controller.skipRound();return controller.panelState();});
+  app.post('/api/round/lock',async(_request,reply)=>{if(controller.activeRound?.status!=='active')return reply.code(409).send({error:'No active round to lock.'});controller.lockRound();return controller.panelState();});
   app.post('/api/settings',async(request,reply)=>{const parsed=SettingsSchema.safeParse(request.body);if(!parsed.success)return reply.code(400).send({error:'Invalid settings.'});controller.setSettings(parsed.data);return controller.panelState();});
   app.addHook('onClose',async()=>wss.close());
   return wss;

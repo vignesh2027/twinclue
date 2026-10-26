@@ -1,0 +1,687 @@
+{
+  "_meta": {
+    "category": "video game characters",
+    "sources": [
+      "Curated from publicly documented general-reference facts; see facts/README.md"
+    ],
+    "license": "CC0 1.0 for this curated compilation"
+  },
+  "entities": [
+    {
+      "name": "Mario",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Luigi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Sonic",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sega",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Tails",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sega",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Kirby",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Pikachu",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Link",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "human",
+        "wieldsSword": true,
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Zelda",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Donkey Kong",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Samus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "human",
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Yoshi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Bowser",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Peach",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Ganondorf",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Kratos",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony",
+        "debutDecade": "2000s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Lara Croft",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "1990s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Master Chief",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Microsoft",
+        "debutDecade": "2000s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Pac-Man",
+      "aliases": [
+        "Pacman"
+      ],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "1980s"
+      }
+    },
+    {
+      "name": "Mega Man",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Capcom",
+        "debutDecade": "1980s"
+      }
+    },
+    {
+      "name": "Ryu",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Capcom",
+        "debutDecade": "1980s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Chun-Li",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Capcom",
+        "debutDecade": "1990s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Cloud Strife",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Square Enix",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Sephiroth",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Square Enix",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Nathan Drake",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Ellie",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Joel",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Aloy",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony",
+        "debutDecade": "2010s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Geralt",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "CD Projekt",
+        "speciesOrType": "human",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Solid Snake",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "1980s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Crash Bandicoot",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Activision",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Spyro",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Activision",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Ratchet",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony",
+        "debutDecade": "2000s"
+      }
+    },
+    {
+      "name": "Clank",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony",
+        "debutDecade": "2000s"
+      }
+    },
+    {
+      "name": "Steve",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Alex",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Creeper",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "speciesOrType": "creature",
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Tracer",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "2010s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Jinx",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "2010s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Ezio",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Ubisoft",
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Arthur Morgan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Rockstar",
+        "debutDecade": "2010s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Doom Slayer",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "speciesOrType": "human",
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Wario",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Waluigi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "2000s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Fox McCloud",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Isabelle",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Villager",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Sora",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Square Enix",
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Jin Sakai",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "2020s",
+        "speciesOrType": "human",
+        "wieldsSword": true,
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Leon Kennedy",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Capcom",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Jill Valentine",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Capcom",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Sackboy",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sony"
+      }
+    },
+    {
+      "name": "Scorpion",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Sub-Zero",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Toad",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s"
+      }
+    },
+    {
+      "name": "Birdo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s"
+      }
+    },
+    {
+      "name": "Tingle",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s"
+      }
+    },
+    {
+      "name": "Alexios",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "2010s",
+        "speciesOrType": "human",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Toadette",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "2000s"
+      }
+    },
+    {
+      "name": "Diddy Kong",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal"
+      }
+    },
+    {
+      "name": "Bowser Jr.",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "2000s"
+      }
+    },
+    {
+      "name": "Inkling",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "2010s"
+      }
+    },
+    {
+      "name": "Shulk",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "2010s",
+        "wieldsSword": true
+      }
+    },
+    {
+      "name": "Ness",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1980s",
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Olimar",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "2000s",
+        "silentProtagonist": true
+      }
+    },
+    {
+      "name": "Bayonetta",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "2000s",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Kiryu",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Yuna",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Square Enix",
+        "speciesOrType": "human"
+      }
+    },
+    {
+      "name": "Charizard",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "1990s"
+      }
+    },
+    {
+      "name": "Mewtwo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "1990s",
+        "speciesOrType": "creature"
+      }
+    },
+    {
+      "name": "Niko Bellic",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "2000s"
+      }
+    },
+    {
+      "name": "Porky Minch",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "debutDecade": "1990s"
+      }
+    }
+  ]
+}

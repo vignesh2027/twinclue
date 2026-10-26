@@ -1,30 +1,16 @@
 import 'dotenv/config';
-import { buildDemoServer } from './server.js';
-
+import {buildDemoServer} from './server.js';
 const pause=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
-const server=await buildDemoServer();
-const address=await server.listen();
-console.log(`Twinclue DEMO is running at ${address}`);
-console.log(`Overlay A: ${address}/overlay/a`);
-console.log(`Overlay B: ${address}/overlay/b`);
-console.log(`Control panel: ${address}/panel`);
-server.controller.setSettings({category:'general',difficulty:'medium',roundLengthSeconds:45});
-
+const server=await buildDemoServer();const address=await server.listen();console.log(`Twinclue DEMO is running at ${address}`);console.log(`Overlay A: ${address}/overlay/a`);console.log(`Overlay B: ${address}/overlay/b`);console.log(`Control panel: ${address}/panel`);
+server.controller.setSettings({category:'games',difficulty:'medium',roundLengthSeconds:40});
 while(true){
-  await pause(3000);
-  const cooperative=server.controller.startRound();
-  await pause(4000);server.controller.guess('A','DemoViewerA','maybe a map');
-  await pause(2000);server.controller.guess('B','DemoViewerB','maybe a clock');
-  await pause(5000);server.controller.guess('A','DemoViewerA','perhaps a sign');
-  await pause(19_000);server.controller.guess('A','DemoViewerA',cooperative.puzzle.answer);
-  await pause(3000);server.controller.guess('B','DemoViewerB','one more idea');
-  await pause(7000);server.controller.guess('B','DemoViewerB',cooperative.puzzle.answer);
-  await pause(8000);server.controller.clearRoundDisplay();await pause(3000);
-
-  server.controller.setSettings({category:'games',difficulty:'easy',roundLengthSeconds:40});
-  server.controller.startRound();
-  for(const [after,text] of [[5000,'a wrong guess'],[7000,'another try'],[8000,'one more guess'],[8000,'still thinking']] as const){
-    await pause(after);server.controller.guess('A','DemoTimeoutA',text);server.controller.guess('B','DemoTimeoutB',text);
-  }
-  await pause(12_000);server.controller.clearRoundDisplay();await pause(3000);
+ await pause(3000);const round=server.controller.startRound();const answer=round.puzzle.answer;
+ await pause(2500);server.controller.vote('A','DemoA1','maybe another game',Date.now());server.controller.vote('A','DemoA2','a game with a hero',Date.now());server.controller.vote('B','DemoB1','maybe a fantasy title',Date.now());
+ await pause(3500);server.controller.vote('A','DemoA3','another guess',Date.now());server.controller.vote('B','DemoB2','perhaps a console game',Date.now());
+ await pause(4500);server.controller.vote('A','DemoA1',answer,Date.now());server.controller.vote('A','DemoA2',answer,Date.now());
+ await pause(4500);server.controller.vote('B','DemoB1',answer,Date.now());server.controller.vote('B','DemoB2',answer,Date.now());
+ await pause(6000);if(round.status==='active')server.controller.lockRound();await pause(7000);server.controller.clearRoundDisplay();
+ await pause(3000);server.controller.setSettings({category:'food',difficulty:'medium',roundLengthSeconds:40});const timeout=server.controller.startRound();
+ for(const [delay,text] of [[4000,'maybe a snack'],[6000,'a dish with rice'],[7000,'could be a dessert'],[6000,'one more guess']] as const){await pause(delay);server.controller.vote('A',`DemoWrongA${delay}`,text,Date.now());server.controller.vote('B',`DemoWrongB${delay}`,text,Date.now());}
+ if(timeout.status==='active')await pause(12_000);server.controller.timeout();await pause(7000);server.controller.clearRoundDisplay();server.controller.setSettings({category:'games',difficulty:'medium',roundLengthSeconds:40});
 }

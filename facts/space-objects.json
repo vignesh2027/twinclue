@@ -1,0 +1,302 @@
+{
+  "_meta": {
+    "category": "space objects",
+    "sources": [
+      "Curated from publicly documented general-reference facts; see facts/README.md"
+    ],
+    "license": "CC0 1.0 for this curated compilation"
+  },
+  "entities": [
+    {
+      "name": "Mercury",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Venus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Earth",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Mars",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Jupiter",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": true
+      }
+    },
+    {
+      "name": "Saturn",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": true
+      }
+    },
+    {
+      "name": "Uranus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": true
+      }
+    },
+    {
+      "name": "Neptune",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "planet",
+        "solarSystem": "Solar",
+        "hasRings": true
+      }
+    },
+    {
+      "name": "Pluto",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "dwarf planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Ceres",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "dwarf planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Europa",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Ganymede",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Callisto",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Titan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Enceladus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Io",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Triton",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Phobos",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Deimos",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Moon",
+      "aliases": [
+        "The Moon"
+      ],
+      "fame": 2,
+      "attributes": {
+        "objectType": "moon",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Sun",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "star",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Halley’s Comet",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "comet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Orion Nebula",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "nebula",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Andromeda",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "galaxy",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Milky Way",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "galaxy",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Eris",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "dwarf planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Makemake",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "dwarf planet",
+        "solarSystem": "Solar",
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Haumea",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "dwarf planet",
+        "solarSystem": "Solar",
+        "hasRings": true
+      }
+    },
+    {
+      "name": "Chariklo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "objectType": "asteroid",
+        "solarSystem": "Solar",
+        "hasRings": true
+      }
+    }
+  ]
+}

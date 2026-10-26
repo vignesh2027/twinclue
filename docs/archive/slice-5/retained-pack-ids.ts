@@ -1,0 +1,1 @@
+export const retainedHandwrittenIds=['pack-02','pack-03','pack-04','pack-05','pack-06','pack-08','pack-09','pack-10','pack-11','pack-12','pack-13','pack-14','pack-15','pack-17','pack-23','pack-24','pack-26','pack-27','pack-28','pack-29','pack-30','pack-33','pack-37','pack-42','pack-44','pack-45','pack-46','pack-48','pack-54','pack-55','pack-56','pack-59'] as const;

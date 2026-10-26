@@ -12,8 +12,8 @@ export function validatePuzzle(puzzle: Puzzle): string[] {
   if (puzzle.answer.trim().split(/\s+/).length > 4) reasons.push('The answer must be at most four words.');
   const terms = [puzzle.answer, ...puzzle.aliases].map(normalisePuzzleText).filter(Boolean);
   for (const [label, alternatives] of [['Half A', puzzle.halfAAlsoFits], ['Half B', puzzle.halfBAlsoFits]] as const) {
-    if (alternatives.length < 2) reasons.push(`${label} must list at least two other answers it fits.`);
-    const normalized = alternatives.map(normalisePuzzleText);
+    if (!alternatives || alternatives.length < 2) reasons.push(`${label} must list at least two other answers it fits.`);
+    const normalized = (alternatives ?? []).map(normalisePuzzleText);
     if (normalized.some((entry) => !entry)) reasons.push(`${label} alternatives cannot be empty.`);
     if (new Set(normalized).size !== normalized.length) reasons.push(`${label} alternatives must be distinct.`);
     if (normalized.some((entry) => terms.some((term) => entry.includes(term)))) reasons.push(`${label} alternatives cannot include the answer or an alias.`);

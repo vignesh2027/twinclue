@@ -1,0 +1,671 @@
+{
+  "_meta": {
+    "category": "animals",
+    "sources": [
+      "Curated from publicly documented general-reference facts; see facts/README.md"
+    ],
+    "license": "CC0 1.0 for this curated compilation"
+  },
+  "entities": [
+    {
+      "name": "lion",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "tiger",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "elephant",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "giraffe",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "zebra",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "panda",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "koala",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "kangaroo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "wolf",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "fox",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "bear",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "polar bear",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "camel",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "horse",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "cow",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "dog",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "cat",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "rabbit",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "hare",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "deer",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "moose",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "bison",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "goat",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "sheep",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "herbivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "pig",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "chicken",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "duck",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": true
+      }
+    },
+    {
+      "name": "goose",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": true
+      }
+    },
+    {
+      "name": "swan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": true
+      }
+    },
+    {
+      "name": "eagle",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "owl",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "parrot",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "penguin",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "ostrich",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "flamingo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "crocodile",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "reptile",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "alligator",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "reptile",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "turtle",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "reptile",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "snake",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "reptile",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "frog",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "dolphin",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "whale",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "shark",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "fish",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "octopus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mollusc",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "seal",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "otter",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "beaver",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "bat",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "butterfly",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "insect",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "bee",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "insect",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "ant",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "insect",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "spider",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "insect",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "salmon",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "fish",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "tuna",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "fish",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "crab",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "lobster",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": true
+      }
+    },
+    {
+      "name": "peacock",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "diet": "omnivore",
+        "canFly": true,
+        "swims": false
+      }
+    },
+    {
+      "name": "armadillo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "raccoon",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    },
+    {
+      "name": "capybara",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "diet": "omnivore",
+        "canFly": false,
+        "swims": false
+      }
+    }
+  ]
+}

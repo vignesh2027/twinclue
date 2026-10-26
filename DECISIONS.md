@@ -43,3 +43,15 @@
 - Pack generation is blocked until the old pack audit completes. It will keep only v2 passes, target 60, cap India-friendly entries at 15 while keeping at least eight, and prioritize at least 15 games puzzles. It uses `LLM_MODEL` and switches to `openai/gpt-oss-20b` if the generation model's daily quota is spent.
 - Overlay state reports live, solved, time-up, and idle explicitly. The ticker shows only the side's last three guesses, with correct guesses represented as “got it” until reveal. The guess prefix comes from `COMMAND_PREFIX`, defaulting to `!g`; singular score copy uses “win.”
 - During this work the free endpoint completed 8 of the 60 old puzzles before daily quota exhaustion. None of those eight passed v2. The checkpoint and token totals are retained; the remaining 52 old puzzles must be audited after the quota resets before generation can safely start.
+
+## Slice 5b decisions
+
+- A viewer owns one editable vote in their community. Recasting moves their previous vote. Aliases and accepted fuzzy spellings share the answer bucket; every other vote uses the whole normalized guess.
+- A side's unique plurality leader is its result. Ties have no leader. The round is won only if both side leaders are correct, whether the round ends by timer or streamer lock.
+- Early finish requires 15 seconds of play, correct unique leaders at 50 percent or more on both sides, and five continuous seconds in that state. A streamer lock ends voting immediately and records a win only when both leaders are correct.
+- The overlay shows vote text and counts but withholds correctness until reveal. It shows only the current community's top three buckets and the other community's clue remains hidden. Recent samples are capped at 80 per round.
+- The forge search is deterministic and uses only one or two typed attribute predicates per half. Each predicate set needs at least five entities, and at least two entities in each set must have fame at least equal to the answer.
+- Audit v2.1 uses provider-prefixed Gemini and Groq model names. Gemini calls use its OpenAI-compatible endpoint and a separate key. The gpt-oss solver uses low reasoning. Model and audit version are included in fingerprints.
+- Forge checkpoints now retain the selected candidate wording, completed puzzle results, and per-model token totals so a quota resume audits the same clues.
+- Candidate text is written to the active pack only after at least 40 puzzles have matching v2.1 passes. The old pack remains in docs/archive/slice-5. The current quota stop has no completed v2.1 audit results, so no forged puzzles were kept.
+- Demo mode uses a small clearly labeled sample pack only when no audited pack is available. It does not reintroduce the retired pack into the production game.

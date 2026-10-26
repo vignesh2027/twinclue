@@ -1,0 +1,28 @@
+{
+  "auditVersion": 2,
+  "generated": 0,
+  "validationFailed": 0,
+  "auditFailed": 0,
+  "kept": 0,
+  "retained": 0,
+  "finalPack": 0,
+  "checkedInPack": 60,
+  "generationModel": "not started because old-pack audit is incomplete",
+  "solverModels": [
+    "openai/gpt-oss-20b",
+    "qwen/qwen3.8-27b"
+  ],
+  "factModel": "openai/gpt-oss-20b",
+  "tokenUsage": {
+    "openai/gpt-oss-20b": {
+      "promptTokens": 6317,
+      "completionTokens": 52016,
+      "totalTokens": 58333
+    },
+    "qwen/qwen3.8-27b": {
+      "promptTokens": 1408,
+      "completionTokens": 5896,
+      "totalTokens": 7304
+    }
+  }
+}

@@ -1,0 +1,5 @@
+import {describe,it,expect} from 'vitest';
+import {readFile} from 'node:fs/promises';
+import {searchTable} from './forge.js';
+const expected:Record<string,number>={countries:80,'video-game-characters':70,animals:60,'space-objects':25,'musical-instruments':30,foods:50,sports:30};
+describe('curated forge tables',()=>{it('meet minimum entity counts and include source and license headers',async()=>{for(const [name,minimum] of Object.entries(expected)){const table=JSON.parse(await readFile(new URL(`../../facts/${name}.json`,import.meta.url),'utf8'));expect(table.entities.length,name).toBeGreaterThanOrEqual(minimum);expect(table._meta.sources.length,name).toBeGreaterThan(0);expect(table._meta.license,name).toBeTruthy();}});it('produces a strong games candidate pool from the game-character table',async()=>{const table=JSON.parse(await readFile(new URL('../../facts/video-game-characters.json',import.meta.url),'utf8'));expect(searchTable({category:table._meta.category,entities:table.entities,sources:table._meta.sources,license:table._meta.license}).length).toBeGreaterThanOrEqual(15);});});

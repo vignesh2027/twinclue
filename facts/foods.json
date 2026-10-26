@@ -1,0 +1,570 @@
+{
+  "_meta": {
+    "category": "foods and dishes",
+    "sources": [
+      "Curated from publicly documented general-reference facts; see facts/README.md"
+    ],
+    "license": "CC0 1.0 for this curated compilation"
+  },
+  "entities": [
+    {
+      "name": "pizza",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "mainIngredient": "wheat",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "sushi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Japan",
+        "mainIngredient": "rice",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "curry",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "biryani",
+      "aliases": [
+        "biriyani"
+      ],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "rice",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "dosa",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "potato",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "samosa",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "servedAs": "snack"
+      }
+    },
+    {
+      "name": "idli",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "rice",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "naan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "wheat",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "ramen",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Japan",
+        "mainIngredient": "rice",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "pho",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Vietnam",
+        "mainIngredient": "rice",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "pad thai",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Thailand",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "tacos",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Mexico",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "burrito",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Mexico",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "enchilada",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Mexico",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "paella",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Spain",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "risotto",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "mainIngredient": "rice",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "pasta",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "mainIngredient": "wheat",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "lasagna",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "mainIngredient": "wheat",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "dumpling",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "China",
+        "mainIngredient": "wheat",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "dim sum",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "China",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "kebab",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "falafel",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "hummus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury",
+        "servedAs": "snack"
+      }
+    },
+    {
+      "name": "guacamole",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Mexico",
+        "taste": "savoury",
+        "servedAs": "snack"
+      }
+    },
+    {
+      "name": "pancake",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "waffle",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "croissant",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "France",
+        "mainIngredient": "wheat",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "baguette",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "France",
+        "mainIngredient": "wheat",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "butter chicken",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "gulab jamun",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "pani puri",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "chole bhature",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "dal makhani",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "miso soup",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Japan",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "kimchi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Korea",
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "fried rice",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "hamburger",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "hot dog",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "sandwich",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "salad",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "ice cream",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "chocolate",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "sweet",
+        "servedAs": "dessert"
+      }
+    },
+    {
+      "name": "cheesecake",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "sweet",
+        "servedAs": "dessert"
+      }
+    },
+    {
+      "name": "apple pie",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "gelato",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "taste": "sweet",
+        "servedAs": "dessert"
+      }
+    },
+    {
+      "name": "tiramisu",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "taste": "sweet",
+        "servedAs": "dessert"
+      }
+    },
+    {
+      "name": "samosa chaat",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "poha",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "upma",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "paratha",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "jalebi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "rasgulla",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "mango lassi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "tandoori chicken",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "bibimbap",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "tempura",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "pad see ew",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "spring roll",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "pierogi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "schnitzel",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "fish and chips",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "brownie",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    },
+    {
+      "name": "mochi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury"
+      }
+    }
+  ]
+}

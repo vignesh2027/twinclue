@@ -1,0 +1,396 @@
+{
+  "_meta": {
+    "category": "musical instruments",
+    "sources": [
+      "Curated from publicly documented general-reference facts; see facts/README.md"
+    ],
+    "license": "CC0 1.0 for this curated compilation"
+  },
+  "entities": [
+    {
+      "name": "piano",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": true,
+        "reed": false
+      }
+    },
+    {
+      "name": "guitar",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "violin",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": true,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "viola",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": true,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "cello",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": true,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "double bass",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "harp",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "flute",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "woodwind",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "piccolo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "woodwind",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "oboe",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "woodwind",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": true
+      }
+    },
+    {
+      "name": "clarinet",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "woodwind",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": true
+      }
+    },
+    {
+      "name": "bassoon",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "woodwind",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": true
+      }
+    },
+    {
+      "name": "saxophone",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "woodwind",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": true
+      }
+    },
+    {
+      "name": "trumpet",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "brass",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "trombone",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "brass",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "tuba",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "brass",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "French horn",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "recorder",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "woodwind",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "accordion",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": true,
+        "reed": true
+      }
+    },
+    {
+      "name": "harmonica",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": true
+      }
+    },
+    {
+      "name": "bagpipes",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": true
+      }
+    },
+    {
+      "name": "drums",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "xylophone",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "marimba",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "vibraphone",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "sitar",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "tabla",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "tambura",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "veena",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "banjo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "mandolin",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "ukulele",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "electric guitar",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": false,
+        "reed": false
+      }
+    },
+    {
+      "name": "synthesizer",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": true,
+        "reed": false
+      }
+    },
+    {
+      "name": "organ",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "keyboard",
+        "playedWithBow": false,
+        "keys": true,
+        "reed": false
+      }
+    }
+  ]
+}

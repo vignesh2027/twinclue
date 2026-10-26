@@ -1,0 +1,1 @@
+Drop custom CSV fact tables in this directory. Use `npm run forge -- --table custom/mycommunity.csv` to build and audit a local pack. Include only facts you can verify and include a source and license note in your project records.

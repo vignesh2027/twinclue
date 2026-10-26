@@ -1,0 +1,287 @@
+{
+  "_meta": {
+    "category": "sports",
+    "sources": [
+      "Curated from publicly documented general-reference facts; see facts/README.md"
+    ],
+    "license": "CC0 1.0 for this curated compilation"
+  },
+  "entities": [
+    {
+      "name": "football",
+      "aliases": [
+        "soccer"
+      ],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 11
+      }
+    },
+    {
+      "name": "basketball",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 5
+      }
+    },
+    {
+      "name": "cricket",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 11
+      }
+    },
+    {
+      "name": "tennis",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "volleyball",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 6
+      }
+    },
+    {
+      "name": "rugby",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "baseball",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 9
+      }
+    },
+    {
+      "name": "golf",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "badminton",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "table",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "tennis",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "swimming",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "athletics",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "boxing",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "wrestling",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "cycling",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "skiing",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "gymnastics",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "soccer",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "field",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "hockey",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "ice",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "hockey",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "American",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true
+      }
+    },
+    {
+      "name": "football",
+      "aliases": [
+        "soccer"
+      ],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 11
+      }
+    },
+    {
+      "name": "kabaddi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "playersPerSide": 7
+      }
+    },
+    {
+      "name": "chess",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "archery",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "rowing",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "fencing",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    },
+    {
+      "name": "weightlifting",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual"
+      }
+    }
+  ]
+}

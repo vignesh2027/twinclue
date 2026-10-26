@@ -1,0 +1,2 @@
+import type {Puzzle} from '../puzzle/types.js';
+export const puzzleFixture: Puzzle={id:'fixture-paris',category:'geography',difficulty:'medium',answer:'Paris',aliases:['City of Light'],halfA:'A European capital on a river',halfB:'The Seine flows through its centre',halfAAlsoFits:['Rome','Vienna','Prague'],halfBAlsoFits:['Rouen','Melun','Montereau'],alsoFitsA:['Rome','Vienna','Prague'],alsoFitsB:['Rouen','Melun','Montereau'],predicates:{halfA:[{attribute:'fixture',value:'a'}],halfB:[{attribute:'fixture',value:'b'}],setSizeA:5,setSizeB:5}};
