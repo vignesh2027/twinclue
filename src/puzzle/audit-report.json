@@ -1,59 +1,150 @@
 {
-  "generatedAt": "2026-10-26T09:10:58.645Z",
-  "model": "qwen/qwen3.8-27b",
-  "total": 60,
-  "passed": 60,
-  "passRate": 1,
+  "auditVersion": 2,
+  "generatedAt": "2026-10-26T10:18:14.913Z",
+  "solverModels": [
+    "openai/gpt-oss-20b",
+    "qwen/qwen3.8-27b"
+  ],
+  "factModel": "openai/gpt-oss-20b",
+  "passRule": "No solver may accept either half alone; a majority must accept both halves; fact verifier must mark both halves true.",
+  "total": 8,
+  "passed": 0,
+  "passRate": 0,
+  "tokenUsage": {
+    "openai/gpt-oss-20b": {
+      "promptTokens": 6317,
+      "completionTokens": 52016,
+      "totalTokens": 58333
+    },
+    "qwen/qwen3.8-27b": {
+      "promptTokens": 1408,
+      "completionTokens": 5896,
+      "totalTokens": 7304
+    }
+  },
   "results": [
     {
       "id": "pack-02",
-      "fingerprint": "22c90bdd5ef5c6ae6409dbc7444c1e8692ed17001849d0b1ca003d0a6542f352",
+      "fingerprint": "bc567f53ec37ccbf2d9b631ee21a83b3bc6c3a7aacc6b34bf9818652c5f5168d",
+      "auditVersion": 2,
       "answer": "Hourglass",
-      "passed": true,
+      "passed": false,
       "halfA": {
-        "best_answer": "timer",
+        "best_answer": "hourglass",
         "alternatives": [
-          "hourglass",
-          "ladybug timer"
+          "sand timer",
+          "stopwatch"
         ],
-        "referee": "rejected"
+        "referee": "accepted"
       },
       "halfB": {
-        "best_answer": "peanut",
+        "best_answer": "B",
         "alternatives": [
-          "peanut shell cross-section",
-          "barbell outline"
+          "Letter B",
+          "B‑shape"
         ],
         "referee": "rejected"
       },
       "both": {
-        "best_answer": "hourglass",
+        "best_answer": "egg timer",
         "alternatives": [
-          "dart",
-          "bowling pin"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-03",
-      "fingerprint": "4868f7443cb487f03f2e60db7237769f0d0af94c440e8f51cd9a1d94fae9fa9e",
-      "answer": "Lighthouse",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Space Needle",
-        "alternatives": [
-          "Statue of Liberty",
-          "Pike Place Market"
+          "sand timer",
+          "hourglass"
         ],
         "referee": "rejected"
       },
-      "halfB": {
-        "best_answer": "light",
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "hourglass",
+            "alternatives": [
+              "sand timer",
+              "stopwatch"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "timer",
+            "alternatives": [
+              "hourglass",
+              "metronome"
+            ],
+            "referee": "rejected"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "B",
+            "alternatives": [
+              "Letter B",
+              "B‑shape"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "letter B",
+            "alternatives": [
+              "peanut",
+              "figure-eight"
+            ],
+            "referee": "rejected"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "egg timer",
+            "alternatives": [
+              "sand timer",
+              "hourglass"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "hourglass",
+            "alternatives": [
+              "sand timer",
+              "hourglass timer"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Commonly used for timing board games.",
+        "halfB": "true",
+        "halfBReason": "Classic hourglass shape with two chambers."
+      },
+      "failures": [
+        "halfA alone: openai/gpt-oss-20b answered \"hourglass\".",
+        "Both halves accepted by 1/2 solvers; majority required."
+      ]
+    },
+    {
+      "id": "pack-03",
+      "fingerprint": "6ad873cb160c69d788b1b14c2748ee8c3b5ce39a56909acf43f371b6ee841474",
+      "auditVersion": 2,
+      "answer": "Lighthouse",
+      "passed": false,
+      "halfA": {
+        "best_answer": "lighthouse",
         "alternatives": [
-          "lighthouse beam",
-          "shoreline outline"
+          "pier",
+          "boathouse"
+        ],
+        "referee": "accepted"
+      },
+      "halfB": {
+        "best_answer": "Beacon",
+        "alternatives": [
+          "Light",
+          "Signal light"
         ],
         "referee": "rejected"
       },
@@ -61,1846 +152,705 @@
         "best_answer": "lighthouse",
         "alternatives": [
           "beacon",
-          "beacon tower"
+          "sea beacon"
         ],
         "referee": "accepted"
       },
-      "failures": []
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "lighthouse",
+            "alternatives": [
+              "pier",
+              "boathouse"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "lighthouse",
+            "alternatives": [
+              "tower",
+              "monument"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Beacon",
+            "alternatives": [
+              "Light",
+              "Signal light"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "lighthouse",
+            "alternatives": [
+              "beacon",
+              "lantern"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "lighthouse",
+            "alternatives": [
+              "beacon",
+              "sea beacon"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "lighthouse",
+            "alternatives": [
+              "beacon",
+              "signal light"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Lighthouse stands tall beside water.",
+        "halfB": "true",
+        "halfBReason": "Guides ships with visual beacon at night."
+      },
+      "failures": [
+        "halfA alone: openai/gpt-oss-20b answered \"lighthouse\"; qwen/qwen3.8-27b answered \"lighthouse\".",
+        "halfB alone: qwen/qwen3.8-27b answered \"lighthouse\"."
+      ]
     },
     {
       "id": "pack-04",
-      "fingerprint": "d92cd2a857e6dc33349e18dc7b2d7dc95d3077aa5241157948a305fe429cc35d",
+      "fingerprint": "39425d280e1424b5086b476b6bc0c622ac386b3b9c340f1308f8b8d95f6c73c5",
+      "auditVersion": 2,
       "answer": "Rainbow",
-      "passed": true,
+      "passed": false,
       "halfA": {
-        "best_answer": "aurora",
+        "best_answer": "meteor",
         "alternatives": [
-          "eclipse",
-          "light show"
+          "shooting star",
+          "fireworks"
         ],
         "referee": "rejected"
       },
       "halfB": {
-        "best_answer": "Sun dog",
+        "best_answer": "Blue Hour",
         "alternatives": [
-          "Rainbow",
-          "Halo"
+          "Blue Ray",
+          "Blue Flash"
         ],
         "referee": "rejected"
       },
       "both": {
         "best_answer": "rainbow",
         "alternatives": [
-          "sun dog",
-          "halo"
+          "halo",
+          "glory"
         ],
         "referee": "accepted"
       },
-      "failures": []
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "meteor",
+            "alternatives": [
+              "shooting star",
+              "fireworks"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "rainbow",
+            "alternatives": [
+              "aurora",
+              "mirage"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Blue Hour",
+            "alternatives": [
+              "Blue Ray",
+              "Blue Flash"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "rainbow",
+            "alternatives": [
+              "halo",
+              "mirage"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "rainbow",
+            "alternatives": [
+              "halo",
+              "glory"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "rainbow",
+            "alternatives": [
+              "sunbeam",
+              "optical phenomenon"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Brief optical phenomenon that brightens sky.",
+        "halfB": "true",
+        "halfBReason": "Occurs when sunlight refracts through droplets."
+      },
+      "failures": [
+        "halfA alone: qwen/qwen3.8-27b answered \"rainbow\".",
+        "halfB alone: qwen/qwen3.8-27b answered \"rainbow\"."
+      ]
     },
     {
       "id": "pack-05",
-      "fingerprint": "c8b5984aab10efbaec1c07775b49fd2a58c363a7951ef2eaca8512aed8a417f5",
+      "fingerprint": "ae3beda90b3807ae18fb7a9ca040a617629a6d588af4bcc171f581c4c88f0611",
+      "auditVersion": 2,
       "answer": "Piano",
-      "passed": true,
+      "passed": false,
       "halfA": {
-        "best_answer": "violin",
+        "best_answer": "piano",
         "alternatives": [
           "guitar",
-          "piano"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Guitar",
-        "alternatives": [
-          "Piano",
-          "Organ"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Piano",
-        "alternatives": [
-          "Organ",
-          "Accordion"
+          "drum"
         ],
         "referee": "accepted"
       },
-      "failures": []
+      "halfB": {
+        "best_answer": "Piano",
+        "alternatives": [
+          "Keyboard",
+          "Organ"
+        ],
+        "referee": "accepted"
+      },
+      "both": {
+        "best_answer": "piano",
+        "alternatives": [
+          "keyboard",
+          "organ"
+        ],
+        "referee": "accepted"
+      },
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "piano",
+            "alternatives": [
+              "guitar",
+              "drum"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "clock",
+            "alternatives": [
+              "ruler",
+              "metronome"
+            ],
+            "referee": "rejected"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Piano",
+            "alternatives": [
+              "Keyboard",
+              "Organ"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "piano",
+            "alternatives": [
+              "organ",
+              "harpsichord"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "piano",
+            "alternatives": [
+              "keyboard",
+              "organ"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "piano",
+            "alternatives": [
+              "organ",
+              "harpsichord"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Widely seen in homes and schools.",
+        "halfB": "true",
+        "halfBReason": "Player can play melody and chords."
+      },
+      "failures": [
+        "halfA alone: openai/gpt-oss-20b answered \"piano\".",
+        "halfB alone: openai/gpt-oss-20b answered \"Piano\"; qwen/qwen3.8-27b answered \"piano\"."
+      ]
     },
     {
       "id": "pack-06",
-      "fingerprint": "cb609dffce9754337cbf511f7a920ee856f68c2ab1ba4aee76df2c4f5100e2ab",
+      "fingerprint": "732bb8c058efcb26b1f058f6b510f325d71d3e505a4b59c6cfb520908e4b01f4",
+      "auditVersion": 2,
       "answer": "Telescope",
-      "passed": true,
+      "passed": false,
       "halfA": {
-        "best_answer": "Microscope",
+        "best_answer": "microscope",
         "alternatives": [
-          "Binoculars",
-          "Telescope"
+          "telescope",
+          "binoculars"
         ],
         "referee": "rejected"
       },
       "halfB": {
-        "best_answer": "Headlights",
+        "best_answer": "Mirror",
         "alternatives": [
-          "Searchlights",
-          "Radar antennas"
+          "Lens",
+          "Reflector"
         ],
         "referee": "rejected"
       },
       "both": {
         "best_answer": "telescope",
         "alternatives": [
-          "telescope",
-          "spyglass"
+          "microscope",
+          "binoculars"
         ],
         "referee": "accepted"
       },
-      "failures": []
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "microscope",
+            "alternatives": [
+              "telescope",
+              "binoculars"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "magnifier",
+            "alternatives": [
+              "microscope",
+              "monocle"
+            ],
+            "referee": "rejected"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Mirror",
+            "alternatives": [
+              "Lens",
+              "Reflector"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "Telescope",
+            "alternatives": [
+              "Reflecting telescope",
+              "Newtonian telescope"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "telescope",
+            "alternatives": [
+              "microscope",
+              "binoculars"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "Telescope",
+            "alternatives": [
+              "Binoculars",
+              "Microscope"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Used by scientists to observe cosmos.",
+        "halfB": "true",
+        "halfBReason": "Reflector gathers light from distant objects."
+      },
+      "failures": [
+        "halfB alone: qwen/qwen3.8-27b answered \"Telescope\"."
+      ]
     },
     {
       "id": "pack-08",
-      "fingerprint": "90dac48e8bd163cca3aa6e6a1ddf9e1743c986891d1389ae042d12acd51b9a9f",
+      "fingerprint": "0357084788f5225bc1f0b0a2427dd17b78d283be98f421896634bdf5c94e9e0d",
+      "auditVersion": 2,
       "answer": "Minecraft",
-      "passed": true,
+      "passed": false,
       "halfA": {
-        "best_answer": "Monopoly",
+        "best_answer": "Minecraft",
         "alternatives": [
-          "Chess",
-          "Checkers"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Roblox",
-        "alternatives": [
-          "Minecraft",
+          "Roblox",
           "Terraria"
         ],
-        "referee": "rejected"
+        "referee": "accepted"
       },
-      "both": {
+      "halfB": {
         "best_answer": "Minecraft",
         "alternatives": [
           "Terraria",
-          "No Man's Sky"
+          "Roblox"
         ],
         "referee": "accepted"
       },
-      "failures": []
+      "both": {
+        "best_answer": "minecraft",
+        "alternatives": [
+          "terraria",
+          "roblox"
+        ],
+        "referee": "accepted"
+      },
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Minecraft",
+            "alternatives": [
+              "Roblox",
+              "Terraria"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "zelda",
+            "alternatives": [
+              "minecraft",
+              "tomb raider"
+            ],
+            "referee": "rejected"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Minecraft",
+            "alternatives": [
+              "Terraria",
+              "Roblox"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "Minecraft",
+            "alternatives": [
+              "Sandbox game",
+              "Open-world building game"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "minecraft",
+            "alternatives": [
+              "terraria",
+              "roblox"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "Minecraft",
+            "alternatives": [
+              "Terraria",
+              "Roblox"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Popular game fostering exploration and creation.",
+        "halfB": "true",
+        "halfBReason": "Players mine and alter terrain."
+      },
+      "failures": [
+        "halfA alone: openai/gpt-oss-20b answered \"Minecraft\".",
+        "halfB alone: openai/gpt-oss-20b answered \"Minecraft\"; qwen/qwen3.8-27b answered \"Minecraft\"."
+      ]
     },
     {
       "id": "pack-09",
-      "fingerprint": "0b5eced0926d0d5f959506ef5949c336c59decf538f529ffe233b439c923294b",
+      "fingerprint": "f1bf4faa0eb08a27e7e6bb0de19e4616eb290139071352378f5a726aaa5af33e",
+      "auditVersion": 2,
       "answer": "Pac-Man",
-      "passed": true,
+      "passed": false,
       "halfA": {
-        "best_answer": "Frostbyte",
+        "best_answer": "Mario",
         "alternatives": [
-          "Pac-Man",
-          "Frostbyte"
+          "MegaMan",
+          "Kirby"
         ],
         "referee": "rejected"
       },
       "halfB": {
-        "best_answer": "Tetris",
-        "alternatives": [
-          "Crazy Taxi",
-          "New Super Mario Bros."
-        ],
-        "referee": "rejected"
-      },
-      "both": {
         "best_answer": "Pac-Man",
         "alternatives": [
-          "Wario Land",
-          "Pac-Land"
+          "Bomberman",
+          "Snake"
         ],
         "referee": "accepted"
       },
-      "failures": []
+      "both": {
+        "best_answer": "pac-man",
+        "alternatives": [
+          "ms-pac-man",
+          "pacman"
+        ],
+        "referee": "accepted"
+      },
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Mario",
+            "alternatives": [
+              "MegaMan",
+              "Kirby"
+            ],
+            "referee": "rejected"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "sonic",
+            "alternatives": [
+              "pac-man",
+              "space invader"
+            ],
+            "referee": "rejected"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Pac-Man",
+            "alternatives": [
+              "Bomberman",
+              "Snake"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "Pac-Man",
+            "alternatives": [
+              "Labyrinth game",
+              "Maze game"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "pac-man",
+            "alternatives": [
+              "ms-pac-man",
+              "pacman"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "Pac-Man",
+            "alternatives": [
+              "Ms. Pac-Man",
+              "Dig Dug"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Iconic bright yellow arcade character.",
+        "halfB": "true",
+        "halfBReason": "Maze chase with simple directional control."
+      },
+      "failures": [
+        "halfB alone: openai/gpt-oss-20b answered \"Pac-Man\"; qwen/qwen3.8-27b answered \"Pac-Man\"."
+      ]
     },
     {
       "id": "pack-10",
-      "fingerprint": "afe9fd35cae5c0dae58da0dfaf31287d5432b496213b9de8a1a65d66980b5894",
+      "fingerprint": "99dcbaf653cae37511e7b7ea164dcca2d3315018d7a21156a172f10f60c1bb1b",
+      "auditVersion": 2,
       "answer": "Zelda",
-      "passed": true,
+      "passed": false,
       "halfA": {
-        "best_answer": "Final Fantasy",
+        "best_answer": "Zelda",
         "alternatives": [
-          "Dragon Quest",
-          "Ys"
+          "FinalFantasy",
+          "DragonQuest"
         ],
-        "referee": "rejected"
+        "referee": "accepted"
       },
       "halfB": {
-        "best_answer": "Detective",
-        "alternatives": [
-          "Spy",
-          "Bounty Hunter"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
         "best_answer": "The Legend of Zelda",
         "alternatives": [
-          "Final Fantasy",
-          "Dragon Quest"
+          "Metroid",
+          "Super Mario Odyssey"
         ],
         "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-11",
-      "fingerprint": "d9e827281a24528fde0c0e1215c80171f3e4f291e1073f6fbb6367f9de96c62e",
-      "answer": "Sonic the Hedgehog",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Comix Zone",
-        "alternatives": [
-          "Sonic the Hedgehog",
-          "Vectorman"
-        ],
-        "referee": "unclear"
-      },
-      "halfB": {
-        "best_answer": "Ferdinand",
-        "alternatives": [
-          "Pete the Cat",
-          "Dora the Explorer"
-        ],
-        "referee": "rejected"
       },
       "both": {
-        "best_answer": "Sonic the Hedgehog",
+        "best_answer": "legend-of-zelda",
         "alternatives": [
-          "Crash Bandicoot",
-          "Taz"
+          "the-legend-of-zelda",
+          "zelda"
         ],
         "referee": "accepted"
       },
-      "failures": []
-    },
-    {
-      "id": "pack-12",
-      "fingerprint": "c839e555b41709094d4b12421cfa02262e9f4e330368c9bf82294c2b02986f78",
-      "answer": "Among Us",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Words with Friends",
-        "alternatives": [
-          "Tag",
-          "Doodle Jump"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "The Resistance",
-        "alternatives": [
-          "Mafia",
-          "Undercover"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Among Us",
-        "alternatives": [
-          "Social Deduction",
-          "Mafia"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-13",
-      "fingerprint": "34ff596a1a19f09fa8c36d8f238da494cd6e8d0496201792370f863898dc2a45",
-      "answer": "Super Mario Bros.",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Sonic the Hedgehog",
-        "alternatives": [
-          "Crash Bandicoot",
-          "Spyro"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Brawl Stars",
-        "alternatives": [
-          "Color Wars",
-          "World of Warships: Legends"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Super Mario",
-        "alternatives": [
-          "Super Mario Bros",
-          "Pokémon"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-14",
-      "fingerprint": "264a17e3cf665ee34413e634a6534d0a0878e78490095273e561453f60fb541b",
-      "answer": "The Beatles",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Queen",
-        "alternatives": [
-          "The Beatles",
-          "Elton John"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Waterloo (band)",
-        "alternatives": [
-          "Retrovisor",
-          "Hall & Oates"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "The Beatles",
-        "alternatives": [
-          "ABBA",
-          "Dolly Parton and Porter Wagoner"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-15",
-      "fingerprint": "08f3538dc203ccc64a3ae6a0d28e81a081b3cf0c9c5f477abbbbac38b27bf868",
-      "answer": "Taylor Swift",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Robin Thicke",
-        "alternatives": [
-          "Céline Dion",
-          "James Blunt"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Lorde",
-        "alternatives": [
-          "Billie Eilish",
-          "Taylor Swift"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Taylor Swift",
-        "alternatives": [
-          "Taylor Swift",
-          "Adele"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-17",
-      "fingerprint": "9f9f14d7b91f3066f7a9773c04f42178b6755a2e1ec038a7a1a01184ecf9b864",
-      "answer": "Violin",
-      "passed": true,
-      "halfA": {
-        "best_answer": "harp",
-        "alternatives": [
-          "flute",
-          "oboe"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "create a noise",
-        "alternatives": [
-          "play music",
-          "create a sound"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "violin",
-        "alternatives": [
-          "violin",
-          "fiddle"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-23",
-      "fingerprint": "4ac3797be37c1a0dbf5a83e14e72a19507f0ccb4d3673d47482faff36ad00ab1",
-      "answer": "Photosynthesis",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Phototropism",
-        "alternatives": [
-          "Stomatal closure",
-          "Root hair development"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "sunlight",
-        "alternatives": [
-          "solar radiation",
-          "photosynthesis"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Photosynthesis",
-        "alternatives": [
-          "Photosynthesis in algae",
-          "Chemolithotrophy by plants"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-24",
-      "fingerprint": "1511920c0d086bf866a44d17183b86805e4da3abb294684e22e9f917493e79f1",
-      "answer": "DNA",
-      "passed": true,
-      "halfA": {
-        "best_answer": "nucleus",
-        "alternatives": [
-          "cytoplasm",
-          "organelles"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "gene",
-        "alternatives": [
-          "DNA",
-          "genome"
-        ],
-        "referee": "unclear"
-      },
-      "both": {
-        "best_answer": "DNA",
-        "alternatives": [
-          "genetic material",
-          "hereditary material"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-26",
-      "fingerprint": "2c91983953d107f4819fb0513f3cf6f762d770210be8621b29501bd64c13f59d",
-      "answer": "Coffee",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Espresso",
-        "alternatives": [
-          "Coffee",
-          "Tea"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Espresso",
-        "alternatives": [
-          "Coffee",
-          "Teff flour"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "coffee",
-        "alternatives": [
-          "chicory coffee",
-          "dandelion root coffee"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-27",
-      "fingerprint": "5a14e1759cc9608387bbae50d99e4101d295a220bebae89c4487bb0f5dccab04",
-      "answer": "Phonograph",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Gramophone",
-        "alternatives": [
-          "Gramophone",
-          "Record Player"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "gramophone",
-        "alternatives": [
-          "vinyl record",
-          "phonograph"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "phonograph",
-        "alternatives": [
-          "record player",
-          "turntable"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-28",
-      "fingerprint": "9e4ff97d20b2bf8c6265e8ada7d104c89f51888477d037edd3542fb012d43007",
-      "answer": "The Moon",
-      "passed": true,
-      "halfA": {
-        "best_answer": "star",
-        "alternatives": [
-          "moon",
-          "shooting star"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Mars",
-        "alternatives": [
-          "Moon",
-          "Venus"
-        ],
-        "referee": "unclear"
-      },
-      "both": {
-        "best_answer": "Moon",
-        "alternatives": [
-          "Saturn",
-          "Venus"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-29",
-      "fingerprint": "cfaa438ae00e2a888f7ad448d4c01553930ffa0980b3510bd566e4a95b1fdf19",
-      "answer": "Wimbledon",
-      "passed": true,
-      "halfA": {
-        "best_answer": "US Open",
-        "alternatives": [
-          "Australian Open",
-          "Wimbledon"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Lawn tennis",
-        "alternatives": [
-          "Tennis",
-          "Lawn bowls"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "The Wimbledon Championships",
-        "alternatives": [
-          "The Australian Open",
-          "The US Open"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-30",
-      "fingerprint": "a98ab858c8f5dc2fe873dfac9ee343cd6cc08d0f9b1d8c5e5620f7f4586a414c",
-      "answer": "Basketball",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Volleyball",
-        "alternatives": [
-          "Chess",
-          "Poker"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Bowling",
-        "alternatives": [
-          "Bocce",
-          "Croquet"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Basketball",
-        "alternatives": [
-          "Team handball",
-          "Netball"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-33",
-      "fingerprint": "265e94da0f061436b660b31ea7abfe4f5b006cc34ace1562f3463b4beb5c298a",
-      "answer": "Tour de France",
-      "passed": true,
-      "halfA": {
-        "best_answer": "the London Marathon",
-        "alternatives": [
-          "the Tour de France",
-          "the World Cup"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "yellow jersey",
-        "alternatives": [
-          "green jersey",
-          "polka dot jersey"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Tour de France",
-        "alternatives": [
-          "Vuelta a España",
-          "Giro d'Italia"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-37",
-      "fingerprint": "cea1c79e8c291fc6aad17f2cc1df3abb8d5e4661b34aa23db983b43eb4c43137",
-      "answer": "Margherita pizza",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Spaghetti alle vongole",
-        "alternatives": [
-          "Sfogliatella",
-          "Rajo al sugo"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Margherita",
-        "alternatives": [
-          "Pizza Margherita",
-          "Neapolitan pizza"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Pizza Margherita",
-        "alternatives": [
-          "San Marzano tomato and buffalo mozzarella pizza",
-          "classic marble rind pizza"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-42",
-      "fingerprint": "7fedb274ed050c976afe40e7b4e7543c0d9702611f463802e0069b35038a4366",
-      "answer": "Masala dosa",
-      "passed": true,
-      "halfA": {
-        "best_answer": "idli",
-        "alternatives": [
-          "idli-sambar set",
-          "uttapam"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Idli with Sambar",
-        "alternatives": [
-          "Medu Vada with Sambar",
-          "Paniyaram with Chutney"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Masala dosa",
-        "alternatives": [
-          "Mysore masala dosa",
-          "Idiyappam"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-44",
-      "fingerprint": "ed91c78494049b3d8a0066bb89b4e7da569015ed8c92eb08dfdad89ada89bf02",
-      "answer": "Gulab jamun",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Lassi",
-        "alternatives": [
-          "Gulab Jamun",
-          "Kheer"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Doughnuts",
-        "alternatives": [
-          "Pudding Stuffed Doughnuts",
-          "Doughnuts Soaked in Spiced Cider"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "gulab jamun",
-        "alternatives": [
-          "gulab jamun",
-          "jalebi"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-45",
-      "fingerprint": "cae487ebaaf03f54c82b72b9f87112de24c4bbe821510c907298ff3fad10ccae",
-      "answer": "Pani puri",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Pakora",
-        "alternatives": [
-          "Puri Bhaji",
-          "Bombil Fritters"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Lemon water",
-        "alternatives": [
-          "Lemon-infused broth",
-          "Ginger hot water"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": " Pani Puri",
-        "alternatives": [
-          "Paani Puri",
-          "Golgappa"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-46",
-      "fingerprint": "2aaa172e217eae8a6c8f55caf75bfe836716056bd9bc3f7fb9ee7256c8d4bbf6",
-      "answer": "Paris",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Prague",
-        "alternatives": [
-          "Lisbon",
-          "Stockholm"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "The Seine",
-        "alternatives": [
-          "The Oise",
-          "The Aube"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Paris",
-        "alternatives": [
-          "Paris",
-          "Amsterdam"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-48",
-      "fingerprint": "b3bd2f0ea9f344eff28a833002d4f395a16a6571bd6d3d512da363930f65a21d",
-      "answer": "Sahara",
-      "passed": true,
-      "halfA": {
-        "best_answer": "steppe",
-        "alternatives": [
-          "desert",
-          "savanna"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Arctic Ocean",
-        "alternatives": [
-          "Norwegian Sea",
-          "Bay of Hudson"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Sahara Desert",
-        "alternatives": [
-          "Sahara Desert",
-          "Gobi Desert"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-54",
-      "fingerprint": "7b1aa2d83c91b3389c726dd55f16287137744e61069aa6a7eff6aea61436816d",
-      "answer": "The Wizard of Oz",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Wicked",
-        "alternatives": [
-          "The Wiz",
-          "Mary Poppins"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "The Wonderful Wizard of Oz",
-        "alternatives": [
-          "The Wiz",
-          "Emerald City"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "The Wizard of Oz",
-        "alternatives": [
-          "Music of the Tundra",
-          "Waltz in the Green"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-55",
-      "fingerprint": "986a4f94f81b841d7cf2a35e88c19cf3bd91995c694810e69c5ceddbff8c20e7",
-      "answer": "Jaws",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Close Encounters of the Third Kind",
-        "alternatives": [
-          "Jaws",
-          "Empire of the Sun"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Hothouse",
-        "alternatives": [
-          "Flesh and Bone",
-          "Great White"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Jaws",
-        "alternatives": [
-          "Jaws 2",
-          "Jaws III"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-56",
-      "fingerprint": "97ba2f8a98a8f266c33e4ae7487772e557b0f048e5e460086a1b320bd910fbda",
-      "answer": "Spirited Away",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Nausicaa of the Valley of the Wind",
-        "alternatives": [
-          "Spirited Away",
-          "Grave of the Fireflies"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "1/2 B: A young girl must find work in a strange town where spirits gather",
-        "alternatives": [
-          "1/2 B: A young girl must find work in a strange town where spirits gather",
-          "Half of B: A young girl must find work in a strange town where spirits gather"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Spirited Away",
-        "alternatives": [
-          "Spirited Away",
-          "The Cave"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "pack-59",
-      "fingerprint": "c76fe59075ba8591fcfd15e3499e517a2a23d46e18d9c42e07b541216bcd94fa",
-      "answer": "Toy Story",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Cars",
-        "alternatives": [
-          "Toy Story",
-          "Finding Nemo"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "wind-up toy",
-        "alternatives": [
-          "teddy bear",
-          "doll"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Toy Story",
-        "alternatives": [
-          "Toy Story 3",
-          "Toy Story 2"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-001",
-      "fingerprint": "115301b30c578425036da221b1d8b060ce00cf1517900d8de19e1e22dc0d2f86",
-      "answer": "Mysore Palace",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Ambazhika Palace",
-        "alternatives": [
-          "Padmanabhapuram Palace",
-          "Thiruvananthapuram Palace"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Qutub Minar",
-        "alternatives": [
-          "India Gate",
-          "Victory Arch"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Mysore Palace",
-        "alternatives": [
-          "Agra Fort",
-          "Mehtab Bagh"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-004",
-      "fingerprint": "11df81b2221177bf316ae9ff359ae4f5a001790249574d779405229fa327cd8c",
-      "answer": "Pav Bhaji",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Mashed Potatoes",
-        "alternatives": [
-          "Coleslaw",
-          "Collard Greens"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Popcorn",
-        "alternatives": [
-          "Pepsi",
-          "Nacho Chees"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Pav Bhaji",
-        "alternatives": [
-          "Kachori",
-          "Pakora"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-016",
-      "fingerprint": "8584aa3b3e3e05fc0879153c8aacab0aa2e872bbfe6ef53bbf3ebdf4b16e27b3",
-      "answer": "Mahatma Gandhi",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Nelson Mandela",
-        "alternatives": [
-          "Martin Luther King Jr.",
-          "Mahatma Gandhi"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Jawaharlal Nehru",
-        "alternatives": [
-          "M.S. Ramachandran",
-          "Indira Gandhi"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Mahatma Gandhi",
-        "alternatives": [
-          "Mahatma Gandhi",
-          "Kasturba Gandhi"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-035",
-      "fingerprint": "e165f426ee489455374621306f261746cf3c001d7ca3d66c31959dbd761e4f91",
-      "answer": "Sikkim",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Arunachal Pradesh",
-        "alternatives": [
-          "Sikkim",
-          "Nagaland"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Arunachal Pradesh",
-        "alternatives": [
-          "Nagaland",
-          "Mizoram"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Sikkim",
-        "alternatives": [
-          "Assam",
-          "Tripura"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-036",
-      "fingerprint": "f647d9a6eaecdf3ab85fe468a8e99b59f37d4b9a730ac0f0c5098160092cfd20",
-      "answer": "Lagaan",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Isaac Newton",
-        "alternatives": [
-          "A 2001 Bollywood epic where villagers challenge colonial rulers to a football match",
-          "An Indian film from 2001 about a cricket match against the British"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Drive My Car",
-        "alternatives": [
-          "Parasite",
-          "Past Lives"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Lagaan",
-        "alternatives": [
-          "Lagaan",
-          "Black Sheep White Lamb"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-283",
-      "fingerprint": "7c95005a3c48ce47aa16f5f8dcf2e80b63c2c262d6a3a75e0095a0bbee75e7d1",
-      "answer": "Beethoven's 5th Symphony",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Four Notes",
-        "alternatives": [
-          "Beethoven's Fifth Symphony",
-          "Marshall Plan"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Symphony No. 9 in D minor, Op. 125 ('Choral')",
-        "alternatives": [
-          "Overtures to 'Die Zauberflöte'",
-          "Variations on 'Là ci darem' from Le nozze di Figaro"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Beethoven's 5th Symphony",
-        "alternatives": [
-          "Beethoven's 5th Symphony",
-          "Beethoven's 6th Symphony"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-020",
-      "fingerprint": "087b5bb0877bdbf299e501260f3cfbb497685db838175a031cbaaba3a7175f32",
-      "answer": "Hubble Space Telescope",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Spitzer Space Telescope",
-        "alternatives": [
-          "Hubble Space Telescope",
-          "Kepler Space Telescope"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Hubble",
-        "alternatives": [
-          "JWST",
-          "Kepler"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Hubble Space Telescope",
-        "alternatives": [
-          "Kepler Space Telescope",
-          "Chandra X-ray Observatory"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-027",
-      "fingerprint": "6c427a559c489bafa673d9c7f8ecf2faa87d2c70f78be2504f3aefaa50f9b777",
-      "answer": "Lake Baikal",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Lake Tanganyika",
-        "alternatives": [
-          "Great Bear Lake",
-          "Lake Baikal"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Yenisei",
-        "alternatives": [
-          "Lena",
-          "Ob"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Lake Baikal",
-        "alternatives": [
-          "Lake Baikal",
-          "Lake Ladoga"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-379",
-      "fingerprint": "185ebf78c3fa6fba59856b24e4059118c897b3f0a0c0cb5010a779f5c107253f",
-      "answer": "Mount Kilimanjaro",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Denali",
-        "alternatives": [
-          "Kangchenjunga",
-          "Lhotse"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Lake Victoria",
-        "alternatives": [
-          "Mount Kilimanjaro",
-          "Lake Tanganyika"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Mount Kilimanjaro",
-        "alternatives": [
-          "Mount Kilimanjaro",
-          "Mount Meru"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-395",
-      "fingerprint": "5c2a552198c7763f11d4cb6de67dd90e974e28526d120e34b23310dbcce2472c",
-      "answer": "Sholay",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Carry On... Pollock",
-        "alternatives": [
-          "Itna Bhi To Nahi",
-          "Sholay (1975)"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Purab Aur Bharat",
-        "alternatives": [
-          "Aaj Ka Gudgudiya",
-          "Jaliyan Ka Jadam"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Sholay",
-        "alternatives": [
-          "Sholay",
-          "Bobby"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-042",
-      "fingerprint": "d0a344f0f063efcdf87421c8c67870f80e8f8a4260ba06bae14c9c7c8edb3275",
-      "answer": "Sachin Tendulkar",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Kapil Dev",
-        "alternatives": [
-          "Kapil Dev",
-          "Javagal Srinath"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Brendon McCullum",
-        "alternatives": [
-          "Shahid Afridi",
-          "AB de Villiers"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Sachin Tendulkar",
-        "alternatives": [
-          "Sachin Tendulkar",
-          "Sachin Ramesh Tendulkar"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-251",
-      "fingerprint": "ba50202f428c6e17c700c0fee7109f28e1056870e01ae4622f19edadcc027fa7",
-      "answer": "Miso soup",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Miso",
-        "alternatives": [
-          "Miso soup",
-          "Marmite (dissolved in water/tea)"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "An appetizer",
-        "alternatives": [
-          "An entryway to a restaurant experience",
-          "A test of the chef's skill"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Miso soup",
-        "alternatives": [
-          "Miso soup",
-          "Tanghulu"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-402",
-      "fingerprint": "3d347d23e3ec7bf4d9f1fee1ba105dfad0d38005ecb9a1397700992e00d1d5d2",
-      "answer": "Sundarbans",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Mekong delta forest",
-        "alternatives": [
-          "Araucaria forest",
-          "Tropical cloud forest"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Odisha",
-        "alternatives": [
-          "Rajasthan",
-          "Assam"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Sundarbans",
-        "alternatives": [
-          "Chao Phraya Delta",
-          "Mekong Delta"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-174",
-      "fingerprint": "26bd655411da165fd9dec2b62bd9842883b29a34adaf00ec32db44fe0cb1d992",
-      "answer": "Queen",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Kate Bush",
-        "alternatives": [
-          "Genesis",
-          "Roxy Music"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Crown",
-        "alternatives": [
-          "Crown",
-          "Sovereign"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Queen",
-        "alternatives": [
-          "Monarch",
-          "Sovereign"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-225",
-      "fingerprint": "85da3a8f4e90a62a2f72c7a4ea9ee3b765d37ff44d36a1583c0f3eda3f891445",
-      "answer": "Cricket World Cup",
-      "passed": true,
-      "halfA": {
-        "best_answer": "The Ashes",
-        "alternatives": [
-          "The Test Championship",
-          "The National Cricket Championship"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "FIFA World Cup",
-        "alternatives": [
-          "Rugby World Cup",
-          "Women\u0019s T20 Cricket World Cup"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Cricket World Cup",
-        "alternatives": [
-          "Hockey World Cup",
-          "Rugby World Cup"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-109",
-      "fingerprint": "08e52b996404da62ca759d9d435f52741a1e343bb0081ee4248327d9cacd5fe7",
-      "answer": "A.R. Rahman",
-      "passed": true,
-      "halfA": {
-        "best_answer": "John Williams",
-        "alternatives": [
-          "John Williams",
-          "Alan Menken"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Shankar Mahadevan",
-        "alternatives": [
-          "Rajan & Sangeet",
-          "Panjiri"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "A. R. Rahman",
-        "alternatives": [
-          "Ravi Shankar",
-          "A. R. Rahman"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-407",
-      "fingerprint": "d6629219067ddc8f8f5013b8425b0564f1219f078d094bb0ac6bb41fbd005cf5",
-      "answer": "Virat Kohli",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Sachin Tendulkar",
-        "alternatives": [
-          "Gautam Gambhir",
-          "Michael Clarke"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Shakib Al Hasan",
-        "alternatives": [
-          "MS Dhoni",
-          "Sachin Tendulkar"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Virat Kohli",
-        "alternatives": [
-          "Sachin Tendulkar",
-          "MS Dhoni"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-080",
-      "fingerprint": "d40680e62d3e6f674170d88912f3fc1ae8d26fb2d3d469b7e50e6e7a3f05834e",
-      "answer": "The Shawshank Redemption",
-      "passed": true,
-      "halfA": {
-        "best_answer": "A Hologram for the King",
-        "alternatives": [
-          "Cellular",
-          "Birdman"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Unleashed",
-        "alternatives": [
-          "The Reckoning",
-          "Freedom"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "The Shawshank Redemption",
-        "alternatives": [
-          "The Shawshank Redelivery",
-          "Escape from Alcatraz"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-133",
-      "fingerprint": "230948f5392d1599ba79defb0d39a0c267c8817e092d9d10f13840f325850575",
-      "answer": "Jai Ho",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Foxy Lady",
-        "alternatives": [
-          "Hallelujah",
-          "A Thousand Years"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Chaiyya Chaiyya",
-        "alternatives": [
-          "Jai Ho",
-          "Kuch Toy"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Jai Ho",
-        "alternatives": [
-          "Jai Ho",
-          "Kun Faya Kun"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-100",
-      "fingerprint": "e3072898d275fdea96ec601da765f806cbae4635f3d9959b40d6c3932315e86f",
-      "answer": "Mango Lassi",
-      "passed": true,
-      "halfA": {
-        "best_answer": "piña colada",
-        "alternatives": [
-          "mango lassi",
-          "orange creamsicle"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Masala Chai",
-        "alternatives": [
-          "Lassi",
-          "Chai"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Mango Lassi",
-        "alternatives": [
-          "Mango Lassi",
-          "Lassi"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-104",
-      "fingerprint": "c3d3794f3efabbfb91862b0665b32f6e9c30679f7528ec7906bdf3f56b1430b1",
-      "answer": "Dangal",
-      "passed": true,
-      "halfA": {
-        "best_answer": "The Fighter",
-        "alternatives": [
-          "Kickboxing: Fighting for Survival",
-          "Warrior: A Story of Two Sisters"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Mard Kohli",
-        "alternatives": [
-          "Pikachu and the Big Boss",
-          "Bharat Ek Khoobsoorat Desh"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Dangal",
-        "alternatives": [
-          "The Hundred-Foot Journey",
-          "Margarita with a Straw"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-421",
-      "fingerprint": "cc52062599b28ec6a95eb5eed4d3de8d3a4aa7b8bb0c4910075ab029ea52bbf5",
-      "answer": "Mumbai",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Bollywood",
-        "alternatives": [
-          "Mumbai",
-          "Colombo"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "London",
-        "alternatives": [
-          "Tokyo",
-          "New York"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Mumbai",
-        "alternatives": [
-          "Bombay",
-          "Mumbai"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-380",
-      "fingerprint": "d8943eabc922c99a0c19d75b3633adb59ce0d357e177457ae36ab05d05ebec77",
-      "answer": "Raga Bhairavi",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Raga Yaman",
-        "alternatives": [
-          "Raga Bhairavi",
-          "Raga Malhar"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Symphony",
-        "alternatives": [
-          "Symphonic Poem",
-          "Fantasy"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Raga Bhairav",
-        "alternatives": [
-          "Raga Yaman",
-          "Raga Kedar"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-142",
-      "fingerprint": "0c17efff5fd93bdfd1ef6631d8da66d35bf8b3af0512b67603078adf474471fc",
-      "answer": "Biryani",
-      "passed": true,
-      "halfA": {
-        "best_answer": "pilaf",
-        "alternatives": [
-          "biryani",
-          "kabsa"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Punjab",
-        "alternatives": [
-          "India",
-          "Himachal Pradesh"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Biryani",
-        "alternatives": [
-          "Chole Bhature",
-          "Butter Chicken"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-101",
-      "fingerprint": "fed1d9e83b6285bb9cddf217a4b95fc8b14efab160987b317ddbf1438f0252d3",
-      "answer": "Mount Fuji",
-      "passed": true,
-      "halfA": {
-        "best_answer": "mountain",
-        "alternatives": [
-          "pyramid",
-          "skull"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Cherry Blossom",
-        "alternatives": [
-          "Rising Sun",
-          "Fuji"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Mount Fuji",
-        "alternatives": [
-          "The Great Bell ofTokyo",
-          "The Golden Pavilion"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-160",
-      "fingerprint": "291e6e9632406e367de813d0428eafa610db07f4c188f68badc6404ea3324d97",
-      "answer": "Taj Mahal",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Tomb of Edward IV",
-        "alternatives": [
-          "Henry VII's Chapel",
-          "Tomb of Edward IV"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Mehtab Bagh",
-        "alternatives": [
-          "Raj Bagh",
-          "Sadar Bazar"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Taj Mahal",
-        "alternatives": [
-          "Tomb of I'timad-ud-Daulah",
-          "Tomb of Safdarjung"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-284",
-      "fingerprint": "b3a48c977fc19130c1eb833cdd77a0bb52459e2a80dd4612ef92c591cfc49a18",
-      "answer": "Paneer Tikka",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Grilled halloumi",
-        "alternatives": [
-          "Cheese chunks",
-          "Paneer"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Pani Puri",
-        "alternatives": [
-          "Kebabs",
-          "Chaat"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Paneer Tikka",
-        "alternatives": [
-          "Paneer Tikka",
-          "Malai Kebab"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
-    },
-    {
-      "id": "gen-335",
-      "fingerprint": "9218c4bda65e70d73db6529f315761e680449611c5cc03a178c82803a553d12a",
-      "answer": "Paneer",
-      "passed": true,
-      "halfA": {
-        "best_answer": "Quark",
-        "alternatives": [
-          "Ricotta",
-          "Curdled Milk"
-        ],
-        "referee": "rejected"
-      },
-      "halfB": {
-        "best_answer": "Ghee",
-        "alternatives": [
-          "Margarine",
-          "Palm oil"
-        ],
-        "referee": "rejected"
-      },
-      "both": {
-        "best_answer": "Paneer",
-        "alternatives": [
-          "Hung Curd",
-          "Lassi Whey"
-        ],
-        "referee": "accepted"
-      },
-      "failures": []
+      "solvers": {
+        "halfA": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "Zelda",
+            "alternatives": [
+              "FinalFantasy",
+              "DragonQuest"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "zelda",
+            "alternatives": [
+              "dragon quest",
+              "final fantasy"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "halfB": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "The Legend of Zelda",
+            "alternatives": [
+              "Metroid",
+              "Super Mario Odyssey"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "The Legend of Zelda",
+            "alternatives": [
+              "Action-adventure game",
+              "Metroid"
+            ],
+            "referee": "accepted"
+          }
+        ],
+        "both": [
+          {
+            "model": "openai/gpt-oss-20b",
+            "best_answer": "legend-of-zelda",
+            "alternatives": [
+              "the-legend-of-zelda",
+              "zelda"
+            ],
+            "referee": "accepted"
+          },
+          {
+            "model": "qwen/qwen3.8-27b",
+            "best_answer": "The Legend of Zelda",
+            "alternatives": [
+              "Métroid",
+              "Final Fantasy"
+            ],
+            "referee": "accepted"
+          }
+        ]
+      },
+      "factCheck": {
+        "halfA": "true",
+        "halfAReason": "Nintendo's enduring fantasy adventure saga.",
+        "halfB": "true",
+        "halfBReason": "Blends puzzles, exploration, and combat."
+      },
+      "failures": [
+        "halfA alone: openai/gpt-oss-20b answered \"Zelda\"; qwen/qwen3.8-27b answered \"zelda\".",
+        "halfB alone: openai/gpt-oss-20b answered \"The Legend of Zelda\"; qwen/qwen3.8-27b answered \"The Legend of Zelda\"."
+      ]
     }
   ],
   "rounds": [
     {
       "round": 1,
-      "puzzlesAudited": 60,
-      "passed": 20
-    },
-    {
-      "round": 2,
-      "puzzlesAudited": 40,
-      "passed": 4
-    },
-    {
-      "round": 3,
-      "puzzlesAudited": 29,
-      "passed": 4
-    },
-    {
-      "round": 4,
-      "puzzlesAudited": 10,
-      "passed": 2
-    },
-    {
-      "round": 5,
-      "puzzlesAudited": 5,
-      "passed": 0
-    },
-    {
-      "round": 6,
       "puzzlesAudited": 8,
-      "passed": 2
-    },
-    {
-      "round": 7,
-      "puzzlesAudited": 184,
-      "passed": 28
+      "passed": 0
     }
   ]
 }
