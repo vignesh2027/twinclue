@@ -86,7 +86,8 @@ export class ChatSender {
   private async post(item: QueueItem): Promise<boolean | 'retry'> {
     const metrics = this.config.metrics;
     try {
-      const response = await this.config.helix.call('POST', '/chat/messages', 'bot', { broadcaster_id: this.config.channels[item.channel], sender_id: this.config.botUserId, message: item.text });
+      // The sender owns 429 handling (its window and pause), so Helix must not retry a rate-limited send on its own.
+      const response = await this.config.helix.call('POST', '/chat/messages', 'bot', { broadcaster_id: this.config.channels[item.channel], sender_id: this.config.botUserId, message: item.text }, { retryRateLimit: false });
       if (response.status === 429) {
         metrics?.chatSends.inc({ result: 'rate_limited' });
         this.pausedUntil = this.now() + rateLimitWaitMs(response.headers, this.now());

@@ -115,4 +115,16 @@ describe('game controller', () => {
     expect(controller.session.scoreboard.wins).toBe(0);
     expect(metrics.votes.get({ result: 'voted' })).toBe(2);
   });
+
+  it('refuses rehearsal votes in a real round when rehearsal is switched on mid-round', () => {
+    const controller = make();
+    controller.startRound();
+    controller.vote('A', '1', 'Paris');
+    controller.setRehearsal(true);
+    expect(() => controller.rehearsalVote('Paris')).toThrow(/counts for real/);
+    expect(controller.activeRound!.voterCount('B')).toBe(0);
+    expect(controller.snapshot('a').rehearsal).toBe(false);
+    controller.lockRound();
+    expect(controller.session.scoreboard).toMatchObject({ rounds: 1, wins: 0 });
+  });
 });

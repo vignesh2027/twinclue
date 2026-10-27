@@ -120,6 +120,17 @@ describe('chat sender', () => {
     expect(posts[1]!.at).toBeGreaterThanOrEqual(12_000);
   });
 
+  it('posts a rate-limited message at most three times through the real Helix client', async () => {
+    const fetcher = vi.fn(async () => json({}, 429, { 'ratelimit-reset': '5' }));
+    const tokens = { valid: vi.fn(async () => ({ access_token: 't' })), refresh: vi.fn() };
+    const helix = new TwitchHelix({ clientId: 'id', tokens: tokens as never, fetcher: fetcher as typeof fetch, sleep: async () => undefined });
+    let clock = 0;
+    const chat = new ChatSender({ helix, botUserId: 'bot', channels: { a: '1' }, sharedChat: () => false, now: () => clock, sleep: async ms => { clock += ms; } });
+    expect(await chat.send('a', 'hello')).toBe(false);
+    // One send plus the sender's two retries; Helix must not multiply them with its own 429 retries.
+    expect(fetcher).toHaveBeenCalledTimes(3);
+  });
+
   it('sends once when Shared Chat joins both channels, and to both otherwise', async () => {
     const shared = sender(ok, true);
     await shared.chat.send('both', 'Round started');

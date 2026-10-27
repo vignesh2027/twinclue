@@ -69,7 +69,7 @@ export class Session {
  */
 export class SessionStore {
   private writing?: Promise<void>;
-  private pending = false;
+  private followUp?: Promise<void>;
   private timer?: ReturnType<typeof setTimeout>;
   private lastStartAt = 0;
   private lastDurationMs = 0;
@@ -111,10 +111,13 @@ export class SessionStore {
   /** Immediate save for round transitions and shutdown. Concurrent calls coalesce into one extra write. */
   async now(session: Session): Promise<void> {
     if (this.timer) { clearTimeout(this.timer); this.timer = undefined; }
-    if (this.writing) { this.pending = true; return this.writing; }
+    // A caller arriving mid-write waits for the follow-up write that includes its state, not the older one in flight.
+    if (this.writing) {
+      this.followUp ??= this.writing.then(() => { this.followUp = undefined; return this.now(session); });
+      return this.followUp;
+    }
     this.writing = this.write(session).finally(() => { this.writing = undefined; });
     await this.writing;
-    if (this.pending) { this.pending = false; await this.now(session); }
   }
 
   private async write(session: Session): Promise<void> {

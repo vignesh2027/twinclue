@@ -121,7 +121,8 @@ export class GameController {
     const alsoB = puzzle ? puzzle.alsoFitsB ?? puzzle.halfBAlsoFits : [];
     return {
       type: 'state', seq: this.ingested, serverNow: this.now(), demo: this.demo, unauditedDemo: Boolean(this.demo && puzzle?.id.startsWith('demo-')),
-      rehearsal: this.rehearsal || Boolean(round?.rehearsal), side: view, commandPrefix: this.commandPrefix, roundStatus: status,
+      // A live round is labelled by what it is, so a real round never wears the REHEARSAL tag.
+      rehearsal: round?.status === 'active' ? round.rehearsal : this.rehearsal || Boolean(round?.rehearsal), side: view, commandPrefix: this.commandPrefix, roundStatus: status,
       category: puzzle?.category ?? null, half: status === 'active' ? (view === 'a' ? puzzle!.halfA : puzzle!.halfB) : null,
       startedAt: status === 'active' ? round!.startedAt ?? null : null, endsAt: status === 'active' ? round!.endsAt ?? null : null,
       leading: round?.leaderLabel(side) ?? null, voters: round?.voterCount(side) ?? 0, buckets: display.buckets, otherVotes: display.other,
@@ -198,6 +199,9 @@ export class GameController {
   /** Rehearsal: the host types a vote for community B as if a new viewer sent it. */
   rehearsalVote(text: string): VoteResult {
     if (!this.rehearsal) throw new Error('Rehearsal mode is off.');
+    // Turning rehearsal on mid-round must not let typed votes into a round that counts.
+    const round = this.session.current;
+    if (round?.status === 'active' && !round.rehearsal) throw new Error('This round counts for real. Rehearsal votes go into the next rehearsal round.');
     const id = ++this.rehearsalVoter;
     return this.vote('B', `rehearsal-${id}`, text, { displayName: `Rehearsal viewer ${id}` });
   }

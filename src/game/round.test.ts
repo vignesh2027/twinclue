@@ -92,6 +92,18 @@ describe('community lock-in votes', () => {
     expect(r.consensusDueAt()).toBeUndefined();
   });
 
+  it('restarts the consensus hold when a side switches leader without dropping below the share', () => {
+    const r = round();
+    for (const id of ['1', '2', '3']) r.vote('A', id, 'Rome', 1_000);
+    r.vote('B', '4', 'Rome', 1_000);
+    r.vote('B', '5', 'Rome', 1_000);
+    r.vote('B', '6', 'Vienna', 1_000);
+    expect(r.consensusDueAt()).toBe(6_000);
+    // Rome 2 of 3 becomes Vienna 2 of 3: still 66 percent, but a different answer.
+    expect(r.vote('B', '4', 'Vienna', 3_000)).toBe('voted');
+    expect(r.consensusDueAt()).toBe(8_000);
+  });
+
   it('round-trips a compact snapshot without losing or doubling a vote', () => {
     const r = round();
     for (let i = 0; i < 50; i++) r.vote(i % 2 ? 'A' : 'B', `u${i}`, i % 3 ? 'Paris' : `nonsense ${i % 5}`, 10);

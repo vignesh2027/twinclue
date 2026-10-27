@@ -1,7 +1,11 @@
 import type { AuthRole, TokenStore } from './auth.js';
 
 export interface HelixResponse { status: number; body: unknown; headers: Headers }
-export interface HelixApi { call(method: 'GET' | 'POST' | 'DELETE', path: string, role: AuthRole, body?: unknown): Promise<HelixResponse> }
+export interface HelixCallOptions {
+  /** False hands a 429 straight back, for callers that keep their own rate-limit window (the chat sender). */
+  retryRateLimit?: boolean;
+}
+export interface HelixApi { call(method: 'GET' | 'POST' | 'DELETE', path: string, role: AuthRole, body?: unknown, options?: HelixCallOptions): Promise<HelixResponse> }
 export interface HelixConfig { clientId: string; tokens: Pick<TokenStore, 'valid' | 'refresh'>; fetcher?: typeof fetch; timeoutMs?: number; retries?: number; sleep?: (ms: number) => Promise<void>; now?: () => number }
 
 const defaultSleep = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
@@ -22,7 +26,7 @@ export class TwitchHelix implements HelixApi {
   private readonly sleep: (ms: number) => Promise<void>;
   constructor(private readonly config: HelixConfig) { this.sleep = config.sleep ?? defaultSleep; }
 
-  async call(method: 'GET' | 'POST' | 'DELETE', path: string, role: AuthRole, body?: unknown): Promise<HelixResponse> {
+  async call(method: 'GET' | 'POST' | 'DELETE', path: string, role: AuthRole, body?: unknown, options: HelixCallOptions = {}): Promise<HelixResponse> {
     const retries = this.config.retries ?? 3;
     let refreshed = false;
     for (let attempt = 0; ; attempt++) {
@@ -40,7 +44,8 @@ export class TwitchHelix implements HelixApi {
         continue;
       }
       if (response.status === 401 && !refreshed) { refreshed = true; await this.config.tokens.refresh(role); continue; }
-      if ((response.status === 429 || response.status >= 500) && attempt < retries) {
+      const retryable = response.status >= 500 || (response.status === 429 && options.retryRateLimit !== false);
+      if (retryable && attempt < retries) {
         await this.sleep(response.status === 429 ? rateLimitWaitMs(response.headers, (this.config.now ?? Date.now)()) : Math.min(8_000, 500 * 2 ** attempt));
         continue;
       }

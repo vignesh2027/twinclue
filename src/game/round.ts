@@ -75,6 +75,7 @@ export class Round {
   endedAt?: number;
   endsAt?: number;
   consensusSince?: number;
+  private consensusLeaders?: string;
   finishReason?: 'timeout' | 'lock' | 'consensus' | 'skip';
   result: Record<Community, SideReveal> | null = null;
   readonly rehearsal: boolean;
@@ -172,8 +173,12 @@ export class Round {
     }
     return true;
   }
+  /** The hold restarts when either side's leader changes, so the lock always means the same two answers for the full hold. */
   private updateConsensus(at: number): void {
-    if (this.consensusHolds()) this.consensusSince ??= at; else this.consensusSince = undefined;
+    const leaders = this.consensusHolds() ? `${this.tallies.A.leader()}\u0000${this.tallies.B.leader()}` : undefined;
+    if (leaders === undefined) this.consensusSince = undefined;
+    else if (leaders !== this.consensusLeaders || this.consensusSince === undefined) this.consensusSince = at;
+    this.consensusLeaders = leaders;
   }
   refreshConsensus(at = Date.now()): void { if (this.status === 'active') this.updateConsensus(at); }
   /** When the consensus lock is due, or undefined if consensus does not currently hold. */

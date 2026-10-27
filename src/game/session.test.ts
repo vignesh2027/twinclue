@@ -74,4 +74,16 @@ describe('session persistence', () => {
     expect(write).toHaveBeenCalledTimes(2);
     store.stop();
   }));
+
+  it('resolves a save that arrives during another write only once its own state is on disk', () => withDir(async dir => {
+    const path = join(dir, 'session.json');
+    const store = new SessionStore(path);
+    const session = new Session();
+    const first = store.now(session);
+    session.stats.rounds = 7;
+    // The shutdown path awaits exactly this call and then exits, so the newer score must already be written.
+    await store.now(session);
+    expect(JSON.parse(await readFile(path, 'utf8')).stats.rounds).toBe(7);
+    await first;
+  }));
 });
