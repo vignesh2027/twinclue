@@ -2,7 +2,19 @@
   "_meta": {
     "category": "countries",
     "sources": [
-      "Curated from publicly documented general-reference facts; see facts/README.md"
+      "Curated from publicly documented general-reference facts; see facts/README.md",
+      "Wikipedia: Gallery of sovereign state flags (https://en.wikipedia.org/wiki/Gallery_of_sovereign_state_flags)",
+      "Wikipedia: Left- and right-hand traffic (https://en.wikipedia.org/wiki/Left-_and_right-hand_traffic)",
+      "Wikipedia: Landlocked country (https://en.wikipedia.org/wiki/Landlocked_country)",
+      "Wikipedia: Island country (https://en.wikipedia.org/wiki/Island_country)",
+      "Wikipedia: List of current monarchies (https://en.wikipedia.org/wiki/List_of_current_monarchies)",
+      "Wikipedia: Member state of the European Union (https://en.wikipedia.org/wiki/Member_state_of_the_European_Union)",
+      "Wikipedia: Eurozone (https://en.wikipedia.org/wiki/Eurozone)",
+      "Wikipedia: List of Olympic Games host cities (https://en.wikipedia.org/wiki/List_of_Olympic_Games_host_cities)",
+      "Wikipedia: List of countries and territories by number of land borders (https://en.wikipedia.org/wiki/List_of_countries_and_territories_by_number_of_land_borders)",
+      "Wikipedia: List of territorial entities where Spanish is an official language (https://en.wikipedia.org/wiki/List_of_territorial_entities_where_Spanish_is_an_official_language)",
+      "Wikipedia: List of countries and territories where Arabic is an official language (https://en.wikipedia.org/wiki/List_of_countries_and_territories_where_Arabic_is_an_official_language)",
+      "Wikipedia: List of countries by English-speaking population (https://en.wikipedia.org/wiki/List_of_countries_by_English-speaking_population)"
     ],
     "license": "CC0 1.0 for this curated compilation"
   },
@@ -14,7 +26,13 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "left"
+        "drivingSide": "right",
+        "islandNation": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "Iran"
+        ]
       }
     },
     {
@@ -24,7 +42,15 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "black"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -34,7 +60,20 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "star",
+          "crescent"
+        ],
+        "mainLanguage": "Arabic",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -44,7 +83,11 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "currency": "euro",
+        "islandNation": false,
+        "euMember": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -54,7 +97,19 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "black",
+          "yellow"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "mainLanguage": "Portuguese",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -64,7 +119,20 @@
       "attributes": {
         "continent": "South America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white",
+          "yellow"
+        ],
+        "flagFeatures": [
+          "sun"
+        ],
+        "mainLanguage": "Spanish",
+        "currency": "peso",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -74,7 +142,19 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "blue",
+          "orange"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Iran",
+          "Türkiye"
+        ]
       }
     },
     {
@@ -91,8 +171,13 @@
           "red"
         ],
         "flagFeatures": [
-          "star"
-        ]
+          "star",
+          "cross"
+        ],
+        "mainLanguage": "English",
+        "currency": "dollar",
+        "monarchy": true,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -106,6 +191,15 @@
         "flagColors": [
           "red",
           "white"
+        ],
+        "mainLanguage": "German",
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Germany"
         ]
       }
     },
@@ -116,7 +210,25 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "red",
+          "green",
+          "white"
+        ],
+        "flagFeatures": [
+          "star",
+          "crescent"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Russia",
+          "Iran",
+          "Türkiye"
+        ]
       }
     },
     {
@@ -126,7 +238,17 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "green",
+          "red"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "India"
+        ]
       }
     },
     {
@@ -136,7 +258,20 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "green",
+          "white"
+        ],
+        "mainLanguage": "Russian",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Russia"
+        ]
       }
     },
     {
@@ -146,7 +281,20 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "black",
+          "yellow",
+          "red"
+        ],
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": true,
+        "euMember": true,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Germany"
+        ]
       }
     },
     {
@@ -156,7 +304,14 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "islandNation": false,
+        "monarchy": true,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "India"
+        ]
       }
     },
     {
@@ -166,7 +321,11 @@
       "attributes": {
         "continent": "South America",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "mainLanguage": "Spanish",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -176,7 +335,15 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": true,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "blue",
+          "black",
+          "white"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -186,7 +353,20 @@
       "attributes": {
         "continent": "South America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "yellow",
+          "blue",
+          "white"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "mainLanguage": "Portuguese",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -198,9 +378,16 @@
         "landlocked": false,
         "drivingSide": "right",
         "flagColors": [
-          "green",
           "white",
+          "green",
           "red"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Türkiye"
         ]
       }
     },
@@ -211,7 +398,10 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "islandNation": false,
+        "monarchy": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -221,7 +411,18 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "red",
+          "yellow"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -235,7 +436,12 @@
         "flagColors": [
           "red",
           "white"
-        ]
+        ],
+        "mainLanguage": "English",
+        "currency": "dollar",
+        "islandNation": false,
+        "monarchy": true,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -253,7 +459,12 @@
         ],
         "flagFeatures": [
           "star"
-        ]
+        ],
+        "mainLanguage": "Spanish",
+        "currency": "peso",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -264,8 +475,19 @@
         "continent": "Asia",
         "landlocked": false,
         "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "yellow"
+        ],
         "flagFeatures": [
           "star"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Russia",
+          "India"
         ]
       }
     },
@@ -276,7 +498,17 @@
       "attributes": {
         "continent": "South America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "yellow",
+          "blue",
+          "red"
+        ],
+        "mainLanguage": "Spanish",
+        "currency": "peso",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -286,7 +518,11 @@
       "attributes": {
         "continent": "North America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "mainLanguage": "Spanish",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -297,11 +533,11 @@
         "continent": "Europe",
         "landlocked": false,
         "drivingSide": "right",
-        "flagColors": [
-          "blue",
-          "white",
-          "red"
-        ]
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -319,7 +555,12 @@
         ],
         "flagFeatures": [
           "star"
-        ]
+        ],
+        "mainLanguage": "Spanish",
+        "currency": "peso",
+        "islandNation": true,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -331,9 +572,17 @@
         "landlocked": true,
         "drivingSide": "right",
         "flagColors": [
-          "blue",
           "white",
-          "red"
+          "red",
+          "blue"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Germany",
+          "Austria"
         ]
       }
     },
@@ -351,6 +600,13 @@
         ],
         "flagFeatures": [
           "cross"
+        ],
+        "islandNation": false,
+        "monarchy": true,
+        "euMember": true,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Germany"
         ]
       }
     },
@@ -361,7 +617,12 @@
       "attributes": {
         "continent": "South America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "mainLanguage": "Spanish",
+        "currency": "dollar",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -371,7 +632,11 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "mainLanguage": "Arabic",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -381,7 +646,19 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "yellow",
+          "red",
+          "blue"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -391,7 +668,11 @@
       "attributes": {
         "continent": "Oceania",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "currency": "dollar",
+        "islandNation": true,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -402,8 +683,20 @@
         "continent": "Europe",
         "landlocked": false,
         "drivingSide": "right",
+        "flagColors": [
+          "white",
+          "blue"
+        ],
         "flagFeatures": [
           "cross"
+        ],
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Russia"
         ]
       }
     },
@@ -419,6 +712,15 @@
           "blue",
           "white",
           "red"
+        ],
+        "mainLanguage": "French",
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Germany"
         ]
       }
     },
@@ -431,8 +733,18 @@
         "landlocked": false,
         "drivingSide": "right",
         "flagColors": [
-          "red",
-          "white"
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "cross"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Russia",
+          "Türkiye"
         ]
       }
     },
@@ -443,7 +755,21 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "black",
+          "red",
+          "yellow"
+        ],
+        "mainLanguage": "German",
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Austria"
+        ]
       }
     },
     {
@@ -454,9 +780,18 @@
         "continent": "Africa",
         "landlocked": false,
         "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "yellow",
+          "green",
+          "black"
+        ],
         "flagFeatures": [
           "star"
-        ]
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -467,8 +802,20 @@
         "continent": "Europe",
         "landlocked": false,
         "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "white"
+        ],
         "flagFeatures": [
           "cross"
+        ],
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Türkiye"
         ]
       }
     },
@@ -481,9 +828,16 @@
         "landlocked": true,
         "drivingSide": "right",
         "flagColors": [
-          "green",
+          "red",
           "white",
-          "red"
+          "green"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Austria"
         ]
       }
     },
@@ -502,7 +856,11 @@
         ],
         "flagFeatures": [
           "cross"
-        ]
+        ],
+        "islandNation": true,
+        "monarchy": false,
+        "euMember": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -512,7 +870,19 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "orange",
+          "white",
+          "green",
+          "blue"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China"
+        ]
       }
     },
     {
@@ -526,7 +896,10 @@
         "flagColors": [
           "red",
           "white"
-        ]
+        ],
+        "islandNation": true,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -541,6 +914,12 @@
           "green",
           "white",
           "red"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Türkiye"
         ]
       }
     },
@@ -551,7 +930,21 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white",
+          "black",
+          "green"
+        ],
+        "mainLanguage": "Arabic",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Iran",
+          "Türkiye"
+        ]
       }
     },
     {
@@ -561,7 +954,18 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "green",
+          "white",
+          "orange"
+        ],
+        "mainLanguage": "English",
+        "currency": "euro",
+        "islandNation": true,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -571,7 +975,17 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "white",
+          "blue"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -586,6 +1000,14 @@
           "green",
           "white",
           "red"
+        ],
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Austria"
         ]
       }
     },
@@ -596,7 +1018,15 @@
       "attributes": {
         "continent": "North America",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "black",
+          "green",
+          "yellow"
+        ],
+        "currency": "dollar",
+        "islandNation": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -608,9 +1038,12 @@
         "landlocked": false,
         "drivingSide": "left",
         "flagColors": [
-          "red",
-          "white"
-        ]
+          "white",
+          "red"
+        ],
+        "islandNation": true,
+        "monarchy": true,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -620,7 +1053,20 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "black",
+          "white",
+          "green",
+          "red"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "mainLanguage": "Arabic",
+        "islandNation": false,
+        "monarchy": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -630,7 +1076,21 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "yellow"
+        ],
+        "flagFeatures": [
+          "sun"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "Russia"
+        ]
       }
     },
     {
@@ -640,7 +1100,16 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "black",
+          "red",
+          "green",
+          "white"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -650,7 +1119,18 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "blue",
+          "white"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China"
+        ]
       }
     },
     {
@@ -662,10 +1142,14 @@
         "landlocked": false,
         "drivingSide": "right",
         "flagColors": [
-          "green",
+          "red",
           "white",
-          "red"
-        ]
+          "green"
+        ],
+        "mainLanguage": "Arabic",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -676,9 +1160,18 @@
         "continent": "Asia",
         "landlocked": false,
         "drivingSide": "left",
+        "flagColors": [
+          "red",
+          "white",
+          "blue",
+          "yellow"
+        ],
         "flagFeatures": [
-          "star"
-        ]
+          "star",
+          "crescent"
+        ],
+        "monarchy": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -688,7 +1181,18 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "red",
+          "green",
+          "white"
+        ],
+        "flagFeatures": [
+          "crescent"
+        ],
+        "islandNation": true,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -698,7 +1202,12 @@
       "attributes": {
         "continent": "North America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "mainLanguage": "Spanish",
+        "currency": "peso",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -708,7 +1217,19 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "blue",
+          "yellow"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "Russia"
+        ]
       }
     },
     {
@@ -718,7 +1239,18 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "green"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "mainLanguage": "Arabic",
+        "islandNation": false,
+        "monarchy": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -728,7 +1260,23 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "yellow",
+          "green",
+          "red",
+          "white"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "India"
+        ]
       }
     },
     {
@@ -738,7 +1286,23 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": true,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "red",
+          "blue",
+          "white"
+        ],
+        "flagFeatures": [
+          "sun",
+          "crescent"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "India"
+        ]
       }
     },
     {
@@ -750,9 +1314,17 @@
         "landlocked": false,
         "drivingSide": "right",
         "flagColors": [
-          "blue",
+          "red",
           "white",
-          "red"
+          "blue"
+        ],
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": true,
+        "euMember": true,
+        "hostedSummerOlympics": true,
+        "notableNeighbours": [
+          "Germany"
         ]
       }
     },
@@ -763,7 +1335,21 @@
       "attributes": {
         "continent": "Oceania",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "blue",
+          "red",
+          "white"
+        ],
+        "flagFeatures": [
+          "star",
+          "cross"
+        ],
+        "mainLanguage": "English",
+        "currency": "dollar",
+        "islandNation": true,
+        "monarchy": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -773,7 +1359,14 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -783,7 +1376,22 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "red",
+          "white"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "Russia"
+        ]
       }
     },
     {
@@ -795,12 +1403,19 @@
         "landlocked": false,
         "drivingSide": "right",
         "flagColors": [
-          "blue",
+          "red",
           "white",
-          "red"
+          "blue"
         ],
         "flagFeatures": [
           "cross"
+        ],
+        "islandNation": false,
+        "monarchy": true,
+        "euMember": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Russia"
         ]
       }
     },
@@ -812,8 +1427,21 @@
         "continent": "Asia",
         "landlocked": false,
         "drivingSide": "left",
+        "flagColors": [
+          "green",
+          "white"
+        ],
         "flagFeatures": [
-          "star"
+          "star",
+          "crescent"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China",
+          "India",
+          "Iran"
         ]
       }
     },
@@ -824,7 +1452,19 @@
       "attributes": {
         "continent": "North America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "white",
+          "red",
+          "blue"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "mainLanguage": "Spanish",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -838,7 +1478,11 @@
         "flagColors": [
           "red",
           "white"
-        ]
+        ],
+        "mainLanguage": "Spanish",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -848,7 +1492,21 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "red",
+          "white",
+          "yellow"
+        ],
+        "flagFeatures": [
+          "star",
+          "sun"
+        ],
+        "currency": "peso",
+        "islandNation": true,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -860,8 +1518,16 @@
         "landlocked": false,
         "drivingSide": "right",
         "flagColors": [
-          "red",
-          "white"
+          "white",
+          "red"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Russia",
+          "Germany"
         ]
       }
     },
@@ -872,7 +1538,13 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "mainLanguage": "Portuguese",
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -882,7 +1554,16 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "yellow",
+          "red"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -894,9 +1575,16 @@
         "landlocked": false,
         "drivingSide": "right",
         "flagColors": [
-          "blue",
           "white",
+          "blue",
           "red"
+        ],
+        "mainLanguage": "Russian",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": false,
+        "notableNeighbours": [
+          "China"
         ]
       }
     },
@@ -907,7 +1595,15 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "green",
+          "white"
+        ],
+        "mainLanguage": "Arabic",
+        "islandNation": false,
+        "monarchy": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -918,11 +1614,10 @@
         "continent": "Europe",
         "landlocked": true,
         "drivingSide": "right",
-        "flagColors": [
-          "blue",
-          "white",
-          "red"
-        ]
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -936,7 +1631,15 @@
         "flagColors": [
           "red",
           "white"
-        ]
+        ],
+        "flagFeatures": [
+          "star",
+          "crescent"
+        ],
+        "currency": "dollar",
+        "islandNation": true,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -946,7 +1649,18 @@
       "attributes": {
         "continent": "Africa",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "red",
+          "blue",
+          "green",
+          "black",
+          "yellow",
+          "white"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -956,7 +1670,16 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "white",
+          "red",
+          "blue",
+          "black"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -966,7 +1689,13 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "mainLanguage": "Spanish",
+        "currency": "euro",
+        "islandNation": false,
+        "monarchy": true,
+        "euMember": true,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -976,7 +1705,10 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "islandNation": true,
+        "monarchy": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -987,9 +1719,17 @@
         "continent": "Europe",
         "landlocked": false,
         "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "yellow"
+        ],
         "flagFeatures": [
           "cross"
-        ]
+        ],
+        "islandNation": false,
+        "monarchy": true,
+        "euMember": true,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -1006,6 +1746,15 @@
         ],
         "flagFeatures": [
           "cross"
+        ],
+        "mainLanguage": "German",
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Germany",
+          "Austria"
         ]
       }
     },
@@ -1018,10 +1767,13 @@
         "landlocked": false,
         "drivingSide": "left",
         "flagColors": [
-          "blue",
+          "red",
           "white",
-          "red"
-        ]
+          "blue"
+        ],
+        "islandNation": false,
+        "monarchy": true,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -1037,7 +1789,14 @@
           "white"
         ],
         "flagFeatures": [
-          "star"
+          "star",
+          "crescent"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Iran"
         ]
       }
     },
@@ -1048,7 +1807,18 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "blue",
+          "yellow"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "euMember": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "Russia"
+        ]
       }
     },
     {
@@ -1058,7 +1828,15 @@
       "attributes": {
         "continent": "Asia",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "green",
+          "white",
+          "black"
+        ],
+        "islandNation": false,
+        "hostedSummerOlympics": false
       }
     },
     {
@@ -1071,7 +1849,20 @@
       "attributes": {
         "continent": "Europe",
         "landlocked": false,
-        "drivingSide": "left"
+        "drivingSide": "left",
+        "flagColors": [
+          "blue",
+          "white",
+          "red"
+        ],
+        "flagFeatures": [
+          "cross"
+        ],
+        "mainLanguage": "English",
+        "islandNation": true,
+        "monarchy": true,
+        "euMember": false,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -1084,7 +1875,20 @@
       "attributes": {
         "continent": "North America",
         "landlocked": false,
-        "drivingSide": "right"
+        "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "white",
+          "blue"
+        ],
+        "flagFeatures": [
+          "star"
+        ],
+        "mainLanguage": "English",
+        "currency": "dollar",
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": true
       }
     },
     {
@@ -1095,8 +1899,18 @@
         "continent": "Asia",
         "landlocked": false,
         "drivingSide": "right",
+        "flagColors": [
+          "red",
+          "yellow"
+        ],
         "flagFeatures": [
           "star"
+        ],
+        "islandNation": false,
+        "monarchy": false,
+        "hostedSummerOlympics": false,
+        "notableNeighbours": [
+          "China"
         ]
       }
     }

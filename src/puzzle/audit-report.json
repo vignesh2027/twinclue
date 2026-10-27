@@ -1,6 +1,6 @@
 {
   "auditVersion": 2.1,
-  "generatedAt": "2026-10-26T13:56:39.579Z",
+  "generatedAt": "2026-10-26T14:34:03.788Z",
   "solverModels": [
     "gemini:gemini-3.5-flash",
     "gemini:gemini-2.5-flash",
@@ -25,9 +25,9 @@
       "totalTokens": 0
     },
     "groq:openai/gpt-oss-20b": {
-      "promptTokens": 1485,
-      "completionTokens": 1408,
-      "totalTokens": 2893
+      "promptTokens": 4455,
+      "completionTokens": 4414,
+      "totalTokens": 8869
     }
   },
   "results": [],

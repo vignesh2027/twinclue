@@ -2,7 +2,17 @@
   "_meta": {
     "category": "video game characters",
     "sources": [
-      "Curated from publicly documented general-reference facts; see facts/README.md"
+      "Curated from publicly documented general-reference facts; see facts/README.md",
+      "Wikipedia: List of video game mascots (https://en.wikipedia.org/wiki/List_of_video_game_mascots)",
+      "Wikipedia: Nintendo (https://en.wikipedia.org/wiki/Nintendo)",
+      "Wikipedia: Sega (https://en.wikipedia.org/wiki/Sega)",
+      "Wikipedia: Capcom (https://en.wikipedia.org/wiki/Capcom)",
+      "Wikipedia: Platform game (https://en.wikipedia.org/wiki/Platform_game)",
+      "Wikipedia: Role-playing video game (https://en.wikipedia.org/wiki/Role-playing_video_game)",
+      "Wikipedia: Action-adventure game (https://en.wikipedia.org/wiki/Action-adventure_game)",
+      "Wikipedia: Fighting game (https://en.wikipedia.org/wiki/Fighting_game)",
+      "Wikipedia: Survival horror (https://en.wikipedia.org/wiki/Survival_horror)",
+      "Wikipedia: Silent protagonist (https://en.wikipedia.org/wiki/Silent_protagonist)"
     ],
     "license": "CC0 1.0 for this curated compilation"
   },
@@ -15,6 +25,8 @@
         "publisher": "Nintendo",
         "debutDecade": "1980s",
         "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "platform",
         "franchise": "Super Mario"
       }
     },
@@ -26,6 +38,8 @@
         "publisher": "Nintendo",
         "debutDecade": "1980s",
         "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "platform",
         "franchise": "Super Mario"
       }
     },
@@ -36,7 +50,10 @@
       "attributes": {
         "publisher": "Sega",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "animal",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Sonic the Hedgehog"
       }
     },
     {
@@ -46,7 +63,10 @@
       "attributes": {
         "publisher": "Sega",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "animal",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Sonic the Hedgehog"
       }
     },
     {
@@ -56,7 +76,9 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "creature",
+        "debutGenre": "platform",
+        "franchise": "Kirby"
       }
     },
     {
@@ -66,7 +88,9 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "creature",
+        "debutGenre": "role-playing",
+        "franchise": "Pokémon"
       }
     },
     {
@@ -77,6 +101,8 @@
         "publisher": "Nintendo",
         "debutDecade": "1980s",
         "speciesOrType": "Hylian",
+        "gender": "male",
+        "debutGenre": "action-adventure",
         "wieldsSword": true,
         "silentProtagonist": true,
         "franchise": "The Legend of Zelda"
@@ -89,7 +115,9 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "human",
+        "speciesOrType": "Hylian",
+        "gender": "female",
+        "debutGenre": "action-adventure",
         "franchise": "The Legend of Zelda"
       }
     },
@@ -100,7 +128,10 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "animal"
+        "speciesOrType": "animal",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Donkey Kong"
       }
     },
     {
@@ -111,6 +142,8 @@
         "publisher": "Nintendo",
         "debutDecade": "1980s",
         "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "action-adventure",
         "silentProtagonist": true,
         "franchise": "Metroid"
       }
@@ -122,7 +155,9 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "animal",
+        "debutGenre": "platform",
+        "franchise": "Super Mario"
       }
     },
     {
@@ -132,7 +167,11 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "animal"
+        "speciesOrType": "creature",
+        "gender": "male",
+        "debutGenre": "platform",
+        "isVillain": true,
+        "franchise": "Super Mario"
       }
     },
     {
@@ -142,7 +181,10 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1980s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "platform",
+        "franchise": "Super Mario"
       }
     },
     {
@@ -152,7 +194,9 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "isVillain": true,
         "wieldsSword": true,
         "franchise": "The Legend of Zelda"
       }
@@ -165,6 +209,9 @@
         "publisher": "Sony",
         "debutDecade": "2000s",
         "speciesOrType": "demigod",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "nationality": "Greek",
         "franchise": "God of War"
       }
     },
@@ -174,7 +221,11 @@
       "fame": 2,
       "attributes": {
         "debutDecade": "1990s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "action-adventure",
+        "nationality": "British",
+        "franchise": "Tomb Raider"
       }
     },
     {
@@ -184,7 +235,10 @@
       "attributes": {
         "publisher": "Microsoft",
         "debutDecade": "2000s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "shooter",
+        "franchise": "Halo"
       }
     },
     {
@@ -194,7 +248,11 @@
       ],
       "fame": 2,
       "attributes": {
-        "debutDecade": "1980s"
+        "publisher": "Bandai Namco",
+        "debutDecade": "1980s",
+        "gender": "male",
+        "debutGenre": "maze",
+        "franchise": "Pac-Man"
       }
     },
     {
@@ -203,7 +261,11 @@
       "fame": 3,
       "attributes": {
         "publisher": "Capcom",
-        "debutDecade": "1980s"
+        "debutDecade": "1980s",
+        "speciesOrType": "robot",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Mega Man"
       }
     },
     {
@@ -214,6 +276,9 @@
         "publisher": "Capcom",
         "debutDecade": "1980s",
         "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "fighting",
+        "nationality": "Japanese",
         "franchise": "Street Fighter"
       }
     },
@@ -225,6 +290,9 @@
         "publisher": "Capcom",
         "debutDecade": "1990s",
         "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "fighting",
+        "nationality": "Chinese",
         "franchise": "Street Fighter"
       }
     },
@@ -236,7 +304,10 @@
         "publisher": "Square Enix",
         "debutDecade": "1990s",
         "speciesOrType": "human",
-        "wieldsSword": true
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "wieldsSword": true,
+        "franchise": "Final Fantasy"
       }
     },
     {
@@ -246,8 +317,11 @@
       "attributes": {
         "publisher": "Square Enix",
         "debutDecade": "1990s",
-        "speciesOrType": "human",
-        "wieldsSword": true
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "isVillain": true,
+        "wieldsSword": true,
+        "franchise": "Final Fantasy"
       }
     },
     {
@@ -256,7 +330,12 @@
       "fame": 3,
       "attributes": {
         "publisher": "Sony",
-        "speciesOrType": "human"
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "nationality": "American",
+        "franchise": "Uncharted"
       }
     },
     {
@@ -265,7 +344,12 @@
       "fame": 3,
       "attributes": {
         "publisher": "Sony",
-        "speciesOrType": "human"
+        "debutDecade": "2010s",
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "action-adventure",
+        "nationality": "American",
+        "franchise": "The Last of Us"
       }
     },
     {
@@ -274,7 +358,12 @@
       "fame": 3,
       "attributes": {
         "publisher": "Sony",
-        "speciesOrType": "human"
+        "debutDecade": "2010s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "nationality": "American",
+        "franchise": "The Last of Us"
       }
     },
     {
@@ -285,6 +374,8 @@
         "publisher": "Sony",
         "debutDecade": "2010s",
         "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "role-playing",
         "franchise": "Horizon"
       }
     },
@@ -294,8 +385,11 @@
       "fame": 2,
       "attributes": {
         "publisher": "CD Projekt",
-        "speciesOrType": "human",
-        "wieldsSword": true
+        "debutDecade": "2000s",
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "wieldsSword": true,
+        "franchise": "The Witcher"
       }
     },
     {
@@ -303,8 +397,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
+        "publisher": "Konami",
         "debutDecade": "1980s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "franchise": "Metal Gear"
       }
     },
     {
@@ -314,7 +412,10 @@
       "attributes": {
         "publisher": "Activision",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "animal",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Crash Bandicoot"
       }
     },
     {
@@ -324,7 +425,10 @@
       "attributes": {
         "publisher": "Activision",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "creature",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Spyro"
       }
     },
     {
@@ -333,7 +437,10 @@
       "fame": 2,
       "attributes": {
         "publisher": "Sony",
-        "debutDecade": "2000s"
+        "debutDecade": "2000s",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Ratchet & Clank"
       }
     },
     {
@@ -342,7 +449,10 @@
       "fame": 2,
       "attributes": {
         "publisher": "Sony",
-        "debutDecade": "2000s"
+        "debutDecade": "2000s",
+        "speciesOrType": "robot",
+        "debutGenre": "platform",
+        "franchise": "Ratchet & Clank"
       }
     },
     {
@@ -350,7 +460,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "silentProtagonist": true
+        "publisher": "Microsoft",
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "debutGenre": "sandbox",
+        "silentProtagonist": true,
+        "franchise": "Minecraft"
       }
     },
     {
@@ -358,7 +473,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "silentProtagonist": true
+        "publisher": "Microsoft",
+        "debutDecade": "2010s",
+        "speciesOrType": "human",
+        "debutGenre": "sandbox",
+        "silentProtagonist": true,
+        "franchise": "Minecraft"
       }
     },
     {
@@ -366,8 +486,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
+        "publisher": "Microsoft",
+        "debutDecade": "2000s",
         "speciesOrType": "creature",
-        "silentProtagonist": true
+        "debutGenre": "sandbox",
+        "franchise": "Minecraft"
       }
     },
     {
@@ -376,7 +499,11 @@
       "fame": 3,
       "attributes": {
         "debutDecade": "2010s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "shooter",
+        "nationality": "British",
+        "franchise": "Overwatch"
       }
     },
     {
@@ -385,7 +512,10 @@
       "fame": 2,
       "attributes": {
         "debutDecade": "2010s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "battle arena",
+        "franchise": "League of Legends"
       }
     },
     {
@@ -396,7 +526,11 @@
         "publisher": "Ubisoft",
         "debutDecade": "2000s",
         "speciesOrType": "human",
-        "wieldsSword": true
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "nationality": "Italian",
+        "wieldsSword": true,
+        "franchise": "Assassin's Creed"
       }
     },
     {
@@ -406,7 +540,11 @@
       "attributes": {
         "publisher": "Rockstar",
         "debutDecade": "2010s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "nationality": "American",
+        "franchise": "Red Dead Redemption"
       }
     },
     {
@@ -414,8 +552,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
+        "debutDecade": "1990s",
         "speciesOrType": "human",
-        "silentProtagonist": true
+        "gender": "male",
+        "debutGenre": "shooter",
+        "silentProtagonist": true,
+        "franchise": "Doom"
       }
     },
     {
@@ -425,7 +567,10 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "human"
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Wario"
       }
     },
     {
@@ -434,7 +579,10 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "2000s"
+        "debutDecade": "2000s",
+        "gender": "male",
+        "debutGenre": "sports",
+        "franchise": "Super Mario"
       }
     },
     {
@@ -444,7 +592,10 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "animal",
+        "gender": "male",
+        "debutGenre": "shooter",
+        "franchise": "Star Fox"
       }
     },
     {
@@ -453,7 +604,11 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "speciesOrType": "animal"
+        "debutDecade": "2010s",
+        "speciesOrType": "animal",
+        "gender": "female",
+        "debutGenre": "life simulation",
+        "franchise": "Animal Crossing"
       }
     },
     {
@@ -462,7 +617,10 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "silentProtagonist": true
+        "debutDecade": "2000s",
+        "debutGenre": "life simulation",
+        "silentProtagonist": true,
+        "franchise": "Animal Crossing"
       }
     },
     {
@@ -473,7 +631,9 @@
         "publisher": "Square Enix",
         "debutDecade": "2000s",
         "speciesOrType": "human",
-        "wieldsSword": true
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "franchise": "Kingdom Hearts"
       }
     },
     {
@@ -481,10 +641,14 @@
       "aliases": [],
       "fame": 3,
       "attributes": {
+        "publisher": "Sony",
         "debutDecade": "2020s",
         "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "nationality": "Japanese",
         "wieldsSword": true,
-        "silentProtagonist": true
+        "franchise": "Ghost of Tsushima"
       }
     },
     {
@@ -493,7 +657,12 @@
       "fame": 3,
       "attributes": {
         "publisher": "Capcom",
-        "speciesOrType": "human"
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "survival horror",
+        "nationality": "American",
+        "franchise": "Resident Evil"
       }
     },
     {
@@ -502,7 +671,12 @@
       "fame": 3,
       "attributes": {
         "publisher": "Capcom",
-        "speciesOrType": "human"
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "survival horror",
+        "nationality": "American",
+        "franchise": "Resident Evil"
       }
     },
     {
@@ -510,7 +684,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "publisher": "Sony"
+        "publisher": "Sony",
+        "debutDecade": "2000s",
+        "debutGenre": "platform",
+        "franchise": "LittleBigPlanet"
       }
     },
     {
@@ -518,7 +695,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "speciesOrType": "human"
+        "publisher": "Warner Bros.",
+        "debutDecade": "1990s",
+        "gender": "male",
+        "debutGenre": "fighting",
+        "nationality": "Japanese",
+        "franchise": "Mortal Kombat"
       }
     },
     {
@@ -526,7 +708,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "speciesOrType": "human"
+        "publisher": "Warner Bros.",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "fighting",
+        "franchise": "Mortal Kombat"
       }
     },
     {
@@ -535,7 +722,9 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "1980s"
+        "debutDecade": "1980s",
+        "debutGenre": "platform",
+        "franchise": "Super Mario"
       }
     },
     {
@@ -544,7 +733,9 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "1980s"
+        "debutDecade": "1980s",
+        "debutGenre": "platform",
+        "franchise": "Super Mario"
       }
     },
     {
@@ -553,7 +744,11 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "1990s"
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "franchise": "The Legend of Zelda"
       }
     },
     {
@@ -561,9 +756,14 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
+        "publisher": "Ubisoft",
         "debutDecade": "2010s",
         "speciesOrType": "human",
-        "wieldsSword": true
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "nationality": "Greek",
+        "wieldsSword": true,
+        "franchise": "Assassin's Creed"
       }
     },
     {
@@ -572,7 +772,10 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "2000s"
+        "debutDecade": "2000s",
+        "gender": "female",
+        "debutGenre": "racing",
+        "franchise": "Super Mario"
       }
     },
     {
@@ -582,7 +785,10 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "animal"
+        "speciesOrType": "animal",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Donkey Kong"
       }
     },
     {
@@ -591,7 +797,12 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "2000s"
+        "debutDecade": "2000s",
+        "speciesOrType": "creature",
+        "gender": "male",
+        "debutGenre": "platform",
+        "isVillain": true,
+        "franchise": "Super Mario"
       }
     },
     {
@@ -600,7 +811,9 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "2010s"
+        "debutDecade": "2010s",
+        "debutGenre": "shooter",
+        "franchise": "Splatoon"
       }
     },
     {
@@ -610,7 +823,10 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "2010s",
-        "wieldsSword": true
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "wieldsSword": true,
+        "franchise": "Xenoblade Chronicles"
       }
     },
     {
@@ -619,8 +835,12 @@
       "fame": 2,
       "attributes": {
         "publisher": "Nintendo",
-        "debutDecade": "1980s",
-        "silentProtagonist": true
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "silentProtagonist": true,
+        "franchise": "EarthBound"
       }
     },
     {
@@ -630,7 +850,9 @@
       "attributes": {
         "publisher": "Nintendo",
         "debutDecade": "2000s",
-        "silentProtagonist": true
+        "gender": "male",
+        "debutGenre": "strategy",
+        "franchise": "Pikmin"
       }
     },
     {
@@ -639,7 +861,9 @@
       "fame": 2,
       "attributes": {
         "debutDecade": "2000s",
-        "speciesOrType": "human"
+        "gender": "female",
+        "debutGenre": "action-adventure",
+        "franchise": "Bayonetta"
       }
     },
     {
@@ -647,7 +871,13 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "speciesOrType": "human"
+        "publisher": "Sega",
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "nationality": "Japanese",
+        "franchise": "Yakuza"
       }
     },
     {
@@ -656,7 +886,11 @@
       "fame": 2,
       "attributes": {
         "publisher": "Square Enix",
-        "speciesOrType": "human"
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "role-playing",
+        "franchise": "Final Fantasy"
       }
     },
     {
@@ -664,7 +898,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "debutDecade": "1990s"
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "creature",
+        "debutGenre": "role-playing",
+        "franchise": "Pokémon"
       }
     },
     {
@@ -672,8 +910,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
+        "publisher": "Nintendo",
         "debutDecade": "1990s",
-        "speciesOrType": "creature"
+        "speciesOrType": "creature",
+        "debutGenre": "role-playing",
+        "franchise": "Pokémon"
       }
     },
     {
@@ -681,7 +922,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "debutDecade": "2000s"
+        "publisher": "Rockstar",
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "action-adventure",
+        "franchise": "Grand Theft Auto"
       }
     },
     {
@@ -689,7 +935,136 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "debutDecade": "1990s"
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "role-playing",
+        "isVillain": true,
+        "franchise": "EarthBound"
+      }
+    },
+    {
+      "name": "Knuckles",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sega",
+        "debutDecade": "1990s",
+        "speciesOrType": "animal",
+        "gender": "male",
+        "debutGenre": "platform",
+        "franchise": "Sonic the Hedgehog"
+      }
+    },
+    {
+      "name": "Dr. Eggman",
+      "aliases": [
+        "Eggman",
+        "Dr. Robotnik",
+        "Robotnik"
+      ],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Sega",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "platform",
+        "isVillain": true,
+        "franchise": "Sonic the Hedgehog"
+      }
+    },
+    {
+      "name": "Ken Masters",
+      "aliases": [
+        "Ken"
+      ],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Capcom",
+        "debutDecade": "1980s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "fighting",
+        "nationality": "American",
+        "franchise": "Street Fighter"
+      }
+    },
+    {
+      "name": "Kazuya Mishima",
+      "aliases": [
+        "Kazuya"
+      ],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Bandai Namco",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "fighting",
+        "nationality": "Japanese",
+        "franchise": "Tekken"
+      }
+    },
+    {
+      "name": "Albert Wesker",
+      "aliases": [
+        "Wesker"
+      ],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Capcom",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "survival horror",
+        "isVillain": true,
+        "franchise": "Resident Evil"
+      }
+    },
+    {
+      "name": "King K. Rool",
+      "aliases": [
+        "K. Rool"
+      ],
+      "fame": 1,
+      "attributes": {
+        "publisher": "Nintendo",
+        "debutDecade": "1990s",
+        "speciesOrType": "creature",
+        "gender": "male",
+        "debutGenre": "platform",
+        "isVillain": true,
+        "franchise": "Donkey Kong"
+      }
+    },
+    {
+      "name": "Gordon Freeman",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "publisher": "Valve",
+        "debutDecade": "1990s",
+        "speciesOrType": "human",
+        "gender": "male",
+        "debutGenre": "shooter",
+        "silentProtagonist": true,
+        "franchise": "Half-Life"
+      }
+    },
+    {
+      "name": "Chell",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "publisher": "Valve",
+        "debutDecade": "2000s",
+        "speciesOrType": "human",
+        "gender": "female",
+        "debutGenre": "puzzle",
+        "silentProtagonist": true,
+        "franchise": "Portal"
       }
     }
   ]

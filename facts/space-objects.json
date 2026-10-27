@@ -2,7 +2,17 @@
   "_meta": {
     "category": "space objects",
     "sources": [
-      "Curated from publicly documented general-reference facts; see facts/README.md"
+      "Curated from publicly documented general-reference facts; see facts/README.md",
+      "Wikipedia: Planet (https://en.wikipedia.org/wiki/Planet)",
+      "Wikipedia: Natural satellite (https://en.wikipedia.org/wiki/Natural_satellite)",
+      "Wikipedia: Moons of Saturn (https://en.wikipedia.org/wiki/Moons_of_Saturn)",
+      "Wikipedia: Moons of Uranus (https://en.wikipedia.org/wiki/Moons_of_Uranus)",
+      "Wikipedia: Galilean moons (https://en.wikipedia.org/wiki/Galilean_moons)",
+      "Wikipedia: Dwarf planet (https://en.wikipedia.org/wiki/Dwarf_planet)",
+      "Wikipedia: Timeline of discovery of Solar System planets and their moons (https://en.wikipedia.org/wiki/Timeline_of_discovery_of_Solar_System_planets_and_their_moons)",
+      "Wikipedia: Naming of moons (https://en.wikipedia.org/wiki/Naming_of_moons)",
+      "Wikipedia: Ring system (https://en.wikipedia.org/wiki/Ring_system)",
+      "Wikipedia: Atmosphere (https://en.wikipedia.org/wiki/Atmosphere)"
     ],
     "license": "CC0 1.0 for this curated compilation"
   },
@@ -10,90 +20,147 @@
     {
       "name": "Mercury",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "biggerThanMoon": true,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "knownSinceAncientTimes": true,
+        "composition": "rocky",
+        "nameOrigin": "Roman myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
     {
       "name": "Venus",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "biggerThanMoon": true,
+        "orbits": "Sun",
+        "thickAtmosphere": true,
+        "knownSinceAncientTimes": true,
+        "composition": "rocky",
+        "nameOrigin": "Roman myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
     {
       "name": "Earth",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "biggerThanMoon": true,
+        "liquidWaterOcean": true,
+        "orbits": "Sun",
+        "composition": "rocky",
+        "hasMoons": true,
         "hasRings": false
       }
     },
     {
       "name": "Mars",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "biggerThanMoon": true,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "knownSinceAncientTimes": true,
+        "composition": "rocky",
+        "nameOrigin": "Roman myth",
+        "hasMoons": true,
         "hasRings": false
       }
     },
     {
       "name": "Jupiter",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "biggerThanMoon": true,
+        "orbits": "Sun",
+        "thickAtmosphere": true,
+        "knownSinceAncientTimes": true,
+        "composition": "gas giant",
+        "nameOrigin": "Roman myth",
+        "hasMoons": true,
         "hasRings": true
       }
     },
     {
       "name": "Saturn",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "biggerThanMoon": true,
+        "orbits": "Sun",
+        "thickAtmosphere": true,
+        "knownSinceAncientTimes": true,
+        "composition": "gas giant",
+        "nameOrigin": "Roman myth",
+        "hasMoons": true,
         "hasRings": true
       }
     },
     {
       "name": "Uranus",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1700s",
+        "biggerThanMoon": true,
+        "orbits": "Sun",
+        "thickAtmosphere": true,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Herschel",
+        "composition": "ice giant",
+        "nameOrigin": "Greek myth",
+        "hasMoons": true,
         "hasRings": true
       }
     },
     {
       "name": "Neptune",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "planet",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1800s",
+        "biggerThanMoon": true,
+        "orbits": "Sun",
+        "thickAtmosphere": true,
+        "discoveredWithTelescope": true,
+        "composition": "ice giant",
+        "nameOrigin": "Roman myth",
+        "hasMoons": true,
         "hasRings": true
       }
     },
     {
       "name": "Pluto",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "dwarf planet",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1900s",
+        "biggerThanMoon": false,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Clyde Tombaugh",
+        "composition": "icy",
+        "nameOrigin": "Roman myth",
+        "hasMoons": true,
         "hasRings": false
       }
     },
@@ -103,7 +170,14 @@
       "fame": 2,
       "attributes": {
         "objectType": "dwarf planet",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1800s",
+        "biggerThanMoon": false,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Giuseppe Piazzi",
+        "nameOrigin": "Roman myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
@@ -113,7 +187,16 @@
       "fame": 2,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": false,
+        "liquidWaterOcean": true,
+        "orbits": "Jupiter",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Galileo Galilei",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
@@ -123,17 +206,34 @@
       "fame": 2,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": true,
+        "liquidWaterOcean": true,
+        "orbits": "Jupiter",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Galileo Galilei",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
     {
       "name": "Callisto",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": true,
+        "orbits": "Jupiter",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Galileo Galilei",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
@@ -143,7 +243,16 @@
       "fame": 2,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": true,
+        "liquidWaterOcean": true,
+        "orbits": "Saturn",
+        "thickAtmosphere": true,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Christiaan Huygens",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
@@ -153,7 +262,16 @@
       "fame": 2,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1700s",
+        "biggerThanMoon": false,
+        "liquidWaterOcean": true,
+        "orbits": "Saturn",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Herschel",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
@@ -163,17 +281,33 @@
       "fame": 2,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": true,
+        "orbits": "Jupiter",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Galileo Galilei",
+        "composition": "rocky",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
     {
       "name": "Triton",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1800s",
+        "biggerThanMoon": false,
+        "orbits": "Neptune",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Lassell",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
@@ -183,17 +317,33 @@
       "fame": 2,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1800s",
+        "biggerThanMoon": false,
+        "orbits": "Mars",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Asaph Hall",
+        "composition": "rocky",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
     {
       "name": "Deimos",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "discoveryCentury": "1800s",
+        "biggerThanMoon": false,
+        "orbits": "Mars",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Asaph Hall",
+        "composition": "rocky",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
         "hasRings": false
       }
     },
@@ -202,21 +352,25 @@
       "aliases": [
         "The Moon"
       ],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "moon",
-        "solarSystem": "Solar",
+        "orbits": "Earth",
+        "thickAtmosphere": false,
+        "knownSinceAncientTimes": true,
+        "composition": "rocky",
+        "hasMoons": false,
         "hasRings": false
       }
     },
     {
       "name": "Sun",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "star",
-        "solarSystem": "Solar",
-        "hasRings": false
+        "biggerThanMoon": true,
+        "knownSinceAncientTimes": true
       }
     },
     {
@@ -225,8 +379,8 @@
       "fame": 2,
       "attributes": {
         "objectType": "comet",
-        "solarSystem": "Solar",
-        "hasRings": false
+        "orbits": "Sun",
+        "knownSinceAncientTimes": true
       }
     },
     {
@@ -235,8 +389,7 @@
       "fame": 2,
       "attributes": {
         "objectType": "nebula",
-        "solarSystem": "Solar",
-        "hasRings": false
+        "nameOrigin": "Greek myth"
       }
     },
     {
@@ -245,57 +398,279 @@
       "fame": 2,
       "attributes": {
         "objectType": "galaxy",
-        "hasRings": false
+        "nameOrigin": "Greek myth"
       }
     },
     {
       "name": "Milky Way",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "objectType": "galaxy",
-        "solarSystem": "Solar",
-        "hasRings": false
+        "knownSinceAncientTimes": true
       }
     },
     {
       "name": "Eris",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "objectType": "dwarf planet",
-        "solarSystem": "Solar",
+        "discoveryCentury": "2000s",
+        "biggerThanMoon": false,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": true,
         "hasRings": false
       }
     },
     {
       "name": "Makemake",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "objectType": "dwarf planet",
-        "solarSystem": "Solar",
+        "discoveryCentury": "2000s",
+        "biggerThanMoon": false,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "composition": "icy",
+        "nameOrigin": "Polynesian myth",
+        "hasMoons": true,
         "hasRings": false
       }
     },
     {
       "name": "Haumea",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "objectType": "dwarf planet",
-        "solarSystem": "Solar",
+        "discoveryCentury": "2000s",
+        "biggerThanMoon": false,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "nameOrigin": "Polynesian myth",
+        "hasMoons": true,
         "hasRings": true
       }
     },
     {
       "name": "Chariklo",
       "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "minor planet",
+        "discoveryCentury": "1900s",
+        "biggerThanMoon": false,
+        "orbits": "Sun",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "nameOrigin": "Greek myth",
+        "hasRings": true
+      }
+    },
+    {
+      "name": "Mimas",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1700s",
+        "biggerThanMoon": false,
+        "orbits": "Saturn",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Herschel",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Rhea",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": false,
+        "orbits": "Saturn",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Giovanni Cassini",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Tethys",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": false,
+        "orbits": "Saturn",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Giovanni Cassini",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Dione",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": false,
+        "orbits": "Saturn",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Giovanni Cassini",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Iapetus",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1600s",
+        "biggerThanMoon": false,
+        "orbits": "Saturn",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Giovanni Cassini",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Miranda",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1900s",
+        "biggerThanMoon": false,
+        "orbits": "Uranus",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "Gerard Kuiper",
+        "composition": "icy",
+        "nameOrigin": "English literature",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Ariel",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1800s",
+        "biggerThanMoon": false,
+        "orbits": "Uranus",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Lassell",
+        "composition": "icy",
+        "nameOrigin": "English literature",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Umbriel",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1800s",
+        "biggerThanMoon": false,
+        "orbits": "Uranus",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Lassell",
+        "composition": "icy",
+        "nameOrigin": "English literature",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Titania",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1700s",
+        "biggerThanMoon": false,
+        "orbits": "Uranus",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Herschel",
+        "composition": "icy",
+        "nameOrigin": "English literature",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Oberon",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "objectType": "moon",
+        "discoveryCentury": "1700s",
+        "biggerThanMoon": false,
+        "orbits": "Uranus",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "William Herschel",
+        "composition": "icy",
+        "nameOrigin": "English literature",
+        "hasMoons": false,
+        "hasRings": false
+      }
+    },
+    {
+      "name": "Charon",
+      "aliases": [],
       "fame": 2,
       "attributes": {
-        "objectType": "asteroid",
-        "solarSystem": "Solar",
-        "hasRings": true
+        "objectType": "moon",
+        "discoveryCentury": "1900s",
+        "biggerThanMoon": false,
+        "orbits": "Pluto",
+        "thickAtmosphere": false,
+        "discoveredWithTelescope": true,
+        "discoveredBy": "James Christy",
+        "composition": "icy",
+        "nameOrigin": "Greek myth",
+        "hasMoons": false,
+        "hasRings": false
       }
     }
   ]

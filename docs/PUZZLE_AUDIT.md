@@ -31,8 +31,8 @@ Candidates come from curated attribute tables and deterministic set intersection
 - Aggregate single-half hit rate: not measured
 - Aggregate both-halves hit rate: not measured
 - Generation wording model: predicate templates
-- Token usage by model: {"gemini:gemini-3.5-flash":{"promptTokens":0,"completionTokens":0,"totalTokens":0},"gemini:gemini-2.5-flash":{"promptTokens":0,"completionTokens":0,"totalTokens":0},"groq:openai/gpt-oss-20b":{"promptTokens":1485,"completionTokens":1408,"totalTokens":2893}}
-- Quota state: Rate limit reached for model `openai/gpt-oss-20b` in organization [hidden] service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199696, Requested 707. Please try again in 2m54.095999999s. Need more tokens? Upgrade to Dev Tie
+- Token usage by model: {"gemini:gemini-3.5-flash":{"promptTokens":0,"completionTokens":0,"totalTokens":0},"gemini:gemini-2.5-flash":{"promptTokens":0,"completionTokens":0,"totalTokens":0},"groq:openai/gpt-oss-20b":{"promptTokens":4455,"completionTokens":4414,"totalTokens":8869}}
+- Quota state: Rate limit reached for model `openai/gpt-oss-20b` in organization [hidden] service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199993, Requested 939. Please try again in 6m42.624s. Need more tokens? Upgrade to Dev Tier toda
 - Resume checkpoint: data/forge-progress.json
 - Final pack category counts: {}
 - Selected candidates by category before audit: {"games":9,"geography":12,"science":3,"food":1}

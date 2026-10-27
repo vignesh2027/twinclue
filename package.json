@@ -12,7 +12,8 @@
     "generate:pack": "tsx src/puzzle/generate-pack.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "forge": "tsx src/puzzle/forge-pack.ts"
+    "forge": "tsx src/puzzle/forge-pack.ts",
+    "bench": "tsx src/bench/bench.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

@@ -2,7 +2,17 @@
   "_meta": {
     "category": "sports",
     "sources": [
-      "Curated from publicly documented general-reference facts; see facts/README.md"
+      "Curated from publicly documented general-reference facts; see facts/README.md",
+      "Wikipedia: Sport (https://en.wikipedia.org/wiki/Sport)",
+      "Wikipedia: Team sport (https://en.wikipedia.org/wiki/Team_sport)",
+      "Wikipedia: Racket sport (https://en.wikipedia.org/wiki/Racket_sport)",
+      "Wikipedia: Combat sport (https://en.wikipedia.org/wiki/Combat_sport)",
+      "Wikipedia: Summer Olympic Games (https://en.wikipedia.org/wiki/Summer_Olympic_Games)",
+      "Wikipedia: Winter Olympic Games (https://en.wikipedia.org/wiki/Winter_Olympic_Games)",
+      "Wikipedia: Olympic sports (https://en.wikipedia.org/wiki/Olympic_sports)",
+      "Wikipedia: History of association football (https://en.wikipedia.org/wiki/History_of_association_football)",
+      "Wikipedia: Origins of cricket (https://en.wikipedia.org/wiki/Origins_of_cricket)",
+      "Wikipedia: Basketball (https://en.wikipedia.org/wiki/Basketball)"
     ],
     "license": "CC0 1.0 for this curated compilation"
   },
@@ -12,40 +22,98 @@
       "aliases": [
         "soccer"
       ],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "teamOrIndividual": "team",
         "usesBall": true,
-        "playersPerSide": 11
+        "playersPerSide": 11,
+        "scoredIn": "goals",
+        "playedOn": "grass",
+        "olympics": "Summer",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
       "name": "basketball",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "teamOrIndividual": "team",
         "usesBall": true,
-        "playersPerSide": 5
+        "playersPerSide": 5,
+        "scoredIn": "points",
+        "playedOn": "court",
+        "olympics": "Summer",
+        "originCountry": "United States",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
       "name": "cricket",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "teamOrIndividual": "team",
         "usesBall": true,
-        "playersPerSide": 11
+        "playersPerSide": 11,
+        "hitWith": "bat",
+        "scoredIn": "runs",
+        "playedOn": "grass",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
       "name": "tennis",
       "aliases": [],
+      "fame": 3,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true,
+        "hitWith": "racket",
+        "scoredIn": "points",
+        "playedOn": "court",
+        "olympics": "Summer",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": true
+      }
+    },
+    {
+      "name": "table tennis",
+      "aliases": [
+        "ping pong"
+      ],
       "fame": 2,
       "attributes": {
         "teamOrIndividual": "individual",
-        "usesBall": true
+        "usesBall": true,
+        "hitWith": "racket",
+        "scoredIn": "points",
+        "playedOn": "table",
+        "olympics": "Summer",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": true
+      }
+    },
+    {
+      "name": "badminton",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "hitWith": "racket",
+        "scoredIn": "points",
+        "playedOn": "court",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": true
       }
     },
     {
@@ -55,7 +123,13 @@
       "attributes": {
         "teamOrIndividual": "team",
         "usesBall": true,
-        "playersPerSide": 6
+        "playersPerSide": 6,
+        "scoredIn": "points",
+        "playedOn": "court",
+        "olympics": "Summer",
+        "originCountry": "United States",
+        "combatSport": false,
+        "playedOverNet": true
       }
     },
     {
@@ -64,7 +138,13 @@
       "fame": 2,
       "attributes": {
         "teamOrIndividual": "team",
-        "usesBall": true
+        "usesBall": true,
+        "scoredIn": "points",
+        "playedOn": "grass",
+        "olympics": "Summer",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -74,7 +154,12 @@
       "attributes": {
         "teamOrIndividual": "team",
         "usesBall": true,
-        "playersPerSide": 9
+        "playersPerSide": 9,
+        "hitWith": "bat",
+        "scoredIn": "runs",
+        "originCountry": "United States",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -83,49 +168,39 @@
       "fame": 2,
       "attributes": {
         "teamOrIndividual": "individual",
-        "usesBall": true
-      }
-    },
-    {
-      "name": "badminton",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "individual",
-        "usesBall": true
-      }
-    },
-    {
-      "name": "table",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "individual"
-      }
-    },
-    {
-      "name": "tennis",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "individual",
-        "usesBall": true
+        "usesBall": true,
+        "hitWith": "club",
+        "playedOn": "grass",
+        "olympics": "Summer",
+        "originCountry": "Scotland",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
       "name": "swimming",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "playedOn": "water",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
       "name": "athletics",
-      "aliases": [],
+      "aliases": [
+        "track and field"
+      ],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -133,7 +208,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "playedOn": "ring",
+        "olympics": "Summer",
+        "combatSport": true,
+        "playedOverNet": false
       }
     },
     {
@@ -141,7 +221,13 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "playedOn": "mat",
+        "olympics": "Summer",
+        "combatSport": true,
+        "playedOverNet": false
       }
     },
     {
@@ -149,7 +235,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "usesBall": false,
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -157,7 +246,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "playedOn": "ice or snow",
+        "olympics": "Winter",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -165,73 +259,57 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
-      }
-    },
-    {
-      "name": "soccer",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
         "teamOrIndividual": "individual",
-        "usesBall": true
+        "scoredIn": "points",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
-      "name": "field",
+      "name": "field hockey",
       "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "team",
-        "usesBall": true
-      }
-    },
-    {
-      "name": "hockey",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "team",
-        "usesBall": true
-      }
-    },
-    {
-      "name": "ice",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "team",
-        "usesBall": true
-      }
-    },
-    {
-      "name": "hockey",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "team",
-        "usesBall": true
-      }
-    },
-    {
-      "name": "American",
-      "aliases": [],
-      "fame": 2,
-      "attributes": {
-        "teamOrIndividual": "team",
-        "usesBall": true
-      }
-    },
-    {
-      "name": "football",
-      "aliases": [
-        "soccer"
-      ],
       "fame": 2,
       "attributes": {
         "teamOrIndividual": "team",
         "usesBall": true,
-        "playersPerSide": 11
+        "playersPerSide": 11,
+        "hitWith": "stick",
+        "scoredIn": "goals",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "ice hockey",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": false,
+        "playersPerSide": 6,
+        "hitWith": "stick",
+        "scoredIn": "goals",
+        "playedOn": "ice or snow",
+        "olympics": "Winter",
+        "originCountry": "Canada",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "American football",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 11,
+        "scoredIn": "points",
+        "originCountry": "United States",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -240,15 +318,26 @@
       "fame": 2,
       "attributes": {
         "teamOrIndividual": "team",
-        "playersPerSide": 7
+        "usesBall": false,
+        "playersPerSide": 7,
+        "scoredIn": "points",
+        "playedOn": "court",
+        "originCountry": "India",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
       "name": "chess",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "olympics": "none",
+        "originCountry": "India",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -256,7 +345,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -264,7 +358,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "usesBall": false,
+        "playedOn": "water",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
       }
     },
     {
@@ -272,7 +370,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "olympics": "Summer",
+        "combatSport": true,
+        "playedOverNet": false
       }
     },
     {
@@ -280,7 +383,312 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "teamOrIndividual": "individual"
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "handball",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 7,
+        "scoredIn": "goals",
+        "playedOn": "court",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "water polo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 7,
+        "scoredIn": "goals",
+        "playedOn": "water",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "squash",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true,
+        "hitWith": "racket",
+        "scoredIn": "points",
+        "playedOn": "court",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "snooker",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": true,
+        "hitWith": "cue",
+        "scoredIn": "points",
+        "playedOn": "table",
+        "olympics": "none",
+        "originCountry": "India",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "darts",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "olympics": "none",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "surfing",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "playedOn": "water",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "skateboarding",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "olympics": "Summer",
+        "originCountry": "United States",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "judo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "playedOn": "mat",
+        "olympics": "Summer",
+        "originCountry": "Japan",
+        "combatSport": true,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "karate",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "playedOn": "mat",
+        "combatSport": true,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "taekwondo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "playedOn": "mat",
+        "olympics": "Summer",
+        "originCountry": "South Korea",
+        "combatSport": true,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "sumo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "playedOn": "ring",
+        "olympics": "none",
+        "originCountry": "Japan",
+        "combatSport": true,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "polo",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 4,
+        "hitWith": "mallet",
+        "scoredIn": "goals",
+        "playedOn": "grass",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "curling",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": false,
+        "playersPerSide": 4,
+        "scoredIn": "points",
+        "playedOn": "ice or snow",
+        "olympics": "Winter",
+        "originCountry": "Scotland",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "figure skating",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "usesBall": false,
+        "scoredIn": "points",
+        "playedOn": "ice or snow",
+        "olympics": "Winter",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "snowboarding",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "playedOn": "ice or snow",
+        "olympics": "Winter",
+        "originCountry": "United States",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "netball",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 7,
+        "scoredIn": "goals",
+        "playedOn": "court",
+        "olympics": "none",
+        "originCountry": "England",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "softball",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "teamOrIndividual": "team",
+        "usesBall": true,
+        "playersPerSide": 9,
+        "hitWith": "bat",
+        "scoredIn": "runs",
+        "originCountry": "United States",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "sailing",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "usesBall": false,
+        "playedOn": "water",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "padel",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "usesBall": true,
+        "hitWith": "racket",
+        "scoredIn": "points",
+        "playedOn": "court",
+        "olympics": "none",
+        "originCountry": "Mexico",
+        "combatSport": false,
+        "playedOverNet": true
+      }
+    },
+    {
+      "name": "speed skating",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "playedOn": "ice or snow",
+        "olympics": "Winter",
+        "combatSport": false,
+        "playedOverNet": false
+      }
+    },
+    {
+      "name": "diving",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "teamOrIndividual": "individual",
+        "usesBall": false,
+        "scoredIn": "points",
+        "playedOn": "water",
+        "olympics": "Summer",
+        "combatSport": false,
+        "playedOverNet": false
       }
     }
   ]

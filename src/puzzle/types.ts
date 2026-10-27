@@ -7,6 +7,7 @@ export const PuzzleSchema = z.object({
   halfA: z.string(), halfB: z.string(),
   halfAAlsoFits: z.array(z.string()).min(2), halfBAlsoFits: z.array(z.string()).min(2),
   alsoFitsA:z.array(z.string()).optional(),alsoFitsB:z.array(z.string()).optional(),
+  sourceTable:z.string().optional(),
   predicates:z.object({halfA:z.array(PredicateSchema).min(1).max(2),halfB:z.array(PredicateSchema).min(1).max(2),setSizeA:z.number().int().positive(),setSizeB:z.number().int().positive()}).optional(),
 });
 export type Puzzle = z.infer<typeof PuzzleSchema>;

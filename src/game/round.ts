@@ -1,43 +1,249 @@
 import type { Puzzle } from '../puzzle/types.js';
-import { guessBucketKey,normaliseGuess } from './referee.js';
+import { normaliseGuess } from './referee.js';
+import { Vocabulary, type VocabEntry } from './vocabulary.js';
 
-export type Community='A'|'B';export type RoundStatus='pending'|'active'|'won'|'timed-out';
-export interface VoteSample {community:Community;user:string;text:string;at:number;}
-export interface VoteEntry {bucket:string;display:string;}
-export interface VoteBucket {key:string;answer:string;count:number;}
-export interface SideReveal {topAnswer:string|null;correct:boolean;voters:number;}
-const blockedWords=['fuck','shit','bitch','cunt','nigger','faggot'];
-export function isBlockedGuess(value:string):boolean {const normalized=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();return blockedWords.some(word=>new RegExp(`\\b${word}\\b`,'i').test(normalized));}
-export function cleanVoteText(value:string,maxLength=80):string {return value.replace(/[\u0000-\u001f\u007f<>]/g,'').replace(/\s+/g,' ').trim().slice(0,maxLength);}
-export class Round {
-  status:RoundStatus='pending';startedAt?:number;endedAt?:number;earlyFinishAt?:number;
-  readonly votes:Record<Community,Map<string,VoteEntry>>={A:new Map(),B:new Map()};
-  readonly bucketCounts:Record<Community,Map<string,number>>={A:new Map(),B:new Map()};
-  readonly bucketLabels:Record<Community,Map<string,string>>={A:new Map(),B:new Map()};
-  readonly recentSamples:VoteSample[]=[];readonly sampleLimit=80;
-  result:Record<Community,SideReveal>|null=null;
-  private readonly lastVote=new Map<string,number>();
-  constructor(readonly puzzle:Puzzle){}
-  start(at=Date.now()):void {if(this.status!=='pending')throw new Error('Round has already started.');this.status='active';this.startedAt=at;}
-  vote(community:Community,user:string,text:string,at=Date.now()):'voted'|'unchanged'|'blocked'|'rate-limited'|'inactive' {
-    if(this.status!=='active')return 'inactive';const clean=cleanVoteText(text);if(!clean||isBlockedGuess(clean))return 'blocked';const userKey=user.toLocaleLowerCase();const rateKey=`${community}:${userKey}`;const previousAt=this.lastVote.get(rateKey);if(previousAt!==undefined&&at-previousAt<3000)return 'rate-limited';
-    const bucket=guessBucketKey(clean,this.puzzle.answer,this.puzzle.aliases);if(!bucket)return 'blocked';const current=this.votes[community].get(userKey);this.lastVote.set(rateKey,at);if(current?.bucket===bucket){this.sample(community,user,clean,at);return 'unchanged';}
-    if(current)this.decrement(community,current.bucket);const display=bucket==='__answer__'?this.puzzle.answer:normaliseGuess(clean);this.votes[community].set(userKey,{bucket,display});this.bucketCounts[community].set(bucket,(this.bucketCounts[community].get(bucket)??0)+1);this.bucketLabels[community].set(bucket,display);this.sample(community,user,clean,at);this.refreshEarlyFinish(at);return 'voted';
+export type Community = 'A' | 'B';
+export type RoundStatus = 'pending' | 'active' | 'won' | 'timed-out';
+export type VoteResult = 'voted' | 'unchanged' | 'blocked' | 'rate-limited' | 'inactive';
+export interface VoteSample { community: Community; user: string; label: string; at: number }
+export interface VoteBucket { answer: string; count: number }
+export interface SideReveal { topAnswer: string | null; correct: boolean; voters: number }
+export interface ConsensusRule { share: number; holdMs: number; minVotes: number }
+export interface RoundOptions { vocabulary?: VocabEntry[]; cooldownMs?: number; consensus?: Partial<ConsensusRule>; rehearsal?: boolean; sampleTicker?: boolean }
+
+export const OTHER_LABEL = 'other answers';
+export const DEFAULT_CONSENSUS: ConsensusRule = { share: 0.6, holdMs: 5_000, minVotes: 3 };
+const MAX_VOTE_CHARS = 200;
+const blockedWords = ['fuck', 'shit', 'bitch', 'cunt', 'nigger', 'faggot'];
+const blockedPattern = new RegExp(`\\b(${blockedWords.join('|')})\\b`, 'i');
+
+export function isBlockedGuess(value: string): boolean {
+  return blockedPattern.test(value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase());
+}
+export function cleanVoteText(value: string, maxLength = 80): string {
+  return value.slice(0, MAX_VOTE_CHARS).replace(/[\u0000-\u001f\u007f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, maxLength);
+}
+
+/** One community's tally. Every operation is O(1): counts are indexed by value so the leader is always known. */
+class SideTally {
+  readonly votes = new Map<string, string>();
+  readonly counts = new Map<string, number>();
+  private readonly byCount = new Map<number, Set<string>>();
+  max = 0;
+
+  add(bucket: string): void {
+    const count = this.counts.get(bucket) ?? 0;
+    if (count) this.unindex(bucket, count);
+    this.index(bucket, count + 1);
+    this.counts.set(bucket, count + 1);
+    if (count + 1 > this.max) this.max = count + 1;
   }
-  private decrement(community:Community,bucket:string):void {const count=this.bucketCounts[community].get(bucket)??0;if(count<=1){this.bucketCounts[community].delete(bucket);this.bucketLabels[community].delete(bucket);}else this.bucketCounts[community].set(bucket,count-1);}
-  private sample(community:Community,user:string,text:string,at:number):void {this.recentSamples.push({community,user:cleanVoteText(user,24),text,at});if(this.recentSamples.length>this.sampleLimit)this.recentSamples.splice(0,this.recentSamples.length-this.sampleLimit);}
-  private answerKey():string{return '__answer__';}
-  topBuckets(community:Community,limit=3):VoteBucket[]{return [...this.bucketCounts[community]].map(([key,count])=>({key,answer:this.bucketLabels[community].get(key)??key,count})).sort((a,b)=>b.count-a.count||a.answer.localeCompare(b.answer)).slice(0,limit);}
-  voterCount(community:Community):number{return this.votes[community].size;}
-  get totalVoters():Record<Community,number>{return {A:this.voterCount('A'),B:this.voterCount('B')};}
-  private uniqueLeader(community:Community):VoteBucket|null {const ranked=this.topBuckets(community,2);if(!ranked.length||ranked[0]!.count===ranked[1]?.count)return null;return ranked[0]!;}
-  isLeadingCorrect(community:Community):boolean{return this.uniqueLeader(community)?.key===this.answerKey();}
-  private earlyCondition(at:number):boolean {if(this.startedAt===undefined||at-this.startedAt<15_000)return false;for(const community of ['A','B'] as const){const leader=this.uniqueLeader(community);if(!leader||leader.key!==this.answerKey()||leader.count/this.voterCount(community)<0.5)return false;}return true;}
-  private refreshEarlyFinish(at:number):void {if(this.earlyCondition(at)){this.earlyFinishAt??=at+5_000;}else this.earlyFinishAt=undefined;}
-  updateEarlyFinish(at=Date.now()):number|undefined {if(this.status!=='active')return undefined;this.refreshEarlyFinish(at);return this.earlyFinishAt;}
-  lock(at=Date.now()):void {if(this.status==='active')this.finish(at);}
-  timeout(at=Date.now()):void {if(this.status==='active')this.finish(at);}
-  finish(at=Date.now()):void {if(this.status!=='active')return;const a=this.uniqueLeader('A'),b=this.uniqueLeader('B');const correct=Boolean(a&&b&&a.key===this.answerKey()&&b.key===this.answerKey());this.status=correct?'won':'timed-out';this.endedAt=at;this.earlyFinishAt=undefined;this.result={A:{topAnswer:a?.answer??null,correct:Boolean(a&&a.key===this.answerKey()),voters:this.voterCount('A')},B:{topAnswer:b?.answer??null,correct:Boolean(b&&b.key===this.answerKey()),voters:this.voterCount('B')}};}
-  restoreVotes(community:Community,votes:Array<[string,VoteEntry]>):void {this.votes[community].clear();this.bucketCounts[community].clear();this.bucketLabels[community].clear();for(const [user,entry] of votes){this.votes[community].set(user,entry);this.bucketCounts[community].set(entry.bucket,(this.bucketCounts[community].get(entry.bucket)??0)+1);this.bucketLabels[community].set(entry.bucket,entry.display);}}
-  get solveTimeMs():number|undefined{return this.startedAt===undefined||this.endedAt===undefined?undefined:this.endedAt-this.startedAt;}
+  remove(bucket: string): void {
+    const count = this.counts.get(bucket) ?? 0;
+    if (!count) return;
+    this.unindex(bucket, count);
+    if (count > 1) { this.index(bucket, count - 1); this.counts.set(bucket, count - 1); } else this.counts.delete(bucket);
+    if (count === this.max && !this.byCount.has(count)) this.max = count - 1;
+  }
+  /** The bucket with strictly the most votes, or null on a tie or an empty side. */
+  leader(): string | null {
+    const top = this.byCount.get(this.max);
+    if (!top || top.size !== 1) return null;
+    return top.values().next().value ?? null;
+  }
+  private index(bucket: string, count: number): void {
+    let set = this.byCount.get(count);
+    if (!set) { set = new Set(); this.byCount.set(count, set); }
+    set.add(bucket);
+  }
+  private unindex(bucket: string, count: number): void {
+    const set = this.byCount.get(count);
+    set?.delete(bucket);
+    if (set && !set.size) this.byCount.delete(count);
+  }
+}
+
+export interface SerializedRound {
+  puzzle: Puzzle; status: RoundStatus; startedAt?: number; endedAt?: number; endsAt?: number; rehearsal: boolean;
+  buckets: string[]; votesA: Array<[string, number]>; votesB: Array<[string, number]>;
+  samples: VoteSample[]; result: Record<Community, SideReveal> | null; finishReason?: string;
+}
+
+export class Round {
+  status: RoundStatus = 'pending';
+  startedAt?: number;
+  endedAt?: number;
+  endsAt?: number;
+  consensusSince?: number;
+  finishReason?: 'timeout' | 'lock' | 'consensus' | 'skip';
+  result: Record<Community, SideReveal> | null = null;
+  readonly rehearsal: boolean;
+  readonly vocabulary: Vocabulary;
+  readonly sampleLimit = 80;
+  private readonly tallies: Record<Community, SideTally> = { A: new SideTally(), B: new SideTally() };
+  private readonly lastChange = new Map<string, number>();
+  private readonly samples: VoteSample[] = [];
+  private sampleHead = 0;
+  private readonly cooldownMs: number;
+  readonly consensus: ConsensusRule;
+
+  constructor(readonly puzzle: Puzzle, options: RoundOptions = {}) {
+    const fallback = [...(puzzle.alsoFitsA ?? puzzle.halfAAlsoFits), ...(puzzle.alsoFitsB ?? puzzle.halfBAlsoFits)].map(name => ({ name, aliases: [] }));
+    this.vocabulary = new Vocabulary({ name: puzzle.answer, aliases: puzzle.aliases }, options.vocabulary ?? fallback);
+    this.cooldownMs = options.cooldownMs ?? 2_000;
+    this.consensus = { ...DEFAULT_CONSENSUS, ...options.consensus };
+    this.rehearsal = options.rehearsal ?? false;
+  }
+
+  start(at = Date.now(), durationMs?: number): void {
+    if (this.status !== 'pending') throw new Error('Round has already started.');
+    this.status = 'active';
+    this.startedAt = at;
+    if (durationMs !== undefined) this.endsAt = at + durationMs;
+  }
+
+  /** Records a viewer's vote. userId is the stable Twitch chatter_user_id; displayName is only shown in the ticker. */
+  vote(community: Community, userId: string, text: string, at = Date.now(), displayName = userId, sample = true): VoteResult {
+    if (this.status !== 'active') return 'inactive';
+    const clean = cleanVoteText(text);
+    if (!clean || isBlockedGuess(clean)) return 'blocked';
+    const normalised = normaliseGuess(clean);
+    if (!normalised) return 'blocked';
+    const tally = this.tallies[community];
+    const current = tally.votes.get(userId);
+    const bucket = this.vocabulary.match(normalised) ?? `t:${normalised}`;
+    if (current === bucket) { if (sample) this.sample(community, displayName, bucket, at); return 'unchanged'; }
+    const changeKey = `${community}:${userId}`;
+    if (current !== undefined) {
+      const last = this.lastChange.get(changeKey);
+      if (last !== undefined && at - last < this.cooldownMs) return 'rate-limited';
+      tally.remove(current);
+    }
+    tally.votes.set(userId, bucket);
+    tally.add(bucket);
+    this.lastChange.set(changeKey, at);
+    if (sample) this.sample(community, displayName, bucket, at);
+    this.updateConsensus(at);
+    return 'voted';
+  }
+
+  label(bucket: string): string { return this.vocabulary.label(bucket) ?? OTHER_LABEL; }
+  voterCount(community: Community): number { return this.tallies[community].votes.size; }
+  /** The display label of one viewer's current vote (an entity name or "other answers"), or undefined. */
+  voteLabel(community: Community, userId: string): string | undefined { const bucket = this.tallies[community].votes.get(userId); return bucket === undefined ? undefined : this.label(bucket); }
+  leaderLabel(community: Community): string | null { const leader = this.tallies[community].leader(); return leader === null ? null : this.label(leader); }
+
+  /** Vote bars: only entities from the round's fact table, everything else summed as one "other answers" figure. */
+  displayBuckets(community: Community, limit = 3): { buckets: VoteBucket[]; other: number } {
+    const tally = this.tallies[community];
+    const known: VoteBucket[] = [];
+    let knownVotes = 0;
+    for (const [bucket, count] of tally.counts) {
+      if (!this.vocabulary.has(bucket)) continue;
+      known.push({ answer: this.vocabulary.label(bucket)!, count });
+      knownVotes += count;
+    }
+    known.sort((a, b) => b.count - a.count || a.answer.localeCompare(b.answer));
+    return { buckets: known.slice(0, limit), other: tally.votes.size - knownVotes };
+  }
+
+  /** The last few ticker samples for one side, oldest first. */
+  recentSamples(community?: Community, limit = this.sampleLimit): VoteSample[] {
+    const ordered = this.samples.length < this.sampleLimit ? this.samples : [...this.samples.slice(this.sampleHead), ...this.samples.slice(0, this.sampleHead)];
+    const filtered = community ? ordered.filter(sample => sample.community === community) : ordered;
+    return filtered.slice(-limit);
+  }
+
+  private sample(community: Community, user: string, bucket: string, at: number): void {
+    const entry: VoteSample = { community, user: cleanVoteText(user, 24) || 'viewer', label: this.label(bucket), at };
+    if (this.samples.length < this.sampleLimit) this.samples.push(entry);
+    else { this.samples[this.sampleHead] = entry; this.sampleHead = (this.sampleHead + 1) % this.sampleLimit; }
+  }
+
+  /**
+   * Consensus lock: both sides have a unique leader holding at least `share` of their side's votes, with at least
+   * `minVotes` voters. Correctness is never consulted here, so an early lock does not reveal anything.
+   */
+  private consensusHolds(): boolean {
+    for (const community of ['A', 'B'] as const) {
+      const tally = this.tallies[community];
+      const voters = tally.votes.size;
+      if (voters < this.consensus.minVotes || tally.leader() === null || tally.max / voters < this.consensus.share) return false;
+    }
+    return true;
+  }
+  private updateConsensus(at: number): void {
+    if (this.consensusHolds()) this.consensusSince ??= at; else this.consensusSince = undefined;
+  }
+  refreshConsensus(at = Date.now()): void { if (this.status === 'active') this.updateConsensus(at); }
+  /** When the consensus lock is due, or undefined if consensus does not currently hold. */
+  consensusDueAt(): number | undefined {
+    return this.status === 'active' && this.consensusSince !== undefined ? this.consensusSince + this.consensus.holdMs : undefined;
+  }
+
+  finish(at = Date.now(), reason: Round['finishReason'] = 'timeout'): void {
+    if (this.status !== 'active') return;
+    const answer = this.vocabulary.answerKey;
+    const side = (community: Community): SideReveal => {
+      const leader = this.tallies[community].leader();
+      return { topAnswer: leader === null ? null : this.label(leader), correct: leader === answer, voters: this.voterCount(community) };
+    };
+    this.result = { A: side('A'), B: side('B') };
+    this.status = this.result.A.correct && this.result.B.correct ? 'won' : 'timed-out';
+    this.endedAt = at;
+    this.finishReason = reason;
+    this.consensusSince = undefined;
+    this.lastChange.clear();
+  }
+  lock(at = Date.now()): void { this.finish(at, 'lock'); }
+  timeout(at = Date.now()): void { this.finish(at, 'timeout'); }
+
+  get solveTimeMs(): number | undefined { return this.startedAt === undefined || this.endedAt === undefined ? undefined : this.endedAt - this.startedAt; }
+
+  /** Compact snapshot: each vote is [userId, bucket index], so 100,000 votes stay a few megabytes. */
+  serialize(includeVotes = this.status === 'active'): SerializedRound {
+    const buckets: string[] = [];
+    const indexOf = new Map<string, number>();
+    const pack = (community: Community): Array<[string, number]> => {
+      if (!includeVotes) return [];
+      const out: Array<[string, number]> = [];
+      for (const [user, bucket] of this.tallies[community].votes) {
+        let index = indexOf.get(bucket);
+        if (index === undefined) { index = buckets.length; buckets.push(this.vocabulary.has(bucket) ? `=${this.label(bucket)}` : bucket); indexOf.set(bucket, index); }
+        out.push([user, index]);
+      }
+      return out;
+    };
+    const votesA = pack('A');
+    const votesB = pack('B');
+    return { puzzle: this.puzzle, status: this.status, startedAt: this.startedAt, endedAt: this.endedAt, endsAt: this.endsAt, rehearsal: this.rehearsal,
+      buckets, votesA, votesB, samples: this.recentSamples(), result: this.result, finishReason: this.finishReason };
+  }
+
+  static restore(saved: SerializedRound, options: RoundOptions = {}): Round {
+    const round = new Round(saved.puzzle, { ...options, rehearsal: saved.rehearsal });
+    round.status = saved.status;
+    round.startedAt = saved.startedAt;
+    round.endedAt = saved.endedAt;
+    round.endsAt = saved.endsAt;
+    round.result = saved.result;
+    round.finishReason = saved.finishReason as Round['finishReason'];
+    // Entity buckets are stored by name, not by key, so a changed fact table cannot misfile a restored vote.
+    const buckets = saved.buckets.map(bucket => {
+      if (!bucket.startsWith('=')) return bucket;
+      const normalised = normaliseGuess(bucket.slice(1));
+      return round.vocabulary.match(normalised) ?? `t:${normalised}`;
+    });
+    for (const [community, votes] of [['A', saved.votesA], ['B', saved.votesB]] as const) {
+      const tally = round.tallies[community];
+      for (const [user, index] of votes) {
+        const bucket = buckets[index];
+        if (bucket === undefined || tally.votes.has(user)) continue;
+        tally.votes.set(user, bucket);
+        tally.add(bucket);
+      }
+    }
+    for (const sample of saved.samples.slice(-round.sampleLimit)) round.samples.push(sample);
+    return round;
+  }
 }

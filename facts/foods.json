@@ -2,7 +2,19 @@
   "_meta": {
     "category": "foods and dishes",
     "sources": [
-      "Curated from publicly documented general-reference facts; see facts/README.md"
+      "Curated from publicly documented general-reference facts; see facts/README.md",
+      "Wikipedia: Italian cuisine (https://en.wikipedia.org/wiki/Italian_cuisine)",
+      "Wikipedia: Japanese cuisine (https://en.wikipedia.org/wiki/Japanese_cuisine)",
+      "Wikipedia: Indian cuisine (https://en.wikipedia.org/wiki/Indian_cuisine)",
+      "Wikipedia: Mexican cuisine (https://en.wikipedia.org/wiki/Mexican_cuisine)",
+      "Wikipedia: Chinese cuisine (https://en.wikipedia.org/wiki/Chinese_cuisine)",
+      "Wikipedia: French cuisine (https://en.wikipedia.org/wiki/French_cuisine)",
+      "Wikipedia: Thai cuisine (https://en.wikipedia.org/wiki/Thai_cuisine)",
+      "Wikipedia: Korean cuisine (https://en.wikipedia.org/wiki/Korean_cuisine)",
+      "Wikipedia: Street food (https://en.wikipedia.org/wiki/Street_food)",
+      "Wikipedia: Deep frying (https://en.wikipedia.org/wiki/Deep_frying)",
+      "Wikipedia: Steaming (https://en.wikipedia.org/wiki/Steaming)",
+      "Wikipedia: Noodle soup (https://en.wikipedia.org/wiki/Noodle_soup)"
     ],
     "license": "CC0 1.0 for this curated compilation"
   },
@@ -14,7 +26,10 @@
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "wheat",
-        "taste": "savoury"
+        "taste": "savoury",
+        "cookingMethod": "baked",
+        "eatenWithHands": true,
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -32,7 +47,9 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -44,7 +61,8 @@
       "attributes": {
         "originCountry": "India",
         "mainIngredient": "rice",
-        "taste": "savoury"
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -53,8 +71,10 @@
       "fame": 2,
       "attributes": {
         "originCountry": "India",
-        "mainIngredient": "potato",
-        "taste": "savoury"
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "servedAs": "breakfast",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -62,10 +82,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "originCountry": "India",
-        "mainIngredient": "wheat",
         "taste": "savoury",
-        "servedAs": "snack"
+        "cookingMethod": "deep-fried",
+        "eatenWithHands": true,
+        "servedAs": "street food",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -75,7 +96,10 @@
       "attributes": {
         "originCountry": "India",
         "mainIngredient": "rice",
-        "taste": "savoury"
+        "taste": "savoury",
+        "cookingMethod": "steamed",
+        "servedAs": "breakfast",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -83,9 +107,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "originCountry": "India",
         "mainIngredient": "wheat",
-        "taste": "savoury"
+        "cookingMethod": "baked",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "bread"
+        ]
       }
     },
     {
@@ -94,8 +121,13 @@
       "fame": 3,
       "attributes": {
         "originCountry": "Japan",
-        "mainIngredient": "rice",
-        "taste": "savoury"
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "noodles",
+          "soup"
+        ]
       }
     },
     {
@@ -105,7 +137,12 @@
       "attributes": {
         "originCountry": "Vietnam",
         "mainIngredient": "rice",
-        "taste": "savoury"
+        "taste": "savoury",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "noodles",
+          "soup"
+        ]
       }
     },
     {
@@ -114,7 +151,14 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Thailand",
-        "taste": "savoury"
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "cookingMethod": "stir-fried",
+        "servedAs": "street food",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "noodles"
+        ]
       }
     },
     {
@@ -123,7 +167,9 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Mexico",
-        "taste": "savoury"
+        "taste": "savoury",
+        "eatenWithHands": true,
+        "servedAs": "street food"
       }
     },
     {
@@ -132,7 +178,10 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Mexico",
-        "taste": "savoury"
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "eatenWithHands": true,
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -141,7 +190,9 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Mexico",
-        "taste": "savoury"
+        "mainIngredient": "corn",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -150,7 +201,9 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Spain",
-        "taste": "savoury"
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -160,7 +213,8 @@
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "rice",
-        "taste": "savoury"
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -170,7 +224,8 @@
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "wheat",
-        "taste": "savoury"
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -180,7 +235,9 @@
       "attributes": {
         "originCountry": "Italy",
         "mainIngredient": "wheat",
-        "taste": "savoury"
+        "taste": "savoury",
+        "cookingMethod": "baked",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -188,9 +245,7 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "originCountry": "China",
-        "mainIngredient": "wheat",
-        "taste": "savoury"
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -199,7 +254,7 @@
       "fame": 2,
       "attributes": {
         "originCountry": "China",
-        "taste": "savoury"
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -207,7 +262,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "taste": "savoury",
+        "cookingMethod": "grilled",
+        "servedAs": "street food",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -215,7 +273,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "mainIngredient": "chickpeas",
+        "taste": "savoury",
+        "cookingMethod": "deep-fried",
+        "servedAs": "street food",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -223,8 +285,8 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury",
-        "servedAs": "snack"
+        "mainIngredient": "chickpeas",
+        "taste": "savoury"
       }
     },
     {
@@ -233,8 +295,8 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Mexico",
-        "taste": "savoury",
-        "servedAs": "snack"
+        "mainIngredient": "avocado",
+        "taste": "savoury"
       }
     },
     {
@@ -242,7 +304,9 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "mainIngredient": "wheat",
+        "servedAs": "breakfast",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -250,7 +314,9 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "mainIngredient": "wheat",
+        "servedAs": "breakfast",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -260,7 +326,9 @@
       "attributes": {
         "originCountry": "France",
         "mainIngredient": "wheat",
-        "taste": "savoury"
+        "cookingMethod": "baked",
+        "eatenWithHands": true,
+        "servedAs": "breakfast"
       }
     },
     {
@@ -270,7 +338,10 @@
       "attributes": {
         "originCountry": "France",
         "mainIngredient": "wheat",
-        "taste": "savoury"
+        "cookingMethod": "baked",
+        "dishType": [
+          "bread"
+        ]
       }
     },
     {
@@ -279,7 +350,9 @@
       "fame": 2,
       "attributes": {
         "originCountry": "India",
-        "taste": "savoury"
+        "mainIngredient": "chicken",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -288,7 +361,10 @@
       "fame": 2,
       "attributes": {
         "originCountry": "India",
-        "taste": "savoury"
+        "mainIngredient": "milk",
+        "taste": "sweet",
+        "cookingMethod": "deep-fried",
+        "servedAs": "dessert"
       }
     },
     {
@@ -297,7 +373,10 @@
       "fame": 2,
       "attributes": {
         "originCountry": "India",
-        "taste": "savoury"
+        "taste": "savoury",
+        "cookingMethod": "deep-fried",
+        "eatenWithHands": true,
+        "servedAs": "street food"
       }
     },
     {
@@ -306,7 +385,9 @@
       "fame": 2,
       "attributes": {
         "originCountry": "India",
-        "taste": "savoury"
+        "mainIngredient": "chickpeas",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -315,7 +396,9 @@
       "fame": 2,
       "attributes": {
         "originCountry": "India",
-        "taste": "savoury"
+        "mainIngredient": "lentils",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -324,7 +407,12 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Japan",
-        "taste": "savoury"
+        "mainIngredient": "soybeans",
+        "taste": "savoury",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "soup"
+        ]
       }
     },
     {
@@ -333,7 +421,9 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Korea",
-        "taste": "savoury"
+        "mainIngredient": "cabbage",
+        "taste": "savoury",
+        "cookingMethod": "fermented"
       }
     },
     {
@@ -341,7 +431,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "China",
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "cookingMethod": "stir-fried",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -349,7 +443,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "United States",
+        "mainIngredient": "beef",
+        "taste": "savoury",
+        "eatenWithHands": true,
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -357,7 +455,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "taste": "savoury",
+        "eatenWithHands": true,
+        "servedAs": "street food",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -365,7 +466,7 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "eatenWithHands": true
       }
     },
     {
@@ -373,7 +474,7 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "servedHotOrCold": "cold"
       }
     },
     {
@@ -381,7 +482,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "mainIngredient": "milk",
+        "taste": "sweet",
+        "servedAs": "dessert",
+        "servedHotOrCold": "cold"
       }
     },
     {
@@ -389,8 +493,8 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "sweet",
-        "servedAs": "dessert"
+        "mainIngredient": "cacao",
+        "taste": "sweet"
       }
     },
     {
@@ -398,8 +502,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
+        "mainIngredient": "cheese",
         "taste": "sweet",
-        "servedAs": "dessert"
+        "servedAs": "dessert",
+        "servedHotOrCold": "cold"
       }
     },
     {
@@ -407,7 +513,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "mainIngredient": "apples",
+        "taste": "sweet",
+        "cookingMethod": "baked",
+        "servedAs": "dessert"
       }
     },
     {
@@ -416,8 +525,10 @@
       "fame": 2,
       "attributes": {
         "originCountry": "Italy",
+        "mainIngredient": "milk",
         "taste": "sweet",
-        "servedAs": "dessert"
+        "servedAs": "dessert",
+        "servedHotOrCold": "cold"
       }
     },
     {
@@ -427,7 +538,8 @@
       "attributes": {
         "originCountry": "Italy",
         "taste": "sweet",
-        "servedAs": "dessert"
+        "servedAs": "dessert",
+        "servedHotOrCold": "cold"
       }
     },
     {
@@ -435,7 +547,9 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "taste": "savoury",
+        "servedAs": "street food"
       }
     },
     {
@@ -443,7 +557,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "servedAs": "breakfast",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -451,7 +569,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "servedAs": "breakfast",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -459,7 +581,14 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "servedAs": "breakfast",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "bread"
+        ]
       }
     },
     {
@@ -467,7 +596,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "mainIngredient": "wheat",
+        "taste": "sweet",
+        "cookingMethod": "deep-fried",
+        "servedAs": "dessert"
       }
     },
     {
@@ -475,7 +607,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "mainIngredient": "milk",
+        "taste": "sweet",
+        "servedAs": "dessert"
       }
     },
     {
@@ -483,7 +618,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "mainIngredient": "yogurt",
+        "taste": "sweet",
+        "servedAs": "drink",
+        "servedHotOrCold": "cold"
       }
     },
     {
@@ -491,7 +630,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "India",
+        "mainIngredient": "chicken",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -499,7 +641,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "Korea",
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -507,7 +652,10 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "Japan",
+        "taste": "savoury",
+        "cookingMethod": "deep-fried",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -515,7 +663,14 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "Thailand",
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "cookingMethod": "stir-fried",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "noodles"
+        ]
       }
     },
     {
@@ -523,7 +678,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "China",
+        "taste": "savoury",
+        "cookingMethod": "deep-fried",
+        "eatenWithHands": true,
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -531,7 +690,7 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -539,7 +698,8 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -547,7 +707,11 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "United Kingdom",
+        "mainIngredient": "fish",
+        "taste": "savoury",
+        "cookingMethod": "deep-fried",
+        "servedHotOrCold": "hot"
       }
     },
     {
@@ -555,7 +719,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "taste": "savoury"
+        "originCountry": "United States",
+        "mainIngredient": "chocolate",
+        "taste": "sweet",
+        "cookingMethod": "baked",
+        "eatenWithHands": true,
+        "servedAs": "dessert"
       }
     },
     {
@@ -563,7 +732,416 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
+        "originCountry": "Japan",
+        "mainIngredient": "rice"
+      }
+    },
+    {
+      "name": "quesadilla",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Mexico",
+        "taste": "savoury",
+        "eatenWithHands": true,
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "nachos",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Mexico",
+        "mainIngredient": "corn",
+        "taste": "savoury",
+        "eatenWithHands": true
+      }
+    },
+    {
+      "name": "tamales",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Mexico",
+        "mainIngredient": "corn",
+        "cookingMethod": "steamed",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "churros",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "mainIngredient": "wheat",
+        "taste": "sweet",
+        "cookingMethod": "deep-fried",
+        "eatenWithHands": true
+      }
+    },
+    {
+      "name": "Peking duck",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "China",
+        "mainIngredient": "duck",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "kung pao chicken",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "China",
+        "mainIngredient": "chicken",
+        "taste": "savoury",
+        "cookingMethod": "stir-fried",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "mapo tofu",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "China",
+        "mainIngredient": "tofu",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "chow mein",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "China",
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "cookingMethod": "stir-fried",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "noodles"
+        ]
+      }
+    },
+    {
+      "name": "xiaolongbao",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "China",
+        "taste": "savoury",
+        "cookingMethod": "steamed",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "crepe",
+      "aliases": [
+        "crêpe"
+      ],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "France",
+        "mainIngredient": "wheat"
+      }
+    },
+    {
+      "name": "ratatouille",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "France",
         "taste": "savoury"
+      }
+    },
+    {
+      "name": "quiche",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "France",
+        "mainIngredient": "egg",
+        "taste": "savoury",
+        "cookingMethod": "baked"
+      }
+    },
+    {
+      "name": "tom yum",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Thailand",
+        "taste": "savoury",
+        "servedHotOrCold": "hot",
+        "dishType": [
+          "soup"
+        ]
+      }
+    },
+    {
+      "name": "green curry",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Thailand",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "mango sticky rice",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "Thailand",
+        "mainIngredient": "rice",
+        "taste": "sweet",
+        "servedAs": "dessert"
+      }
+    },
+    {
+      "name": "gazpacho",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Spain",
+        "mainIngredient": "tomato",
+        "taste": "savoury",
+        "servedHotOrCold": "cold",
+        "dishType": [
+          "soup"
+        ]
+      }
+    },
+    {
+      "name": "udon",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Japan",
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "dishType": [
+          "noodles"
+        ]
+      }
+    },
+    {
+      "name": "onigiri",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "Japan",
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "eatenWithHands": true
+      }
+    },
+    {
+      "name": "takoyaki",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Japan",
+        "taste": "savoury",
+        "servedAs": "street food",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "polenta",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "mainIngredient": "corn",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "carbonara",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "gnocchi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "mainIngredient": "potato",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "chana masala",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "chickpeas",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "dhokla",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "chickpeas",
+        "taste": "savoury",
+        "cookingMethod": "steamed"
+      }
+    },
+    {
+      "name": "French fries",
+      "aliases": [
+        "fries"
+      ],
+      "fame": 2,
+      "attributes": {
+        "mainIngredient": "potato",
+        "taste": "savoury",
+        "cookingMethod": "deep-fried",
+        "eatenWithHands": true,
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "momo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "taste": "savoury",
+        "cookingMethod": "steamed",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "cornbread",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "United States",
+        "mainIngredient": "corn",
+        "cookingMethod": "baked",
+        "dishType": [
+          "bread"
+        ]
+      }
+    },
+    {
+      "name": "satay",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Indonesia",
+        "taste": "savoury",
+        "cookingMethod": "grilled",
+        "eatenWithHands": true,
+        "servedAs": "street food",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "bulgogi",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Korea",
+        "mainIngredient": "beef",
+        "taste": "savoury",
+        "cookingMethod": "grilled",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "tteokbokki",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "Korea",
+        "mainIngredient": "rice",
+        "taste": "savoury",
+        "servedAs": "street food",
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "yakitori",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Japan",
+        "mainIngredient": "chicken",
+        "taste": "savoury",
+        "cookingMethod": "grilled",
+        "eatenWithHands": true,
+        "servedHotOrCold": "hot"
+      }
+    },
+    {
+      "name": "rasmalai",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originCountry": "India",
+        "mainIngredient": "milk",
+        "taste": "sweet",
+        "servedAs": "dessert",
+        "servedHotOrCold": "cold"
+      }
+    },
+    {
+      "name": "focaccia",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "originCountry": "Italy",
+        "mainIngredient": "wheat",
+        "taste": "savoury",
+        "cookingMethod": "baked",
+        "dishType": [
+          "bread"
+        ]
+      }
+    },
+    {
+      "name": "doughnut",
+      "aliases": [
+        "donut"
+      ],
+      "fame": 2,
+      "attributes": {
+        "mainIngredient": "wheat",
+        "taste": "sweet",
+        "cookingMethod": "deep-fried",
+        "eatenWithHands": true
+      }
+    },
+    {
+      "name": "mashed potatoes",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "mainIngredient": "potato",
+        "taste": "savoury",
+        "servedHotOrCold": "hot"
       }
     }
   ]

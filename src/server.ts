@@ -1,39 +1,170 @@
 import 'dotenv/config';
-import Fastify from 'fastify';
+import Fastify, { type FastifyInstance } from 'fastify';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
-import { Session } from './game/session.js';
+import { Session, SessionStore } from './game/session.js';
 import { puzzlePack } from './puzzle/pack.js';
-import {demoPuzzlePack} from './puzzle/demo-pack.js';
-import { parseCommand } from './app/commands.js';
-import { GameController } from './app/controller.js';
-import { registerWebRoutes } from './app/web.js';
-import { registerAuthRoutes } from './twitch/auth.js';
-import { EventSubClient } from './twitch/eventsub.js';
-import { TwitchChat } from './twitch/chat.js';
+import { demoPuzzlePack } from './puzzle/demo-pack.js';
+import { loadFactVocabularies } from './puzzle/vocabulary-source.js';
+import type { Puzzle } from './puzzle/types.js';
+import { GameController, makeRoundOptions, type RoundEvent } from './app/controller.js';
+import { registerWebRoutes, type Readiness } from './app/web.js';
+import { createChatRouter } from './app/router.js';
+import { sideHealth } from './app/health.js';
+import { registerAuthRoutes, TokenStore } from './twitch/auth.js';
+import { EventSubClient, sharedChatJoinsBoth, type Side, type SocketFactory } from './twitch/eventsub.js';
+import { ChatSender } from './twitch/chat.js';
 import { TwitchHelix } from './twitch/helix.js';
+import { loggerOptions } from './obs/log.js';
+import { Metrics } from './obs/metrics.js';
 
-const EnvSchema=z.object({TWITCH_CLIENT_ID:z.string().min(1),TWITCH_CLIENT_SECRET:z.string().min(1),PUBLIC_URL:z.string().url(),CHANNEL_A:z.string().min(1),CHANNEL_B:z.string().min(1),PORT:z.string().optional(),COMMAND_PREFIX:z.string().min(1).max(20).default('!g')});
-async function createServer(demo:boolean,env:NodeJS.ProcessEnv){
-  const config=demo?undefined:EnvSchema.parse(env);const app=Fastify();const session=demo?new Session():await Session.load().catch(()=>new Session());const controller=new GameController(session,demo?[...puzzlePack,...demoPuzzlePack]:puzzlePack,demo,Date.now,!demo);let eventsub:EventSubClient|undefined;
-  if(config){
-    let startEventSub:()=>Promise<void>=async()=>{};
-    const auth=registerAuthRoutes(app,{clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,publicUrl:config.PUBLIC_URL,onAuthorized:()=>startEventSub()});
-    const helix=new TwitchHelix({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,tokens:auth.store});
-    startEventSub=async()=>{if(eventsub||!auth.store.get('bot')||!auth.store.get('a')||!auth.store.get('b'))return;const [a,b,bot]=await Promise.all([helix.userId(config.CHANNEL_A,'a'),helix.userId(config.CHANNEL_B,'b'),helix.userId(undefined,'bot')]);const chat=new TwitchChat({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,tokens:auth.store,channelA:a,channelB:b,botUserId:bot});
-      eventsub=new EventSubClient({clientId:config.TWITCH_CLIENT_ID,clientSecret:config.TWITCH_CLIENT_SECRET,channelA:a,channelB:b,botUserId:bot,tokens:auth.store,helix,onConnection:connected=>{controller.setChannelStatus('a',connected);controller.setChannelStatus('b',connected);},onChat:message=>{const side=message.channel==='a'?'A':'B';const command=parseCommand({channel:side,user:message.user,text:message.text,badges:message.badges},{A:a,B:b},config.COMMAND_PREFIX);const send=(channel:'a'|'b',text:string)=>{void chat.send(channel,text).catch(()=>undefined);};
-        if(command.type==='start'){try{controller.startRound();send(message.channel,'A new Twinclue round has started.');}catch{send(message.channel,'A round is already running.');}}
-        else if(command.type==='skip'){controller.skipRound();send(message.channel,'Round skipped.');}
-        else if(command.type==='lock'){controller.lockRound();send(message.channel,'Votes locked.');}
-        else if(command.type==='score'){const score=session.scoreboard;send(message.channel,`Score: ${score.wins} ${score.wins===1?'win':'wins'} and a ${score.streak} round streak.`);}
-        else if(command.type==='denied')send(message.channel,'Only a broadcaster or moderator can use that command.');
-        else if(command.type==='guess'){controller.vote(command.channel,command.user,command.text);}
-      }});eventsub.connect();};
-    await auth.load();if(auth.store.get('bot')&&auth.store.get('a')&&auth.store.get('b'))await startEventSub();
+const optional = z.string().trim().transform(value => value || undefined).optional();
+const EnvSchema = z.object({
+  TWITCH_CLIENT_ID: z.string().min(1), TWITCH_CLIENT_SECRET: z.string().min(1), PUBLIC_URL: z.string().url(),
+  CHANNEL_A: z.string().trim().min(1, 'CHANNEL_A (the host channel login) is required.'), CHANNEL_B: optional, BOT_LOGIN: optional,
+  ADMIN_TOKEN: z.string().min(24, 'ADMIN_TOKEN must be at least 24 characters. Generate one with: openssl rand -hex 24'),
+  PORT: optional, PUBLIC: optional, COMMAND_PREFIX: z.string().min(1).max(20).default('!g'),
+});
+
+export interface ServerOverrides { logStream?: NodeJS.WritableStream; sessionPath?: string; tokenPath?: string; fetcher?: typeof fetch; eventsubUrl?: string; socketFactory?: SocketFactory; pack?: Puzzle[] }
+export interface BuiltServer { app: FastifyInstance; session: Session; controller: GameController; metrics: Metrics; listen: () => Promise<string>; shutdown: () => Promise<void> }
+
+async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: ServerOverrides = {}): Promise<BuiltServer> {
+  const config = demo ? undefined : EnvSchema.parse(env);
+  const publicBind = env.PUBLIC === '1';
+  if (demo && publicBind) throw new Error('Demo mode has no admin token, so it only runs on 127.0.0.1. Unset PUBLIC.');
+  const metrics = new Metrics();
+  const app = Fastify({ logger: loggerOptions(overrides.logStream), disableRequestLogging: false });
+  const vocabularies = loadFactVocabularies();
+  const roundOptions = makeRoundOptions({ vocabularies });
+  const store = new SessionStore(overrides.sessionPath ?? 'data/session.json', app.log.child({ component: 'session' }), metrics);
+  const session = demo ? new Session() : await store.load(roundOptions);
+  const prefix = config?.COMMAND_PREFIX ?? (env.COMMAND_PREFIX?.trim() || '!g');
+  const pack = overrides.pack ?? (demo ? [...puzzlePack, ...demoPuzzlePack] : puzzlePack);
+
+  let chat: ChatSender | undefined;
+  let eventsub: EventSubClient | undefined;
+  let validation: ReturnType<typeof setInterval> | undefined;
+  const onRoundEvent = (event: RoundEvent) => {
+    if (!chat || event.round.rehearsal) return;
+    const round = event.round;
+    if (event.type === 'started') { void chat.send('both', `Twinclue round started! Each community holds half of the clue on stream. Vote with ${prefix} followed by your answer.`); return; }
+    const result = round.result;
+    const text = round.status === 'won'
+      ? `Both communities locked in ${round.puzzle.answer}. That is a win! Streak: ${session.stats.streak}.`
+      : `Round over. The answer was ${round.puzzle.answer}. Community A chose ${result?.A.topAnswer ?? 'nothing'}, community B chose ${result?.B.topAnswer ?? 'nothing'}.`;
+    void chat.send('both', text);
+  };
+  const controller = new GameController(session, pack, { demo, store: demo ? undefined : store, metrics, vocabularies, commandPrefix: prefix, onRoundEvent });
+
+  let readiness: () => Readiness = () => ({ ready: true, reasons: [], detail: { mode: 'demo' } });
+  if (config) {
+    const channelLogins: Record<Side, string | undefined> = { a: config.CHANNEL_A, b: config.CHANNEL_B };
+    const tokens = new TokenStore({ path: overrides.tokenPath, clientId: config.TWITCH_CLIENT_ID, clientSecret: config.TWITCH_CLIENT_SECRET, fetcher: overrides.fetcher, log: app.log.child({ component: 'tokens' }) });
+    await tokens.load();
+    const helix = new TwitchHelix({ clientId: config.TWITCH_CLIENT_ID, tokens, fetcher: overrides.fetcher });
+    let channelIds: Partial<Record<Side, string>> = {};
+    controller.setHealth({ a: { configured: true }, b: { configured: Boolean(config.CHANNEL_B) } });
+
+    const startTwitch = async () => {
+      eventsub?.stop();
+      eventsub = undefined;
+      const identity = await tokens.validate('bot');
+      controller.setHealth({ tokenValid: Boolean(identity), lastError: identity ? null : 'The bot account is not authorised. Use "Connect bot account" in the panel.' });
+      if (!identity) return;
+      const ids: Partial<Record<Side, string>> = {};
+      for (const side of ['a', 'b'] as const) {
+        const login = channelLogins[side];
+        if (!login) continue;
+        try { ids[side] = await helix.userId(login, 'bot'); } catch (error) {
+          controller.setHealth({ [side]: { error: `Could not find Twitch channel "${login}": ${error instanceof Error ? error.message : String(error)}` } });
+        }
+      }
+      channelIds = ids;
+      // A Shared Chat session may already be running; events only report changes, so ask once at start.
+      if (ids.a && ids.b) {
+        try {
+          const shared = await helix.call('GET', `/shared_chat/session?broadcaster_id=${ids.a}`, 'bot');
+          const session = (shared.body as { data?: Array<{ participants?: unknown }> } | undefined)?.data?.[0];
+          controller.setHealth({ sharedChat: Boolean(session && sharedChatJoinsBoth('channel.shared_chat.begin', session, ids)) });
+        } catch { /* events will correct it */ }
+      }
+      const sender = new ChatSender({ helix, botUserId: identity.userId, channels: ids, sharedChat: () => controller.health.sharedChat, metrics, log: app.log.child({ component: 'chat' }) });
+      chat = sender;
+      eventsub = new EventSubClient({
+        channels: ids, botUserId: identity.userId, helix, url: overrides.eventsubUrl, socketFactory: overrides.socketFactory, metrics, log: app.log.child({ component: 'eventsub' }),
+        onChat: createChatRouter({ controller, broadcasterIds: ids, prefix, metrics }),
+        onShared: (type, event) => controller.setHealth({ sharedChat: sharedChatJoinsBoth(type, event, ids) }),
+        onStatus: status => controller.setHealth(sideHealth(status, ids)),
+      });
+      eventsub.connect();
+    };
+    const startSafely = () => startTwitch().catch(error => {
+      const message = error instanceof Error ? error.message : String(error);
+      app.log.error({ event: 'twitch_start_failed', reason: message }, 'Could not start the Twitch connection.');
+      controller.setHealth({ lastError: `Could not connect to Twitch: ${message}` });
+    });
+
+    registerWebRoutes(app, controller, { security: { adminToken: config.ADMIN_TOKEN }, publicUrl: config.PUBLIC_URL, metrics, readiness: () => readiness(),
+      onRecap: async () => chat ? chat.send('both', `Twinclue recap: ${session.stats.rounds} rounds played, ${session.stats.wins} won together, current streak ${session.stats.streak}. Thanks for playing!`) : false });
+    registerAuthRoutes(app, { clientId: config.TWITCH_CLIENT_ID, clientSecret: config.TWITCH_CLIENT_SECRET, publicUrl: config.PUBLIC_URL, store: tokens, fetcher: overrides.fetcher,
+      expectedLogin: role => (role === 'bot' ? config.BOT_LOGIN ?? config.CHANNEL_A : channelLogins[role]), requireAdmin: app.requireAdmin, log: app.log.child({ component: 'auth' }),
+      onAuthorized: () => { void startSafely(); } });
+
+    readiness = () => {
+      const reasons: string[] = [];
+      const status = eventsub?.status();
+      if (!tokens.status.bot.valid) reasons.push(tokens.status.bot.error ?? 'Bot token missing or not yet validated.');
+      for (const side of ['a', 'b'] as const) {
+        if (!channelLogins[side]) continue;
+        const label = `Channel ${side.toUpperCase()}`;
+        if (!channelIds[side]) { reasons.push(`${label}: channel id not resolved.`); continue; }
+        if (!status?.connected) reasons.push(`${label}: EventSub not connected.`);
+        const sub = status?.subscriptions.find(entry => entry.side === side && entry.type === 'channel.chat.message');
+        if (sub?.status !== 'enabled') reasons.push(`${label}: chat subscription ${sub?.status ?? 'missing'}${sub?.error ? ` (${sub.error})` : ''}.`);
+      }
+      return { ready: reasons.length === 0, reasons, detail: { health: controller.health, eventsub: status ?? null, bot: tokens.status.bot } };
+    };
+
+    await startSafely();
+    validation = setInterval(() => {
+      void tokens.validate('bot').then(identity => controller.setHealth({ tokenValid: Boolean(identity), ...(identity ? {} : { lastError: 'Hourly token check failed. Authorise the bot account again.' }) }));
+    }, 60 * 60_000);
+    validation.unref();
+  } else {
+    registerWebRoutes(app, controller, { metrics, readiness: () => readiness() });
   }
-  registerWebRoutes(app,controller);app.get('/health',async()=>({ok:true}));app.addHook('onClose',async()=>{eventsub?.stop();controller.close();});
-  return {app,session,controller,listen:()=>app.listen({host:'0.0.0.0',port:Number(config?.PORT??env.PORT??3000)})};
+
+  const shutdown = async () => {
+    if (validation) clearInterval(validation);
+    eventsub?.stop();
+    controller.close();
+    store.stop();
+    if (!demo) await store.now(session);
+    await app.close();
+  };
+  const host = publicBind ? '0.0.0.0' : '127.0.0.1';
+  return { app, session, controller, metrics, shutdown, listen: () => app.listen({ host, port: Number(config?.PORT ?? env.PORT ?? 3000) }) };
 }
-export function buildServer(env:NodeJS.ProcessEnv=process.env){return createServer(false,env);}
-export function buildDemoServer(env:NodeJS.ProcessEnv=process.env){return createServer(true,env);}
-if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){const server=await buildServer();await server.listen();}
+
+export function buildServer(env: NodeJS.ProcessEnv = process.env, overrides?: ServerOverrides) { return createServer(false, env, overrides); }
+export function buildDemoServer(env: NodeJS.ProcessEnv = process.env, overrides?: ServerOverrides) { return createServer(true, env, overrides); }
+
+export function installShutdown(server: BuiltServer): void {
+  let closing = false;
+  const stop = (signal: string) => {
+    if (closing) return;
+    closing = true;
+    server.app.log.info({ event: 'shutdown', signal }, 'Shutting down; saving the session.');
+    server.shutdown().then(() => process.exit(0), () => process.exit(1));
+  };
+  process.on('SIGINT', () => stop('SIGINT'));
+  process.on('SIGTERM', () => stop('SIGTERM'));
+  process.on('unhandledRejection', reason => server.app.log.error({ event: 'unhandled_rejection', reason: reason instanceof Error ? reason.message : String(reason) }, 'Unhandled rejection.'));
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const server = await buildServer();
+  installShutdown(server);
+  await server.listen();
+}

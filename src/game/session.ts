@@ -1,18 +1,139 @@
-import { mkdir,readFile,writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { z } from 'zod';
-import { PuzzleSchema } from '../puzzle/types.js';
-import { guessBucketKey,normaliseGuess } from './referee.js';
-import { Round,type Community,type RoundStatus,type VoteEntry,type VoteSample,type SideReveal } from './round.js';
+import { PuzzleSchema, type Puzzle } from '../puzzle/types.js';
+import { silentLog, type Log } from '../obs/log.js';
+import type { Metrics } from '../obs/metrics.js';
+import { Round, type RoundOptions, type SerializedRound, type SideReveal } from './round.js';
 
-const CommunitySchema=z.enum(['A','B']);const VoteEntrySchema=z.tuple([z.string(),z.object({bucket:z.string(),display:z.string()})]);
-const SessionRoundSchema=z.object({puzzle:PuzzleSchema,status:z.enum(['pending','active','won','timed-out']),startedAt:z.number().optional(),endedAt:z.number().optional(),earlyFinishAt:z.number().optional(),votesA:z.array(VoteEntrySchema).optional(),votesB:z.array(VoteEntrySchema).optional(),recentSamples:z.array(z.object({community:CommunitySchema,user:z.string(),text:z.string(),at:z.number()})).optional(),result:z.object({A:z.object({topAnswer:z.string().nullable(),correct:z.boolean(),voters:z.number()}),B:z.object({topAnswer:z.string().nullable(),correct:z.boolean(),voters:z.number()})}).nullable().optional(),history:z.array(z.object({community:CommunitySchema,user:z.string(),text:z.string(),at:z.number()})).optional()});
-const SessionSchema=z.object({rounds:z.array(SessionRoundSchema),streak:z.number().int().nonnegative()});
+export interface RoundSummary { puzzleId: string; answer: string; status: 'won' | 'timed-out'; rehearsal: boolean; startedAt?: number; endedAt?: number; sideA: SideReveal; sideB: SideReveal }
+
+const SideRevealSchema = z.object({ topAnswer: z.string().nullable(), correct: z.boolean(), voters: z.number() });
+const RoundSchema = z.object({
+  puzzle: PuzzleSchema, status: z.enum(['pending', 'active', 'won', 'timed-out']), startedAt: z.number().optional(), endedAt: z.number().optional(),
+  endsAt: z.number().optional(), rehearsal: z.boolean(), buckets: z.array(z.string()), votesA: z.array(z.tuple([z.string(), z.number().int()])),
+  votesB: z.array(z.tuple([z.string(), z.number().int()])),
+  samples: z.array(z.object({ community: z.enum(['A', 'B']), user: z.string(), label: z.string(), at: z.number() })),
+  result: z.object({ A: SideRevealSchema, B: SideRevealSchema }).nullable(), finishReason: z.string().optional(),
+});
+const SessionFileSchema = z.object({
+  version: z.literal(2),
+  stats: z.object({ rounds: z.number().int().nonnegative(), wins: z.number().int().nonnegative(), streak: z.number().int().nonnegative() }),
+  recent: z.array(z.object({ puzzleId: z.string(), answer: z.string(), status: z.enum(['won', 'timed-out']), rehearsal: z.boolean(), startedAt: z.number().optional(), endedAt: z.number().optional(), sideA: SideRevealSchema, sideB: SideRevealSchema })),
+  current: RoundSchema.nullable(),
+});
+export type SessionFile = z.infer<typeof SessionFileSchema>;
+
+/** Score, streak, a bounded history and the current round. Nothing in here grows without limit. */
 export class Session {
-  readonly rounds:Round[]=[];streak=0;
-  addRound(round:Round):void{this.rounds.push(round);}
-  get scoreboard():{rounds:number;wins:number;streak:number}{return {rounds:this.rounds.length,wins:this.rounds.filter(round=>round.status==='won').length,streak:this.streak};}
-  recordResult(round:Round):void{if(round.status==='won')this.streak++;else if(round.status==='timed-out')this.streak=0;}
-  async save(path='data/session.json'):Promise<void>{await mkdir(dirname(path),{recursive:true});const rounds=this.rounds.map(round=>({puzzle:round.puzzle,status:round.status,startedAt:round.startedAt,endedAt:round.endedAt,earlyFinishAt:round.earlyFinishAt,votesA:[...round.votes.A],votesB:[...round.votes.B],recentSamples:round.recentSamples,result:round.result}));await writeFile(path,JSON.stringify({rounds,streak:this.streak},null,2),'utf8');}
-  static async load(path='data/session.json'):Promise<Session>{const parsed=SessionSchema.parse(JSON.parse(await readFile(path,'utf8')));const session=new Session();session.streak=parsed.streak;for(const saved of parsed.rounds){const round=new Round(saved.puzzle);round.status=saved.status as RoundStatus;round.startedAt=saved.startedAt;round.endedAt=saved.endedAt;round.earlyFinishAt=saved.earlyFinishAt;if(saved.votesA)round.restoreVotes('A',saved.votesA as Array<[string,VoteEntry]>);if(saved.votesB)round.restoreVotes('B',saved.votesB as Array<[string,VoteEntry]>);if(saved.recentSamples)round.recentSamples.push(...saved.recentSamples as VoteSample[]);round.result=saved.result as Record<Community,SideReveal>|null??null;if(!saved.votesA&&!saved.votesB&&saved.history){const latest=new Map<Community,Map<string,string>>();for(const item of saved.history){const map=latest.get(item.community)??new Map<string,string>();map.set(item.user.toLocaleLowerCase(),item.text);latest.set(item.community,map);}for(const community of ['A','B'] as const){const votes:Array<[string,VoteEntry]>=[];for(const [user,text] of latest.get(community)??[]){const bucket=guessBucketKey(text,round.puzzle.answer,round.puzzle.aliases);votes.push([user,{bucket,display:bucket==='__answer__'?round.puzzle.answer:normaliseGuess(text)}]);}round.restoreVotes(community,votes);}}session.rounds.push(round);}return session;}
+  readonly stats = { rounds: 0, wins: 0, streak: 0 };
+  readonly recent: RoundSummary[] = [];
+  readonly historyLimit = 50;
+  current?: Round;
+
+  get scoreboard(): { rounds: number; wins: number; streak: number } { return { ...this.stats }; }
+  get streak(): number { return this.stats.streak; }
+
+  addRound(round: Round): void { this.current = round; }
+
+  /** Rehearsal rounds never touch the score. Only a finished round that was not won resets the streak. */
+  recordResult(round: Round): void {
+    if (round.status !== 'won' && round.status !== 'timed-out') return;
+    if (!round.rehearsal) {
+      this.stats.rounds++;
+      if (round.status === 'won') { this.stats.wins++; this.stats.streak++; } else this.stats.streak = 0;
+    }
+    this.recent.push({ puzzleId: round.puzzle.id, answer: round.puzzle.answer, status: round.status, rehearsal: round.rehearsal, startedAt: round.startedAt, endedAt: round.endedAt,
+      sideA: round.result?.A ?? { topAnswer: null, correct: false, voters: 0 }, sideB: round.result?.B ?? { topAnswer: null, correct: false, voters: 0 } });
+    if (this.recent.length > this.historyLimit) this.recent.splice(0, this.recent.length - this.historyLimit);
+  }
+
+  serialize(): SessionFile {
+    return { version: 2, stats: { ...this.stats }, recent: this.recent, current: this.current ? this.current.serialize() as SerializedRound : null };
+  }
+
+  static fromFile(data: unknown, roundOptions: (puzzle: Puzzle) => RoundOptions = () => ({})): Session {
+    const parsed = SessionFileSchema.parse(data);
+    const session = new Session();
+    Object.assign(session.stats, parsed.stats);
+    session.recent.push(...parsed.recent.slice(-session.historyLimit));
+    if (parsed.current) session.current = Round.restore(parsed.current as SerializedRound, roundOptions(parsed.current.puzzle as Puzzle));
+    return session;
+  }
+}
+
+/**
+ * Writes the session atomically (temp file then rename) at most once per interval while votes arrive, and
+ * immediately on round transitions. The interval stretches to ten times the last write's duration, so a very
+ * large vote map cannot keep the event loop busy.
+ */
+export class SessionStore {
+  private writing?: Promise<void>;
+  private pending = false;
+  private timer?: ReturnType<typeof setTimeout>;
+  private lastStartAt = 0;
+  private lastDurationMs = 0;
+  private queued = false;
+
+  constructor(readonly path = 'data/session.json', private readonly log: Log = silentLog, private readonly metrics?: Metrics, readonly minIntervalMs = 1_000) {}
+
+  async load(roundOptions?: (puzzle: Puzzle) => RoundOptions): Promise<Session> {
+    let raw: string;
+    try { raw = await readFile(this.path, 'utf8'); } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return new Session();
+      throw error;
+    }
+    try {
+      return Session.fromFile(JSON.parse(raw), roundOptions);
+    } catch (error) {
+      const aside = `${this.path}.corrupt-${Date.now()}`;
+      await rename(this.path, aside);
+      this.log.error({ event: 'session_corrupt', movedTo: aside, reason: error instanceof Error ? error.message.slice(0, 300) : String(error) },
+        'SESSION FILE WAS CORRUPT. It was moved aside and a fresh session started. The score and streak were reset.');
+      return new Session();
+    }
+  }
+
+  /** Throttled save for vote changes: write starts are at least one interval apart. */
+  request(session: Session): void {
+    if (this.timer || this.queued) return;
+    const interval = Math.max(this.minIntervalMs, this.lastDurationMs * 10);
+    const delay = Math.max(0, this.lastStartAt + interval - Date.now());
+    this.timer = setTimeout(() => {
+      this.timer = undefined;
+      if (!this.writing) { void this.now(session); return; }
+      this.queued = true;
+      void this.writing.finally(() => { this.queued = false; this.request(session); });
+    }, delay);
+    this.timer.unref?.();
+  }
+
+  /** Immediate save for round transitions and shutdown. Concurrent calls coalesce into one extra write. */
+  async now(session: Session): Promise<void> {
+    if (this.timer) { clearTimeout(this.timer); this.timer = undefined; }
+    if (this.writing) { this.pending = true; return this.writing; }
+    this.writing = this.write(session).finally(() => { this.writing = undefined; });
+    await this.writing;
+    if (this.pending) { this.pending = false; await this.now(session); }
+  }
+
+  private async write(session: Session): Promise<void> {
+    const started = performance.now();
+    this.lastStartAt = Date.now();
+    try {
+      const body = JSON.stringify(session.serialize());
+      await mkdir(dirname(this.path), { recursive: true });
+      const temp = `${this.path}.tmp-${process.pid}`;
+      await writeFile(temp, body, 'utf8');
+      await rename(temp, this.path);
+      this.metrics?.snapshots.inc({ result: 'ok' });
+    } catch (error) {
+      this.metrics?.snapshots.inc({ result: 'error' });
+      this.log.error({ event: 'session_save_failed', reason: error instanceof Error ? error.message : String(error) }, 'Could not save the session snapshot.');
+    } finally {
+      this.lastDurationMs = performance.now() - started;
+    }
+  }
+
+  stop(): void { if (this.timer) clearTimeout(this.timer); this.timer = undefined; }
 }

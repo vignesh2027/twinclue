@@ -1,4 +1,6 @@
-import {mkdir,writeFile} from 'node:fs/promises';
+// Historical bootstrap for the first fact tables. The JSON files in facts/ are now curated by hand and are the
+// source of truth, so this script only writes a table that does not exist yet and never overwrites curated data.
+import {access,mkdir,writeFile} from 'node:fs/promises';
 const header=(category,entities)=>({_meta:{category,sources:['Curated from publicly documented general-reference facts; see facts/README.md'],license:'CC0 1.0 for this curated compilation'},entities});
 const rows=`Afghanistan|Asia|1|left
 Albania|Europe|0|right
@@ -126,5 +128,5 @@ const sports='football basketball cricket tennis volleyball rugby baseball golf 
 const teamSports=new Set('football basketball cricket volleyball rugby baseball field hockey ice hockey American football kabaddi'.split(' '));const ballSports=new Set('football basketball cricket tennis volleyball rugby baseball golf badminton soccer field hockey ice hockey American football'.split(' '));const players={'football':11,'basketball':5,'cricket':11,'volleyball':6,'baseball':9,'field hockey':11,'ice hockey':6,'American football':11,'kabaddi':7};
 const sportEntities=sports.map(name=>({name,aliases:name==='football'?['soccer']:[],fame:2,attributes:{teamOrIndividual:teamSports.has(name)?'team':'individual',...(ballSports.has(name)?{usesBall:true}:{}),...(players[name]?{playersPerSide:players[name]}:{})}}));
 await mkdir('facts',{recursive:true});
-for(const [file,table] of [['countries',header('countries',countries)],['video-game-characters',header('video game characters',chars)],['animals',header('animals',animalEntities)],['space-objects',header('space objects',space)],['musical-instruments',header('musical instruments',instrumentEntities)],['foods',header('foods and dishes',foodEntities)],['sports',header('sports',sportEntities)]]) await writeFile(`facts/${file}.json`,JSON.stringify(table,null,2)+'\n');
+for(const [file,table] of [['countries',header('countries',countries)],['video-game-characters',header('video game characters',chars)],['animals',header('animals',animalEntities)],['space-objects',header('space objects',space)],['musical-instruments',header('musical instruments',instrumentEntities)],['foods',header('foods and dishes',foodEntities)],['sports',header('sports',sportEntities)]]){const path=`facts/${file}.json`;if(await access(path).then(()=>true,()=>false)){console.log(`Skipping ${path}: curated table already exists.`);continue;}await writeFile(path,JSON.stringify(table,null,2)+'\n');}
 console.log(JSON.stringify({countries:countries.length,characters:chars.length,animals:animalEntities.length,space:space.length,instruments:instrumentEntities.length,foods:foodEntities.length,sports:sportEntities.length}));

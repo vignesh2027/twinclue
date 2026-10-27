@@ -2,7 +2,17 @@
   "_meta": {
     "category": "musical instruments",
     "sources": [
-      "Curated from publicly documented general-reference facts; see facts/README.md"
+      "Curated from publicly documented general-reference facts; see facts/README.md",
+      "Wikipedia: Orchestra (https://en.wikipedia.org/wiki/Orchestra)",
+      "Wikipedia: String instrument (https://en.wikipedia.org/wiki/String_instrument)",
+      "Wikipedia: Fret (https://en.wikipedia.org/wiki/Fret)",
+      "Wikipedia: Woodwind instrument (https://en.wikipedia.org/wiki/Woodwind_instrument)",
+      "Wikipedia: Reed (instrument) (https://en.wikipedia.org/wiki/Reed_(instrument))",
+      "Wikipedia: Brass instrument (https://en.wikipedia.org/wiki/Brass_instrument)",
+      "Wikipedia: Percussion instrument (https://en.wikipedia.org/wiki/Percussion_instrument)",
+      "Wikipedia: Indian classical music (https://en.wikipedia.org/wiki/Indian_classical_music)",
+      "Wikipedia: Traditional Japanese musical instruments (https://en.wikipedia.org/wiki/Traditional_Japanese_musical_instruments)",
+      "Wikipedia: Chinese musical instruments (https://en.wikipedia.org/wiki/Chinese_musical_instruments)"
     ],
     "license": "CC0 1.0 for this curated compilation"
   },
@@ -10,34 +20,39 @@
     {
       "name": "piano",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "family": "keyboard",
-        "playedWithBow": false,
-        "keys": true,
-        "reed": false
+        "originContinent": "Europe",
+        "playMethod": "pressing keys",
+        "originCountry": "Italy"
       }
     },
     {
       "name": "guitar",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "Europe",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "Spain",
+        "stringsCount": 6
       }
     },
     {
       "name": "violin",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "family": "strings",
-        "playedWithBow": true,
-        "keys": false,
-        "reed": false
+        "originContinent": "Europe",
+        "playMethod": "bowing",
+        "hasFrets": false,
+        "originCountry": "Italy",
+        "orchestral": true,
+        "stringsCount": 4
       }
     },
     {
@@ -46,9 +61,12 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": true,
-        "keys": false,
-        "reed": false
+        "originContinent": "Europe",
+        "playMethod": "bowing",
+        "hasFrets": false,
+        "originCountry": "Italy",
+        "orchestral": true,
+        "stringsCount": 4
       }
     },
     {
@@ -57,9 +75,12 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": true,
-        "keys": false,
-        "reed": false
+        "originContinent": "Europe",
+        "playMethod": "bowing",
+        "hasFrets": false,
+        "originCountry": "Italy",
+        "orchestral": true,
+        "stringsCount": 4
       }
     },
     {
@@ -67,10 +88,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "family": "keyboard",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "family": "strings",
+        "originContinent": "Europe",
+        "playMethod": "bowing",
+        "hasFrets": false,
+        "orchestral": true,
+        "stringsCount": 4
       }
     },
     {
@@ -79,19 +102,19 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "playMethod": "plucking",
+        "hasFrets": false,
+        "orchestral": true
       }
     },
     {
       "name": "flute",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "family": "woodwind",
-        "playedWithBow": false,
-        "keys": false,
+        "playMethod": "blowing",
+        "orchestral": true,
         "reed": false
       }
     },
@@ -101,8 +124,9 @@
       "fame": 2,
       "attributes": {
         "family": "woodwind",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "playMethod": "blowing",
+        "orchestral": true,
         "reed": false
       }
     },
@@ -112,8 +136,10 @@
       "fame": 2,
       "attributes": {
         "family": "woodwind",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "playMethod": "blowing",
+        "originCountry": "France",
+        "orchestral": true,
         "reed": true
       }
     },
@@ -123,8 +149,10 @@
       "fame": 2,
       "attributes": {
         "family": "woodwind",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "playMethod": "blowing",
+        "originCountry": "Germany",
+        "orchestral": true,
         "reed": true
       }
     },
@@ -134,30 +162,35 @@
       "fame": 2,
       "attributes": {
         "family": "woodwind",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "playMethod": "blowing",
+        "orchestral": true,
         "reed": true
       }
     },
     {
       "name": "saxophone",
-      "aliases": [],
-      "fame": 2,
+      "aliases": [
+        "sax"
+      ],
+      "fame": 3,
       "attributes": {
         "family": "woodwind",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "material": "metal",
+        "playMethod": "blowing",
         "reed": true
       }
     },
     {
       "name": "trumpet",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "family": "brass",
-        "playedWithBow": false,
-        "keys": false,
+        "material": "metal",
+        "playMethod": "blowing",
+        "orchestral": true,
         "reed": false
       }
     },
@@ -167,8 +200,10 @@
       "fame": 2,
       "attributes": {
         "family": "brass",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "material": "metal",
+        "playMethod": "blowing",
+        "orchestral": true,
         "reed": false
       }
     },
@@ -178,19 +213,26 @@
       "fame": 2,
       "attributes": {
         "family": "brass",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "material": "metal",
+        "playMethod": "blowing",
+        "originCountry": "Germany",
+        "orchestral": true,
         "reed": false
       }
     },
     {
       "name": "French horn",
-      "aliases": [],
+      "aliases": [
+        "horn"
+      ],
       "fame": 2,
       "attributes": {
-        "family": "keyboard",
-        "playedWithBow": false,
-        "keys": false,
+        "family": "brass",
+        "originContinent": "Europe",
+        "material": "metal",
+        "playMethod": "blowing",
+        "orchestral": true,
         "reed": false
       }
     },
@@ -200,8 +242,8 @@
       "fame": 2,
       "attributes": {
         "family": "woodwind",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "playMethod": "blowing",
         "reed": false
       }
     },
@@ -210,9 +252,7 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "family": "keyboard",
-        "playedWithBow": false,
-        "keys": true,
+        "originContinent": "Europe",
         "reed": true
       }
     },
@@ -221,9 +261,8 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "family": "keyboard",
-        "playedWithBow": false,
-        "keys": false,
+        "originContinent": "Europe",
+        "playMethod": "blowing",
         "reed": true
       }
     },
@@ -232,21 +271,19 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "family": "keyboard",
-        "playedWithBow": false,
-        "keys": false,
+        "family": "woodwind",
+        "playMethod": "blowing",
         "reed": true
       }
     },
     {
       "name": "drums",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
         "family": "percussion",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "strikeWith": "sticks",
+        "playMethod": "striking"
       }
     },
     {
@@ -255,31 +292,30 @@
       "fame": 2,
       "attributes": {
         "family": "percussion",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "strikeWith": "mallets",
+        "playMethod": "striking"
       }
     },
     {
       "name": "marimba",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "family": "percussion",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "strikeWith": "mallets",
+        "playMethod": "striking"
       }
     },
     {
       "name": "vibraphone",
       "aliases": [],
-      "fame": 2,
+      "fame": 1,
       "attributes": {
         "family": "percussion",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "the Americas",
+        "strikeWith": "mallets",
+        "playMethod": "striking",
+        "originCountry": "United States"
       }
     },
     {
@@ -288,9 +324,10 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "India"
       }
     },
     {
@@ -299,20 +336,24 @@
       "fame": 2,
       "attributes": {
         "family": "percussion",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "Asia",
+        "strikeWith": "hands",
+        "playMethod": "striking",
+        "originCountry": "India"
       }
     },
     {
       "name": "tambura",
-      "aliases": [],
-      "fame": 2,
+      "aliases": [
+        "tanpura"
+      ],
+      "fame": 1,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": false,
+        "originCountry": "India"
       }
     },
     {
@@ -321,9 +362,11 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "India",
+        "stringsCount": 7
       }
     },
     {
@@ -332,9 +375,9 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "the Americas",
+        "playMethod": "plucking",
+        "hasFrets": true
       }
     },
     {
@@ -343,9 +386,11 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "originContinent": "Europe",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "Italy",
+        "stringsCount": 8
       }
     },
     {
@@ -354,31 +399,34 @@
       "fame": 2,
       "attributes": {
         "family": "strings",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "Hawaii",
+        "stringsCount": 4
       }
     },
     {
       "name": "electric guitar",
       "aliases": [],
-      "fame": 2,
+      "fame": 3,
       "attributes": {
-        "family": "keyboard",
-        "playedWithBow": false,
-        "keys": false,
-        "reed": false
+        "family": "strings",
+        "originContinent": "the Americas",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "United States",
+        "stringsCount": 6
       }
     },
     {
       "name": "synthesizer",
-      "aliases": [],
+      "aliases": [
+        "synth"
+      ],
       "fame": 2,
       "attributes": {
         "family": "keyboard",
-        "playedWithBow": false,
-        "keys": true,
-        "reed": false
+        "playMethod": "pressing keys"
       }
     },
     {
@@ -387,9 +435,315 @@
       "fame": 2,
       "attributes": {
         "family": "keyboard",
-        "playedWithBow": false,
-        "keys": true,
+        "playMethod": "pressing keys"
+      }
+    },
+    {
+      "name": "shehnai",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "woodwind",
+        "originContinent": "Asia",
+        "playMethod": "blowing",
+        "originCountry": "India",
+        "reed": true
+      }
+    },
+    {
+      "name": "sarod",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": false,
+        "originCountry": "India"
+      }
+    },
+    {
+      "name": "sarangi",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Asia",
+        "playMethod": "bowing",
+        "hasFrets": false,
+        "originCountry": "India"
+      }
+    },
+    {
+      "name": "mridangam",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "percussion",
+        "originContinent": "Asia",
+        "strikeWith": "hands",
+        "playMethod": "striking",
+        "originCountry": "India"
+      }
+    },
+    {
+      "name": "bansuri",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "woodwind",
+        "originContinent": "Asia",
+        "material": "bamboo",
+        "playMethod": "blowing",
+        "originCountry": "India",
         "reed": false
+      }
+    },
+    {
+      "name": "koto",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": false,
+        "originCountry": "Japan",
+        "stringsCount": 13
+      }
+    },
+    {
+      "name": "shamisen",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": false,
+        "originCountry": "Japan",
+        "stringsCount": 3
+      }
+    },
+    {
+      "name": "taiko",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "originContinent": "Asia",
+        "strikeWith": "sticks",
+        "playMethod": "striking",
+        "originCountry": "Japan"
+      }
+    },
+    {
+      "name": "shakuhachi",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "woodwind",
+        "originContinent": "Asia",
+        "material": "bamboo",
+        "playMethod": "blowing",
+        "originCountry": "Japan",
+        "reed": false
+      }
+    },
+    {
+      "name": "erhu",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Asia",
+        "playMethod": "bowing",
+        "hasFrets": false,
+        "originCountry": "China",
+        "stringsCount": 2
+      }
+    },
+    {
+      "name": "pipa",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "China",
+        "stringsCount": 4
+      }
+    },
+    {
+      "name": "guzheng",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Asia",
+        "playMethod": "plucking",
+        "hasFrets": false,
+        "originCountry": "China"
+      }
+    },
+    {
+      "name": "dizi",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "woodwind",
+        "originContinent": "Asia",
+        "material": "bamboo",
+        "playMethod": "blowing",
+        "originCountry": "China",
+        "reed": false
+      }
+    },
+    {
+      "name": "sheng",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "originContinent": "Asia",
+        "material": "bamboo",
+        "playMethod": "blowing",
+        "originCountry": "China",
+        "reed": true
+      }
+    },
+    {
+      "name": "didgeridoo",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "playMethod": "blowing",
+        "originCountry": "Australia",
+        "reed": false
+      }
+    },
+    {
+      "name": "balalaika",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Europe",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "Russia",
+        "stringsCount": 3
+      }
+    },
+    {
+      "name": "bouzouki",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Europe",
+        "playMethod": "plucking",
+        "hasFrets": true,
+        "originCountry": "Greece"
+      }
+    },
+    {
+      "name": "steelpan",
+      "aliases": [
+        "steel drum"
+      ],
+      "fame": 1,
+      "attributes": {
+        "family": "percussion",
+        "originContinent": "the Americas",
+        "strikeWith": "mallets",
+        "material": "metal",
+        "playMethod": "striking",
+        "originCountry": "Trinidad and Tobago"
+      }
+    },
+    {
+      "name": "djembe",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "originContinent": "Africa",
+        "strikeWith": "hands",
+        "playMethod": "striking",
+        "originCountry": "West Africa"
+      }
+    },
+    {
+      "name": "kora",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "family": "strings",
+        "originContinent": "Africa",
+        "playMethod": "plucking",
+        "hasFrets": false,
+        "originCountry": "West Africa",
+        "stringsCount": 21
+      }
+    },
+    {
+      "name": "cajón",
+      "aliases": [
+        "cajon"
+      ],
+      "fame": 1,
+      "attributes": {
+        "family": "percussion",
+        "originContinent": "the Americas",
+        "strikeWith": "hands",
+        "playMethod": "striking",
+        "originCountry": "Peru"
+      }
+    },
+    {
+      "name": "timpani",
+      "aliases": [
+        "kettledrums"
+      ],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "strikeWith": "mallets",
+        "playMethod": "striking",
+        "orchestral": true
+      }
+    },
+    {
+      "name": "triangle",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "material": "metal",
+        "playMethod": "striking",
+        "orchestral": true
+      }
+    },
+    {
+      "name": "cymbals",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "material": "metal",
+        "playMethod": "striking",
+        "orchestral": true
+      }
+    },
+    {
+      "name": "tambourine",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "family": "percussion",
+        "strikeWith": "hands"
       }
     }
   ]

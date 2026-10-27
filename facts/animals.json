@@ -2,7 +2,17 @@
   "_meta": {
     "category": "animals",
     "sources": [
-      "Curated from publicly documented general-reference facts; see facts/README.md"
+      "Curated from publicly documented general-reference facts; see facts/README.md",
+      "Wikipedia: Animal (https://en.wikipedia.org/wiki/Animal)",
+      "Wikipedia: Herbivore (https://en.wikipedia.org/wiki/Herbivore)",
+      "Wikipedia: Carnivore (https://en.wikipedia.org/wiki/Carnivore)",
+      "Wikipedia: Omnivore (https://en.wikipedia.org/wiki/Omnivore)",
+      "Wikipedia: Domestication (https://en.wikipedia.org/wiki/Domestication)",
+      "Wikipedia: Nocturnality (https://en.wikipedia.org/wiki/Nocturnality)",
+      "Wikipedia: Oviparity (https://en.wikipedia.org/wiki/Oviparity)",
+      "Wikipedia: Fauna of Australia (https://en.wikipedia.org/wiki/Fauna_of_Australia)",
+      "Wikipedia: Fauna of Africa (https://en.wikipedia.org/wiki/Fauna_of_Africa)",
+      "Wikipedia: Marine life (https://en.wikipedia.org/wiki/Marine_life)"
     ],
     "license": "CC0 1.0 for this curated compilation"
   },
@@ -14,7 +24,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "cat",
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -24,7 +38,13 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "cat",
+        "laysEggs": false,
+        "domesticated": false,
+        "pattern": "striped",
+        "wildOnlyIn": "Asia"
       }
     },
     {
@@ -34,7 +54,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": true
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -44,7 +67,13 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "pattern": "spotted",
+        "wildOnlyIn": "Africa"
       }
     },
     {
@@ -54,7 +83,14 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "blackAndWhite": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "pattern": "striped",
+        "wildOnlyIn": "Africa"
       }
     },
     {
@@ -64,7 +100,12 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "legs": 4,
+        "animalFamily": "bear",
+        "blackAndWhite": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "wildOnlyIn": "Asia"
       }
     },
     {
@@ -74,7 +115,13 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasPouch": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true,
+        "wildOnlyIn": "Australia"
       }
     },
     {
@@ -84,7 +131,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "hasPouch": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "wildOnlyIn": "Australia"
       }
     },
     {
@@ -94,7 +145,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "dog",
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -104,7 +159,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "omnivore",
+        "legs": 4,
+        "animalFamily": "dog",
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -114,7 +173,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "omnivore",
+        "legs": 4,
+        "animalFamily": "bear",
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -124,7 +187,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "bear",
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -134,7 +201,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -144,7 +214,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -154,7 +228,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -164,7 +242,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "legs": 4,
+        "animalFamily": "dog",
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -174,7 +255,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "cat",
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -184,7 +269,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -194,7 +282,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -204,7 +295,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -214,7 +309,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -224,7 +323,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -234,7 +337,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -244,7 +351,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -254,7 +365,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "omnivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": true
       }
     },
     {
@@ -263,8 +378,10 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "canFly": true,
-        "swims": false
+        "diet": "omnivore",
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": true
       }
     },
     {
@@ -274,7 +391,10 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": true
+        "diet": "omnivore",
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": true
       }
     },
     {
@@ -284,7 +404,9 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": true
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": true
       }
     },
     {
@@ -294,7 +416,9 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": true
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -304,7 +428,10 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -314,7 +441,11 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": false,
+        "nocturnal": true
       }
     },
     {
@@ -324,7 +455,8 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": false
+        "legs": 2,
+        "laysEggs": true
       }
     },
     {
@@ -334,7 +466,11 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 2,
+        "blackAndWhite": true,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -343,8 +479,10 @@
       "fame": 2,
       "attributes": {
         "animalClass": "bird",
-        "canFly": true,
-        "swims": false
+        "canFly": false,
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -354,7 +492,9 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": false
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -364,7 +504,10 @@
       "attributes": {
         "animalClass": "reptile",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 4,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -374,7 +517,10 @@
       "attributes": {
         "animalClass": "reptile",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 4,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -384,7 +530,9 @@
       "attributes": {
         "animalClass": "reptile",
         "canFly": false,
-        "swims": true
+        "legs": 4,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -394,7 +542,9 @@
       "attributes": {
         "animalClass": "reptile",
         "canFly": false,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 0,
+        "domesticated": false
       }
     },
     {
@@ -402,9 +552,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "animalClass": "mammal",
+        "animalClass": "amphibian",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 4,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -414,7 +567,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 0,
+        "laysEggs": false,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -424,7 +581,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 0,
+        "laysEggs": false,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -434,7 +595,10 @@
       "attributes": {
         "animalClass": "fish",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 0,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -444,7 +608,10 @@
       "attributes": {
         "animalClass": "mollusc",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "laysEggs": true,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -454,7 +621,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "laysEggs": false,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -464,7 +634,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -474,7 +647,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": true
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false
       }
     },
     {
@@ -484,7 +660,9 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": true,
-        "swims": false
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true
       }
     },
     {
@@ -494,7 +672,9 @@
       "attributes": {
         "animalClass": "insect",
         "canFly": true,
-        "swims": false
+        "legs": 6,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -504,7 +684,9 @@
       "attributes": {
         "animalClass": "insect",
         "canFly": true,
-        "swims": false
+        "legs": 6,
+        "laysEggs": true,
+        "pattern": "striped"
       }
     },
     {
@@ -513,8 +695,9 @@
       "fame": 2,
       "attributes": {
         "animalClass": "insect",
-        "canFly": false,
-        "swims": false
+        "legs": 6,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -522,9 +705,12 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "animalClass": "insect",
+        "animalClass": "arachnid",
         "canFly": false,
-        "swims": false
+        "diet": "carnivore",
+        "legs": 8,
+        "laysEggs": true,
+        "domesticated": false
       }
     },
     {
@@ -534,7 +720,11 @@
       "attributes": {
         "animalClass": "fish",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 0,
+        "laysEggs": true,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -544,7 +734,11 @@
       "attributes": {
         "animalClass": "fish",
         "canFly": false,
-        "swims": true
+        "diet": "carnivore",
+        "legs": 0,
+        "laysEggs": true,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -552,9 +746,13 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "animalClass": "mammal",
+        "animalClass": "crustacean",
         "canFly": false,
-        "swims": true
+        "diet": "omnivore",
+        "legs": 10,
+        "laysEggs": true,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -562,9 +760,13 @@
       "aliases": [],
       "fame": 2,
       "attributes": {
-        "animalClass": "mammal",
+        "animalClass": "crustacean",
         "canFly": false,
-        "swims": true
+        "diet": "omnivore",
+        "legs": 10,
+        "laysEggs": true,
+        "domesticated": false,
+        "livesInSea": true
       }
     },
     {
@@ -574,7 +776,9 @@
       "attributes": {
         "animalClass": "bird",
         "canFly": true,
-        "swims": false
+        "diet": "omnivore",
+        "legs": 2,
+        "laysEggs": true
       }
     },
     {
@@ -584,7 +788,10 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true
       }
     },
     {
@@ -594,7 +801,11 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "omnivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true
       }
     },
     {
@@ -604,7 +815,389 @@
       "attributes": {
         "animalClass": "mammal",
         "canFly": false,
-        "swims": false
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false
+      }
+    },
+    {
+      "name": "platypus",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 4,
+        "laysEggs": true,
+        "domesticated": false,
+        "wildOnlyIn": "Australia"
+      }
+    },
+    {
+      "name": "emu",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "bird",
+        "canFly": false,
+        "legs": 2,
+        "laysEggs": true,
+        "domesticated": false,
+        "wildOnlyIn": "Australia"
+      }
+    },
+    {
+      "name": "wombat",
+      "aliases": [],
+      "fame": 1,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "herbivore",
+        "legs": 4,
+        "hasPouch": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true,
+        "wildOnlyIn": "Australia"
+      }
+    },
+    {
+      "name": "Tasmanian devil",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 4,
+        "hasPouch": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true,
+        "wildOnlyIn": "Australia"
+      }
+    },
+    {
+      "name": "hippopotamus",
+      "aliases": [
+        "hippo"
+      ],
+      "fame": 3,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false,
+        "wildOnlyIn": "Africa"
+      }
+    },
+    {
+      "name": "rhinoceros",
+      "aliases": [
+        "rhino"
+      ],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "herbivore",
+        "legs": 4,
+        "hasHooves": true,
+        "laysEggs": false,
+        "domesticated": false
+      }
+    },
+    {
+      "name": "gorilla",
+      "aliases": [],
+      "fame": 3,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "laysEggs": false,
+        "domesticated": false,
+        "wildOnlyIn": "Africa"
+      }
+    },
+    {
+      "name": "chimpanzee",
+      "aliases": [
+        "chimp"
+      ],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "omnivore",
+        "laysEggs": false,
+        "domesticated": false,
+        "wildOnlyIn": "Africa"
+      }
+    },
+    {
+      "name": "meerkat",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": false,
+        "wildOnlyIn": "Africa"
+      }
+    },
+    {
+      "name": "cheetah",
+      "aliases": [],
+      "fame": 3,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "cat",
+        "laysEggs": false,
+        "domesticated": false,
+        "pattern": "spotted"
+      }
+    },
+    {
+      "name": "leopard",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "cat",
+        "laysEggs": false,
+        "domesticated": false,
+        "pattern": "spotted"
+      }
+    },
+    {
+      "name": "jaguar",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 4,
+        "animalFamily": "cat",
+        "laysEggs": false,
+        "domesticated": false,
+        "pattern": "spotted"
+      }
+    },
+    {
+      "name": "orangutan",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "laysEggs": false,
+        "domesticated": false,
+        "wildOnlyIn": "Asia"
+      }
+    },
+    {
+      "name": "Komodo dragon",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "reptile",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 4,
+        "laysEggs": true,
+        "domesticated": false,
+        "wildOnlyIn": "Asia"
+      }
+    },
+    {
+      "name": "king cobra",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "reptile",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 0,
+        "laysEggs": true,
+        "domesticated": false,
+        "wildOnlyIn": "Asia"
+      }
+    },
+    {
+      "name": "skunk",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "omnivore",
+        "legs": 4,
+        "blackAndWhite": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true,
+        "pattern": "striped"
+      }
+    },
+    {
+      "name": "hedgehog",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "legs": 4,
+        "laysEggs": false,
+        "nocturnal": true
+      }
+    },
+    {
+      "name": "ladybug",
+      "aliases": [
+        "ladybird"
+      ],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "insect",
+        "canFly": true,
+        "legs": 6,
+        "laysEggs": true,
+        "domesticated": false,
+        "pattern": "spotted"
+      }
+    },
+    {
+      "name": "jellyfish",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 0,
+        "domesticated": false,
+        "livesInSea": true
+      }
+    },
+    {
+      "name": "starfish",
+      "aliases": [
+        "sea star"
+      ],
+      "fame": 2,
+      "attributes": {
+        "canFly": false,
+        "domesticated": false,
+        "livesInSea": true
+      }
+    },
+    {
+      "name": "clownfish",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "fish",
+        "canFly": false,
+        "legs": 0,
+        "laysEggs": true,
+        "domesticated": false,
+        "livesInSea": true,
+        "pattern": "striped"
+      }
+    },
+    {
+      "name": "scorpion",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "arachnid",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 8,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true
+      }
+    },
+    {
+      "name": "llama",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "herbivore",
+        "legs": 4,
+        "laysEggs": false,
+        "domesticated": true
+      }
+    },
+    {
+      "name": "orca",
+      "aliases": [
+        "killer whale"
+      ],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "carnivore",
+        "legs": 0,
+        "blackAndWhite": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "livesInSea": true
+      }
+    },
+    {
+      "name": "snail",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mollusc",
+        "canFly": false,
+        "laysEggs": true,
+        "domesticated": false
+      }
+    },
+    {
+      "name": "mosquito",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "insect",
+        "canFly": true,
+        "legs": 6,
+        "laysEggs": true,
+        "domesticated": false
+      }
+    },
+    {
+      "name": "opossum",
+      "aliases": [],
+      "fame": 2,
+      "attributes": {
+        "animalClass": "mammal",
+        "canFly": false,
+        "diet": "omnivore",
+        "legs": 4,
+        "hasPouch": true,
+        "laysEggs": false,
+        "domesticated": false,
+        "nocturnal": true
       }
     }
   ]
