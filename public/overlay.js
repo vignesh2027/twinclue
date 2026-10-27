@@ -1,86 +1,138 @@
 (() => {
   const side = location.pathname.endsWith('/b') ? 'b' : 'a';
-  const key = new URLSearchParams(location.search).get('k') || '';
-  const root = document.querySelector('#overlay');
-  root.classList.add(`side-${side}`);
+  const params = new URLSearchParams(location.search);
+  const key = params.get('k') || '';
+  // Preview mode: opened directly in a browser rather than in OBS or embedded in the panel. ?preview=0|1 forces it.
+  const embedded = (() => { try { return window.self !== window.top; } catch { return true; } })();
+  const forced = params.get('preview');
+  const preview = forced === '1' ? true : forced === '0' ? false : !window.obsstudio && !embedded;
   const $ = selector => document.querySelector(selector);
+  const root = $('#overlay');
+  root.classList.add(`side-${side}`);
+  root.classList.toggle('preview', preview);
+  $('#stage').hidden = !preview;
+  $('#preview-banner').hidden = !preview;
+  $('#preview-side').textContent = `COMMUNITY ${side.toUpperCase()}`;
   $('#community').textContent = `COMMUNITY ${side.toUpperCase()}`;
-  const el = { demo: $('#demo'), card: $('#card'), idle: $('#idle-badge'), play: $('#play'), category: $('#category'), clue: $('#clue'), phase: $('#phase'), status: $('#status-pill'), wait: $('#wait-message'), time: $('#time-left'), ring: $('#timer-ring'), hook: $('#hook'), cta: $('#cta'), ticker: $('#ticker'), celebration: $('#celebration'), reveal: $('#reveal'), timeout: $('#timeout'), meters: $('#meters') };
+
+  const el = { demo: $('#demo'), card: $('#card'), play: $('#play'), reveal: $('#reveal'), category: $('#category'), clue: $('#clue'), phase: $('#phase'),
+    status: $('#status-pill'), statusText: $('#status-text'), previewStatus: $('#preview-status'), wait: $('#wait-message'), time: $('#time-left'), ring: $('#timer-ring'),
+    hook: $('#hook'), cta: $('#cta'), ticker: $('#ticker'), bars: $('#vote-bars'), verdict: $('#verdict'), kicker: $('#kicker') };
+  const STATUS = { active: 'VOTING LIVE', won: 'BOTH LOCKED IN', 'timed-out': 'TIME UP', unscored: 'NOT SCORED', idle: 'NEXT ROUND SOON' };
+  const RING = 131.95;
+  const CENTRE_STAGE_MS = 8000;
   let state;
-  let stageTimer;
   let clockOffset = 0;
+  let revealKey = '';
+  let centreTimer;
 
   const fmtTime = ms => { if (ms == null) return 'Not available'; const seconds = Math.floor(ms / 1000); return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`; };
+  const plural = (count, word) => `${count} ${count === 1 ? word : `${word}s`}`;
 
   function setStatus(s) {
-    const text = { active: 'VOTING LIVE', won: 'BOTH SIDES LOCKED', 'timed-out': 'TIME UP', unscored: 'NOT SCORED', idle: 'NEXT ROUND SOON' };
-    el.status.textContent = text[s.roundStatus] || text.idle;
+    const text = STATUS[s.roundStatus] || STATUS.idle;
     el.status.dataset.state = s.roundStatus;
-    el.idle.hidden = s.roundStatus !== 'idle';
-    $('#wins').textContent = `${s.scoreboard.wins} ${s.scoreboard.wins === 1 ? 'win' : 'wins'}`;
+    el.statusText.textContent = text;
+    el.previewStatus.textContent = text;
+    $('#wins').textContent = plural(s.scoreboard.wins, 'win');
     $('#streak').textContent = `${s.scoreboard.streak} streak`;
   }
 
-  function bar(label, count, max, extraClass) {
-    const row = document.createElement('div');
-    row.className = `vote-bar vote-bar-${side}${extraClass ? ` ${extraClass}` : ''}`;
-    const name = document.createElement('span');
-    name.textContent = label;
-    const total = document.createElement('b');
-    total.textContent = String(count);
-    const track = document.createElement('i');
-    const fill = document.createElement('em');
-    fill.style.transform = `scaleX(${count / max})`;
-    track.append(fill);
-    row.append(name, track, total);
+  // Bars are keyed by answer and moved, not rebuilt, so their widths animate smoothly between frames.
+  // They come from a closed list: entities in this round's fact table. Anything else is one "other answers" row.
+  const barRows = new Map();
+  function bar(label, extraClass) {
+    let row = barRows.get(label);
+    if (!row) {
+      row = document.createElement('div');
+      row.className = `vote-bar${extraClass ? ` ${extraClass}` : ''}`;
+      const name = document.createElement('span');
+      name.textContent = label;
+      const track = document.createElement('i');
+      const fill = document.createElement('em');
+      fill.style.transform = 'scaleX(0)';
+      track.append(fill);
+      row.append(name, track, document.createElement('b'));
+      barRows.set(label, row);
+    }
     return row;
   }
-
-  // Bars come from a closed list: entities in this round's fact table. Anything else is one "other answers" row.
   function renderVotes(s) {
     $(`#side-${side}-label`).textContent = s.leading ? `Leading: ${s.leading}` : 'Still searching';
-    $(`#side-${side}-count`).textContent = `${s.voters} ${s.voters === 1 ? 'voter' : 'voters'}`;
+    $(`#side-${side}-count`).textContent = plural(s.voters, 'voter');
     const other = side === 'a' ? 'b' : 'a';
     $(`#side-${other}-label`).textContent = 'Other community is voting';
     $(`#side-${other}-count`).textContent = 'Their clue stays hidden';
-    const max = Math.max(1, s.otherVotes || 0, ...s.buckets.map(bucket => bucket.count));
-    const rows = s.buckets.map(bucket => bar(bucket.answer, bucket.count, max));
-    if (s.otherVotes > 0) rows.push(bar('other answers', s.otherVotes, max, 'vote-bar-other'));
-    $('#vote-bars').replaceChildren(...rows);
-    $(`#side-${side}-status`).setAttribute('aria-label', `${s.voters} voters in this community`);
+    const entries = s.buckets.map(bucket => [bucket.answer, bucket.count, '']);
+    if (s.otherVotes > 0) entries.push(['other answers', s.otherVotes, 'vote-bar-other']);
+    const max = Math.max(1, ...entries.map(([, count]) => count));
+    const keep = new Set(entries.map(([label]) => label));
+    for (const [label, row] of barRows) if (!keep.has(label)) { row.remove(); barRows.delete(label); }
+    entries.forEach(([label, count, extra], index) => {
+      const row = bar(label, extra);
+      row.querySelector('b').textContent = String(count);
+      if (el.bars.children[index] !== row) el.bars.insertBefore(row, el.bars.children[index] ?? null);
+      requestAnimationFrame(() => { row.querySelector('em').style.transform = `scaleX(${count / max})`; });
+    });
   }
 
+  const tickerItems = new Map();
   function renderTicker(rows) {
-    el.ticker.replaceChildren(...rows.map(row => {
-      const item = document.createElement('li');
-      item.className = 'ticker-vote';
-      const user = document.createElement('b');
-      user.textContent = `@${row.user}`;
-      const text = document.createElement('span');
-      text.textContent = row.label === 'other answers' ? 'cast a vote' : `voted ${row.label}`;
-      item.append(user, text);
-      return item;
-    }));
+    const keys = rows.map(row => `${row.user}|${row.label}`);
+    for (const [k, item] of tickerItems) if (!keys.includes(k)) { item.remove(); tickerItems.delete(k); }
+    rows.forEach((row, index) => {
+      const k = keys[index];
+      let item = tickerItems.get(k);
+      if (!item) {
+        item = document.createElement('li');
+        const user = document.createElement('b');
+        user.textContent = `@${row.user}`;
+        const text = document.createElement('span');
+        text.textContent = row.label === 'other answers' ? 'cast a vote' : `voted ${row.label}`;
+        item.append(user, text);
+        tickerItems.set(k, item);
+      }
+      if (el.ticker.children[index] !== item) el.ticker.insertBefore(item, el.ticker.children[index] ?? null);
+    });
   }
 
   function showReveal(s) {
     const reveal = s.reveal;
-    el.celebration.hidden = true;
-    el.reveal.hidden = false;
-    el.timeout.hidden = s.roundStatus !== 'timed-out' && s.roundStatus !== 'unscored';
-    el.timeout.textContent = reveal.unscoredReason === 'skipped' ? 'Round skipped. It does not count.'
-      : reveal.unscoredReason === 'not-enough-voters' ? 'Too few voters on one side, so this round does not count.'
-      : 'So close. Here is how the clues fit.';
+    el.kicker.textContent = s.roundStatus === 'won' ? 'TOGETHER, YOU GOT IT' : s.roundStatus === 'timed-out' ? 'SO CLOSE' : '';
+    // A clear pill says why a round did not count.
+    const verdict = reveal.unscoredReason === 'skipped' ? 'Round skipped, so it does not count'
+      : reveal.unscoredReason === 'not-enough-voters' ? 'Too few voters on one side, so this round does not count' : '';
+    el.verdict.hidden = !verdict;
+    el.verdict.textContent = verdict;
     $('#answer').textContent = reveal.answer;
     $('#half-a').textContent = reveal.halfA;
     $('#half-b').textContent = reveal.halfB;
-    const alternatives = side === 'a' ? reveal.alsoFitsA : reveal.alsoFitsB;
+    // The aha moment: how many answers this community's half alone allowed.
+    const alternatives = (side === 'a' ? reveal.alsoFitsA : reveal.alsoFitsB).slice(0, 3);
     const setSize = side === 'a' ? reveal.setSizeA : reveal.setSizeB;
-    $('#also-fits').textContent = `Your half alone fit ${setSize} answers, including ${alternatives.slice(0, 3).join(', ')}.`;
-    const describe = (name, result) => `Community ${name}: ${result.topAnswer ?? 'no clear choice'} (${result.correct ? 'right' : 'not right'}, ${result.voters} ${result.voters === 1 ? 'voter' : 'voters'})`;
-    $('#solvers').textContent = `${describe('A', reveal.sideA)}. ${describe('B', reveal.sideB)}.`;
+    const count = document.createElement('strong');
+    count.textContent = `${setSize} answers`;
+    $('#also-fits').replaceChildren('Your half alone fit ', count, alternatives.length ? `, including ${alternatives.join(', ')}.` : '.');
+    for (const [name, result] of [['a', reveal.sideA], ['b', reveal.sideB]]) {
+      const answerName = document.createElement('span');
+      answerName.className = 'name';
+      answerName.textContent = result.topAnswer ?? 'No clear choice';
+      const mark = document.createElement('span');
+      mark.className = `mark ${result.correct ? 'right' : 'wrong'}`;
+      mark.textContent = result.correct ? '✓ right' : '✗ not right';
+      $(`#result-${name}`).replaceChildren(answerName, mark);
+      $(`#voters-${name}`).textContent = plural(result.voters, 'voter');
+    }
     const how = reveal.finishReason === 'consensus' ? 'Both chats agreed, so votes locked early. ' : '';
     $('#solve-time').textContent = `${how}Round time: ${fmtTime(reveal.solveTimeMs)}`;
+    // Centre stage once per finished round, then the card settles back into its corner.
+    const id = `${s.roundStatus}|${reveal.answer}|${reveal.solveTimeMs}`;
+    if (id !== revealKey) {
+      revealKey = id;
+      root.classList.add('is-centered');
+      clearTimeout(centreTimer);
+      centreTimer = setTimeout(() => root.classList.remove('is-centered'), CENTRE_STAGE_MS);
+    }
   }
 
   function render(s) {
@@ -92,51 +144,39 @@
     if (s.rehearsal) tags.push('REHEARSAL');
     el.demo.hidden = tags.length === 0;
     el.demo.textContent = tags.join(' · ');
-    el.category.textContent = s.category ?? '';
     setStatus(s);
     const active = s.roundStatus === 'active';
+    const finished = s.roundStatus === 'won' || s.roundStatus === 'timed-out' || s.roundStatus === 'unscored';
+    root.classList.toggle('is-idle', !active && !finished);
+    root.classList.toggle('is-active', active);
+    root.classList.toggle('is-revealed', finished);
+    root.classList.toggle('is-won', s.roundStatus === 'won');
     el.play.hidden = !active;
-    el.clue.textContent = s.half ?? '';
-    renderVotes(s);
-    renderTicker(s.recentVotes ?? []);
-    el.wait.hidden = !(active && Boolean(s.leading));
-    if (active && s.leading) el.wait.textContent = 'Chat is converging on a leading answer';
-    el.phase.textContent = s.leading ? 'YOUR CHAT IS CONVERGING' : 'YOUR CLUE';
-    el.hook.textContent = `Community ${side === 'a' ? 'B' : 'A'} has the other half. Ask your streamer to swap clues.`;
-    el.cta.textContent = `Type ${s.commandPrefix || '!g'} and your answer in chat`;
-    if (active) { clearTimeout(stageTimer); root.classList.remove('expanded'); el.celebration.hidden = true; el.reveal.hidden = true; el.timeout.hidden = true; return; }
-    if (s.roundStatus === 'won') {
-      el.celebration.hidden = false;
-      $('#solver-a').textContent = 'Community A is locked';
-      $('#solver-b').textContent = 'Community B is locked';
-      el.reveal.hidden = true;
-      el.timeout.hidden = true;
-      root.classList.add('expanded');
-      clearTimeout(stageTimer);
-      stageTimer = setTimeout(() => { if (state === s) showReveal(s); setTimeout(() => { if (state === s) root.classList.remove('expanded'); }, 4500); }, 2200);
-      return;
+    el.reveal.hidden = !finished;
+    if (!finished) { clearTimeout(centreTimer); root.classList.remove('is-centered'); revealKey = ''; }
+    if (active) {
+      el.category.textContent = s.category ?? '';
+      el.clue.textContent = s.half ?? '';
+      el.phase.textContent = s.leading ? 'YOUR CHAT IS CONVERGING' : 'YOUR CLUE';
+      el.hook.textContent = `Community ${side === 'a' ? 'B' : 'A'} has the other half. Ask your streamer to swap clues.`;
+      el.cta.textContent = `Type ${s.commandPrefix || '!g'} and your answer in chat`;
+      el.wait.hidden = !s.leading;
+      if (s.leading) el.wait.textContent = 'Chat is converging on a leading answer';
+      renderVotes(s);
+      renderTicker(s.recentVotes ?? []);
     }
-    if (s.roundStatus === 'timed-out' || s.roundStatus === 'unscored') {
-      root.classList.add('expanded');
-      showReveal(s);
-      clearTimeout(stageTimer);
-      stageTimer = setTimeout(() => { if (state === s) root.classList.remove('expanded'); }, 7000);
-      return;
-    }
-    el.celebration.hidden = true;
-    el.reveal.hidden = true;
-    el.timeout.hidden = true;
+    if (finished && s.reveal) showReveal(s);
   }
 
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The ring drains as time runs out.
   function tick() {
     if (state?.roundStatus === 'active' && state.endsAt && state.startedAt) {
       const now = Date.now() + clockOffset;
       const remaining = Math.max(0, state.endsAt - now);
+      const left = Math.min(1, Math.max(0, remaining / (state.endsAt - state.startedAt)));
       el.time.textContent = String(Math.ceil(remaining / 1000));
+      el.ring.style.strokeDashoffset = String(RING * (1 - left));
       el.card.classList.toggle('urgent', remaining <= 10_000);
-      const progress = Math.min(1, Math.max(0, (now - state.startedAt) / (state.endsAt - state.startedAt)));
-      if (!reduceMotion) el.ring.style.transform = `rotate(${progress * 360}deg)`;
     } else el.card.classList.remove('urgent');
     requestAnimationFrame(tick);
   }

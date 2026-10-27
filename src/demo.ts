@@ -14,7 +14,7 @@ const { controller } = server;
 const vote = (side: 'A' | 'B', user: string, text: string) => controller.vote(side, user, text, { displayName: user });
 controller.setSettings({ category: 'games', difficulty: 'medium', roundLengthSeconds: 40 });
 while (true) {
-  await pause(3000);
+  await pause(5000);
   const round = controller.startRound();
   const answer = round.puzzle.answer;
   const [a1, a2] = round.puzzle.alsoFitsA ?? round.puzzle.halfAAlsoFits;
@@ -24,8 +24,8 @@ while (true) {
   await pause(4500); vote('A', 'DemoA1', answer); vote('A', 'DemoA2', answer);
   await pause(4500); vote('B', 'DemoB1', answer); vote('B', 'DemoB2', answer);
   await pause(6000); if (round.status === 'active') controller.lockRound();
-  await pause(7000); controller.clearRoundDisplay();
-  await pause(3000);
+  await pause(10_000); controller.clearRoundDisplay();
+  await pause(5000);
   controller.setSettings({ category: 'food', difficulty: 'medium', roundLengthSeconds: 40 });
   const timeout = controller.startRound();
   const wrong = [...(timeout.puzzle.alsoFitsA ?? timeout.puzzle.halfAAlsoFits)];
@@ -36,7 +36,14 @@ while (true) {
   }
   if (timeout.status === 'active') await pause(12_000);
   controller.timeout();
-  await pause(7000);
+  await pause(10_000);
   controller.clearRoundDisplay();
+  // A round with one voter per side ends as "not enough voters" and does not count.
+  await pause(5000);
+  controller.setSettings({ category: 'games', difficulty: 'medium', roundLengthSeconds: 30 });
+  const thin = controller.startRound();
+  await pause(4000); vote('A', 'DemoSoloA', thin.puzzle.answer); vote('B', 'DemoSoloB', thin.puzzle.answer);
+  await pause(5000); controller.timeout();
+  await pause(10_000); controller.clearRoundDisplay();
   controller.setSettings({ category: 'games', difficulty: 'medium', roundLengthSeconds: 40 });
 }
