@@ -248,7 +248,7 @@
       "attributes": {
         "teamOrIndividual": "individual",
         "usesBall": false,
-        "playedOn": "ice or snow",
+        "playedOn": "snow",
         "olympics": "Winter",
         "combatSport": false,
         "playedOverNet": false
@@ -291,7 +291,7 @@
         "playersPerSide": 6,
         "hitWith": "stick",
         "scoredIn": "goals",
-        "playedOn": "ice or snow",
+        "playedOn": "ice",
         "olympics": "Winter",
         "originCountry": "Canada",
         "combatSport": false,
@@ -572,7 +572,7 @@
         "usesBall": false,
         "playersPerSide": 4,
         "scoredIn": "points",
-        "playedOn": "ice or snow",
+        "playedOn": "ice",
         "olympics": "Winter",
         "originCountry": "Scotland",
         "combatSport": false,
@@ -586,7 +586,7 @@
       "attributes": {
         "usesBall": false,
         "scoredIn": "points",
-        "playedOn": "ice or snow",
+        "playedOn": "ice",
         "olympics": "Winter",
         "combatSport": false,
         "playedOverNet": false
@@ -599,7 +599,7 @@
       "attributes": {
         "teamOrIndividual": "individual",
         "usesBall": false,
-        "playedOn": "ice or snow",
+        "playedOn": "snow",
         "olympics": "Winter",
         "originCountry": "United States",
         "combatSport": false,
@@ -671,7 +671,7 @@
       "attributes": {
         "teamOrIndividual": "individual",
         "usesBall": false,
-        "playedOn": "ice or snow",
+        "playedOn": "ice",
         "olympics": "Winter",
         "combatSport": false,
         "playedOverNet": false

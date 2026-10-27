@@ -72,7 +72,6 @@
         "hasHooves": true,
         "laysEggs": false,
         "domesticated": false,
-        "pattern": "spotted",
         "wildOnlyIn": "Africa"
       }
     },

@@ -126,7 +126,8 @@
         "composition": "ice giant",
         "nameOrigin": "Greek myth",
         "hasMoons": true,
-        "hasRings": true
+        "hasRings": true,
+        "discoveryYear": 1781
       }
     },
     {
@@ -143,7 +144,8 @@
         "composition": "ice giant",
         "nameOrigin": "Roman myth",
         "hasMoons": true,
-        "hasRings": true
+        "hasRings": true,
+        "discoveryYear": 1846
       }
     },
     {
@@ -161,7 +163,8 @@
         "composition": "icy",
         "nameOrigin": "Roman myth",
         "hasMoons": true,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1930
       }
     },
     {
@@ -178,7 +181,8 @@
         "discoveredBy": "Giuseppe Piazzi",
         "nameOrigin": "Roman myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1801
       }
     },
     {
@@ -197,7 +201,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1610
       }
     },
     {
@@ -216,7 +221,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1610
       }
     },
     {
@@ -234,7 +240,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1610
       }
     },
     {
@@ -253,7 +260,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1655
       }
     },
     {
@@ -272,7 +280,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1789
       }
     },
     {
@@ -290,7 +299,8 @@
         "composition": "rocky",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1610
       }
     },
     {
@@ -308,7 +318,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1846
       }
     },
     {
@@ -326,7 +337,8 @@
         "composition": "rocky",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1877
       }
     },
     {
@@ -344,7 +356,8 @@
         "composition": "rocky",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1877
       }
     },
     {
@@ -424,7 +437,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": true,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 2005
       }
     },
     {
@@ -441,7 +455,8 @@
         "composition": "icy",
         "nameOrigin": "Polynesian myth",
         "hasMoons": true,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 2005
       }
     },
     {
@@ -472,7 +487,8 @@
         "thickAtmosphere": false,
         "discoveredWithTelescope": true,
         "nameOrigin": "Greek myth",
-        "hasRings": true
+        "hasRings": true,
+        "discoveryYear": 1997
       }
     },
     {
@@ -490,7 +506,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1789
       }
     },
     {
@@ -508,7 +525,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1672
       }
     },
     {
@@ -526,7 +544,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1684
       }
     },
     {
@@ -544,7 +563,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1684
       }
     },
     {
@@ -562,7 +582,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1671
       }
     },
     {
@@ -580,7 +601,8 @@
         "composition": "icy",
         "nameOrigin": "English literature",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1948
       }
     },
     {
@@ -598,7 +620,8 @@
         "composition": "icy",
         "nameOrigin": "English literature",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1851
       }
     },
     {
@@ -616,7 +639,8 @@
         "composition": "icy",
         "nameOrigin": "English literature",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1851
       }
     },
     {
@@ -634,7 +658,8 @@
         "composition": "icy",
         "nameOrigin": "English literature",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1787
       }
     },
     {
@@ -652,7 +677,8 @@
         "composition": "icy",
         "nameOrigin": "English literature",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1787
       }
     },
     {
@@ -670,7 +696,8 @@
         "composition": "icy",
         "nameOrigin": "Greek myth",
         "hasMoons": false,
-        "hasRings": false
+        "hasRings": false,
+        "discoveryYear": 1978
       }
     }
   ]

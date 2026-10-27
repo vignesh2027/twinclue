@@ -2,23 +2,23 @@ import 'dotenv/config';
 import {readdir,readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {z} from 'zod';
 import {searchTables,type FactTable,type ForgeCandidate} from './forge.js';
 import {validatePuzzle} from './validate.js';
 import {PuzzleSchema,type Puzzle} from './types.js';
-import {LlmClient,LlmQuotaError} from '../llm/client.js';
-import {resolveModel,clientsForModels} from '../llm/providers.js';
-import {BlindPuzzleAuditor,auditPack,AUDIT_VERSION,puzzleFingerprint,type AuditReport,type PuzzleAuditResult} from './audit.js';
-import {factCheckCandidates} from './fact-check.js';
+import {clientsForModels} from '../llm/providers.js';
+import {BlindPuzzleAuditor,AUDIT_VERSION,MIN_VALID_SOLVERS,buildReport,clueText,invalidAnswerReason,puzzleFingerprint,statusOf,type PuzzleAuditResult} from './audit.js';
+import {DEFAULT_FACT_MODELS,factCheckCandidates} from './fact-check.js';
+import {normaliseGuess} from '../game/referee.js';
 import {parseCsv} from './csv.js';
 
 const solverModels=(process.env.AUDIT_MODELS??'gemini:gemini-3.5-flash,gemini:gemini-2.5-flash,groq:openai/gpt-oss-20b').split(',').map(x=>x.trim()).filter(Boolean);
-const factModel=process.env.FACT_MODEL?.trim()||'groq:openai/gpt-oss-20b';
+const factModels=(process.env.FACT_MODELS??DEFAULT_FACT_MODELS.join(',')).split(',').map(x=>x.trim()).filter(Boolean);
 const maxPack=Number(process.env.FORGE_TARGET??80);
+// Auditing continues across runs until this many puzzles pass within the category quotas, or candidates run out.
+const passTarget=Number(process.env.FORGE_PASS_TARGET??60);
 // --dry-run stops after the deterministic search, validation and quota selection.
 const dryRun=process.argv.includes('--dry-run');
-const quotaPath=resolve('data/forge-progress.json');const reportPath=resolve('src/puzzle/audit-report.json');
-const polishedSchema=z.object({items:z.array(z.object({id:z.string(),halfA:z.string(),halfB:z.string()}))});
+const quotaPath=resolve('data/forge-progress.json');const reportPath=resolve('src/puzzle/audit-report.json');const verdictsPath=resolve('facts/verdicts.json');
 async function loadTables():Promise<FactTable[]>{const custom=process.argv.find((x,i,a)=>a[i-1]==='--table');if(custom){if(!/^custom\/[A-Za-z0-9._/-]+\.csv$/.test(custom)||custom.split('/').includes('..'))throw new Error('Use a CSV path inside facts/custom/.');return [await readCustomCsv(resolve('facts',custom))];}const files=(await readdir('facts')).filter(f=>f.endsWith('.json')&&f!=='verdicts.json');return Promise.all(files.map(async file=>{const raw=JSON.parse(await readFile(resolve('facts',file),'utf8')) as {_meta:{category:string;sources:string[];license:string};entities:FactTable['entities']};return {category:raw._meta.category,entities:raw.entities,sources:raw._meta.sources,license:raw._meta.license};}));}
 async function readCustomCsv(path:string):Promise<FactTable>{const text=await readFile(path,'utf8');const rows=parseCsv(text);if(rows.length<2)throw new Error('Custom fact table needs a header and at least one entity.');const [header,...data]=rows;if(!header||header[0]?.toLowerCase()!=='name'||header[1]?.toLowerCase()!=='aliases'||header[2]?.toLowerCase()!=='fame')throw new Error('CSV columns must start with name, aliases, fame, then attributes.');const entities=data.filter(row=>row.some(Boolean)).map(row=>{const values=Object.fromEntries(header.map((key,i)=>[key,row[i]??'']));const fame=Number(values.fame);if(!values.name?.trim()||![1,2,3].includes(fame))throw new Error('Every custom row needs a name and fame score of 1, 2, or 3.');const attributes:Record<string,string|string[]|number|boolean>={};for(const key of header.slice(3)){const raw=values[key]??'';if(raw)attributes[key]=raw.includes('|')?raw.split('|').map(v=>v.trim()).filter(Boolean):raw;}return {name:values.name??'',aliases:(values.aliases??'').split('|').filter(Boolean),fame:fame as 1|2|3,attributes};});return {category:basename(path,'.csv'),entities,sources:[`User supplied ${path}`],license:'User supplied; rights remain with the uploader'};}
 export const FORGE_QUOTAS:Record<string,number>={
@@ -37,78 +37,144 @@ export function chooseCandidates(candidates:ForgeCandidate[],target=80):ForgeCan
 }
 function score(puzzle:ForgeCandidate):number{return Math.abs(puzzle.predicates.setSizeA-9)+Math.abs(puzzle.predicates.setSizeB-9)+(puzzle.difficulty==='medium'?0:1);}
 
-async function polish(candidates:ForgeCandidate[]):Promise<{model:string;usage:Record<string,{promptTokens:number;completionTokens:number;totalTokens:number}>}>{const requested=process.env.LLM_MODEL?.trim();if(!requested)return {model:'attribute templates',usage:{}};const fallback='groq:openai/gpt-oss-20b';const modelNames=[requested,fallback];const clients=modelNames.map(model=>new LlmClient({...resolveModel(model),maxCompletionTokens:4096,reasoningEffort:'low',minimumIntervalMs:1800}));let active=0;for(let i=0;i<candidates.length;i+=8){const batch=candidates.slice(i,i+8);const messages=[{role:'system' as const,content:'Polish each pair of clue halves into natural, playful, concise English. Preserve every listed attribute predicate exactly. Do not add, remove, or strengthen any fact. Do not name the answer or aliases. Return JSON with items containing id, halfA, halfB.'},{role:'user' as const,content:JSON.stringify(batch.map(p=>({id:p.id,answer:p.answer,aliases:p.aliases,halfA:p.halfA,halfB:p.halfB,predicates:p.predicates})))}];let done=false;while(!done){try{const result=await clients[active]!.chatJsonWithUsage(messages,polishedSchema);for(const row of result.value.items){const item=batch.find(p=>p.id===row.id);if(item){const previousA=item.halfA,previousB=item.halfB;item.halfA=row.halfA;item.halfB=row.halfB;if(validatePuzzle(item).length){item.halfA=previousA;item.halfB=previousB;}}}done=true;}catch(error){if(error instanceof LlmQuotaError&&error.daily&&active===0&&modelNames.length>1){active=1;continue;}console.log(`Polishing unavailable at batch ${i/8+1}; remaining candidates keep the validated templates.`);return {model:active===0?requested:fallback,usage:Object.fromEntries(modelNames.slice(0,active+1).map((model,index)=>[model,clients[index]!.tokenUsage]))};}}}return {model:modelNames[active]!,usage:{[modelNames[active]!]:clients[active]!.tokenUsage}};}
 
-interface ForgeCheckpoint {forgeVersion?:number;auditVersion:number;solverModels:string[];factModel:string;results:PuzzleAuditResult[];tokenUsage:Record<string,{promptTokens:number;completionTokens:number;totalTokens:number}>;candidatePuzzles?:ForgeCandidate[];generationModel?:string;polishingUsage?:Record<string,{promptTokens:number;completionTokens:number;totalTokens:number}>;}
-function mergeUsage(...groups:Array<Record<string,{promptTokens:number;completionTokens:number;totalTokens:number}>>):Record<string,{promptTokens:number;completionTokens:number;totalTokens:number}>{const usage:Record<string,{promptTokens:number;completionTokens:number;totalTokens:number}>={};for(const group of groups)for(const [model,current] of Object.entries(group)){const previous=usage[model]??{promptTokens:0,completionTokens:0,totalTokens:0};usage[model]={promptTokens:previous.promptTokens+current.promptTokens,completionTokens:previous.completionTokens+current.completionTokens,totalTokens:previous.totalTokens+current.totalTokens};}return usage;}
-async function main():Promise<void>{
- const tables=await loadTables();const found=searchTables(tables,5);const valid=found.filter(candidate=>PuzzleSchema.safeParse(candidate).success&&validatePuzzle(candidate).length===0);const chosen=chooseCandidates(valid,maxPack);const selectedCounts=Object.fromEntries(Object.entries(FORGE_QUOTAS).map(([table,quota])=>[table,{target:quota,available:valid.filter(candidate=>candidate.sourceTable===table).length,selected:chosen.filter(candidate=>candidate.sourceTable===table).length}]));console.log(`Constraint search produced ${found.length} unique-answer candidates, ${found.length-valid.length} failed validation, ${chosen.length} selected.`);console.log(`Category quota availability: ${JSON.stringify(selectedCounts)}`);if(dryRun){for(const [table,counts] of Object.entries(selectedCounts))console.log(`${table}: ${counts.available} available, ${counts.selected} selected of ${counts.target}`);console.log('Dry run: no model calls, audits, fact checks, pack files or checkpoints.');return;}if(!chosen.length)throw new Error('No candidates meet the category quotas.');
- let saved:ForgeCheckpoint|undefined;try{saved=JSON.parse(await readFile(quotaPath,'utf8')) as ForgeCheckpoint;}catch{}
- const checkpointMatches=saved?.forgeVersion===5&&saved.auditVersion===AUDIT_VERSION&&JSON.stringify(saved.solverModels)===JSON.stringify(solverModels)&&saved.factModel===factModel;
- const priorCandidates=checkpointMatches&&saved?.candidatePuzzles?.length?saved.candidatePuzzles:undefined;
- const candidateRows=priorCandidates??chosen;
- const polishing=priorCandidates?{model:saved?.generationModel??'predicate templates',usage:saved?.polishingUsage??{}}:{model:'predicate templates',usage:{}};
- const generationModel=polishing.model;const puzzles:ForgeCandidate[]=candidateRows.filter(p=>PuzzleSchema.safeParse(p).success&&validatePuzzle(p).length===0);
- const clients=clientsForModels([...new Set([...solverModels,factModel])]);const auditor=new BlindPuzzleAuditor(clients,{solverModels,factModel,batchSize:Number(process.env.AUDIT_BATCH??8)});
- let resume:PuzzleAuditResult[]=checkpointMatches?saved?.results??[]:[];if(checkpointMatches)for(const [model,usage] of Object.entries(saved?.tokenUsage??{}))clients[model]?.restoreTokenUsage(usage);
- const polishingUsage=polishing.usage;const progress=new Map(resume.map(result=>[result.id,result]));const checkpoint=async()=>{await mkdir('data',{recursive:true});await writeFile(quotaPath,JSON.stringify({forgeVersion:5,auditVersion:AUDIT_VERSION,solverModels,factModel,results:[...progress.values()],tokenUsage:auditor.tokenUsage,candidatePuzzles:candidateRows,generationModel,polishingUsage},null,2)+'\n');};await checkpoint();
- let result:PuzzleAuditResult[]=[];let quotaStopped=false;let quotaMessage:string|undefined;
- try{const report=await auditPack(puzzles,auditor,{solverModels,factModel,batchSize:Number(process.env.AUDIT_BATCH??8),resume,onProgress:async(done,total,item)=>{progress.set(item.id,item);await checkpoint();if(done%4===0||done===total)console.log(`Blind audit v2.1: ${done}/${total}.`);}});result=report.results;}
- catch(error){const transient=error instanceof Error&&/LLM request failed \(5\d\d\)/.test(error.message);if(!(error instanceof LlmQuotaError)&&!transient)throw error;quotaStopped=true;quotaMessage=error instanceof Error?error.message:'Model quota exhausted.';result=[...progress.values()];await checkpoint();console.log(`${error instanceof LlmQuotaError?(error.daily?'Daily quota':'Per-minute quota'):'Model service'} stopped the audit. Resumable progress is saved at ${quotaPath}.`);}
- const passById=new Map(result.filter(r=>r.passed).map(r=>[r.id,r]));let kept=puzzles.filter(p=>passById.has(p.id)).slice(0,80);const failures=result.filter(r=>!r.passed).length;let pairFactChecks=0;let factRemoved:Array<{id:string;reasons:string[]}>=[];if(kept.length){try{const checked=await factCheckCandidates(kept,tables,clients[factModel]!,resolve('facts/verdicts.json'));kept=checked.valid;pairFactChecks=checked.checked;factRemoved=checked.removed;console.log(`Fact table checks: ${pairFactChecks} unique pairs checked, ${factRemoved.length} puzzles removed.`);}catch(error){if(!(error instanceof LlmQuotaError))throw error;quotaStopped=true;quotaMessage=`Fact table check stopped: ${error.message}`;kept=[];console.log(`Fact table check stopped. Resume with npm run forge. Results are cached in facts/verdicts.json.`);}}
- await mkdir('src/puzzle',{recursive:true});if(kept.length)await writeFile('src/puzzle/forged-pack.ts',`import type { Puzzle } from './types.js';\nexport const forgedPack: Puzzle[]=${JSON.stringify(kept,null,2)};\n`);const usage=auditor.tokenUsage;const relevant=result;const singleRows=result.flatMap(r=>r.solvers.halfA.concat(r.solvers.halfB));const bothRows=result.flatMap(r=>r.solvers.both);const report:AuditReport={auditVersion:AUDIT_VERSION,generatedAt:new Date().toISOString(),solverModels,factModel,passRule:'A majority of available solvers must reject each half alone; a majority must accept both halves; both facts must be verified true.',total:result.length,passed:kept.length,passRate:result.length?kept.length/result.length:null,singleHalfHitRate:singleRows.length?singleRows.filter(r=>r.referee==='accepted').length/singleRows.length:null,bothHalvesHitRate:bothRows.length?bothRows.filter(r=>r.referee==='accepted').length/bothRows.length:null,tokenUsage:usage,results:relevant,rounds:[{round:1,puzzlesAudited:result.length,passed:kept.length}]};
- await writeFile(reportPath,JSON.stringify(report,null,2)+'\n');const categories=Object.fromEntries([...new Set(kept.map(p=>p.category))].map(category=>[category,kept.filter(p=>p.category===category).length]));const selectedCategories=Object.fromEntries([...new Set(chosen.map(p=>p.category))].map(category=>[category,chosen.filter(p=>p.category===category).length]));const difficultyCounts=Object.fromEntries([...new Set(chosen.map(p=>p.difficulty))].map(level=>[level,chosen.filter(p=>p.difficulty===level).length]));const fameCounts=Object.fromEntries([...new Set(chosen.map(p=>p.answer))].map(answer=>[answer,tables.find(table=>table.category===chosen.find(row=>row.answer===answer)?.sourceTable)?.entities.find(entity=>entity.name===answer)?.fame??0]));const fameDistribution=Object.fromEntries([...new Set(Object.values(fameCounts))].map(level=>[level,Object.values(fameCounts).filter(value=>value===level).length]));await mkdir('docs',{recursive:true});await writeFile('docs/PUZZLE_AUDIT.md',`# Puzzle audit
-
-## Version 1
-The first audit used shallow free-text prompts and low reasoning. It let through single-half giveaways and false clues. Examples included the Fandango lyric for Bohemian Rhapsody, Taylor Swift's 1989 and Folklore albums, Sachin Tendulkar's Little Master nickname and century record, the King of Pop, the ruler of Hyrule, Serena Williams's 23 major singles titles, and the Venus Rosewater Dish.
-
-## Version 2
-The stricter blind audit improved reasoning and added a fact verifier. It still tested free-text model-written clues, which often pointed to the prototype of a set. The 8 audited v2 puzzles all failed. A timing aid pointed to hourglass from one half, and a clue about more than 100 known moons pointed to Saturn. The solver panel used low reasoning and only 128 completion tokens, and did not enforce clue truth. Review also found false Mysore Palace, Pav Bhaji, and biryani claims. The report included gen-042's Master Blaster clue, gen-160's Yamuna and Agra clue, gen-016's 10-rupee-note clue, plus the Lagaan, Dangal, Kilimanjaro, Beethoven, Jai Ho, Mumbai, and Miso giveaways. The v2 report is archived in docs/archive/slice-5.
-
-## Table and wording fixes
-Link now uses the fan-recognisable species value Hylian. Kratos is recorded as a demigod. Waluigi species and the unreliable broad animal diet field were removed. Chun-Li already had Capcom in the source table; the Sony wording came from stale model-polished text that did not match its stored predicate. Polishing is disabled for this run, so clue text comes from predicate templates. This is two character attribute corrections and two disputed attribute removals.
-
-## Version 2.1 Puzzle Forge
-Candidates come from curated attribute tables and deterministic set intersections. Each side set must contain at least five members. Two other members in each set must be at least as famous as the answer. A majority of solvers must reject each half alone, a majority must solve both halves together, and both halves must pass fact verification.
-
-- Solvers: ${solverModels.join(', ')}
-- Fact model: ${factModel}
-- Constraint candidates generated: ${found.length}
-- Failed validation: ${found.length-valid.length}
-- Passed validation: ${valid.length}
-- Selected for blind audit: ${puzzles.length}
-- Category quota targets and availability: ${JSON.stringify(selectedCounts)}
-- Fame distribution among selected candidates: ${JSON.stringify(fameDistribution)}
-- Difficulty distribution among selected candidates: ${JSON.stringify(difficultyCounts)}
-- Unique answer selection: one puzzle per answer, swapped predicate mirrors deduplicated
-- Fact table pairs checked for kept puzzles: ${pairFactChecks}
-- Fact table rejections: ${JSON.stringify(factRemoved)}
-- Completed blind audits: ${result.length}
-- Audit failures: ${result.length?failures:'not measured because no audit completed'}
-- Kept: ${kept.length}
-- Pass rate: ${result.length?`${(report.passRate??0)*100}%`:'not measured, 0 audited'}
-- Aggregate single-half hit rate: ${report.singleHalfHitRate===null?'not measured':`${(report.singleHalfHitRate*100).toFixed(1)}%`}
-- Aggregate both-halves hit rate: ${report.bothHalvesHitRate===null?'not measured':`${(report.bothHalvesHitRate*100).toFixed(1)}%`}
-- Generation wording model: ${generationModel}
-- Token usage by model: ${JSON.stringify(usage)}
-- Quota state: ${quotaMessage??'no quota stop'}
-- Resume checkpoint: data/forge-progress.json
-- Final pack category counts: ${JSON.stringify(categories)}\n- Selected candidates by category before audit: ${JSON.stringify(selectedCategories)}
-
-| Round | Puzzles audited | Passed |
-|---:|---:|---:|
-| 1 | ${result.length} | ${result.filter(r=>r.passed).length} |
-
-The Gemini solvers stopped on per-minute quotas. Groq returned partial model output, then hit its token-per-day quota before the full puzzle panel completed. Partial responses are not counted as audited puzzles.
-
-| Puzzle | Category | Set A | Set B | Answer | Pass |
-|---|---|---:|---:|---|---|
-${kept.map(p=>`| ${p.id} | ${p.category} | ${p.predicates?.setSizeA??'?'} | ${p.predicates?.setSizeB??'?'} | ${p.answer} | yes |`).join('\n')}
-
-## Audit failures
-
-${result.filter(r=>!r.passed).map(r=>`- ${r.id} (${r.answer}): ${r.failures.join(' ')}`).join('\n')||'No completed audit results.'}
-`);
- if(kept.length)await writeFile('src/puzzle/pack.ts',"import { forgedPack } from './forged-pack.js';\nexport const puzzlePack=forgedPack;\n");const summary={generated:found.length,validationFailed:found.length-valid.length,selectedCandidatesByCategory:selectedCategories,selectedCounts,categoryShortfalls:Object.fromEntries(Object.entries(selectedCounts).filter(([,counts])=>counts.selected<counts.target)),auditFailed:result.length?failures:null,kept:kept.length,factTablePairsChecked:pairFactChecks,factTableRejected:factRemoved,quotaStopped,quotaMessage,solverModels,factModel,generationModel,tokenUsage:usage};await writeFile('data/forge-stats.json',JSON.stringify(summary,null,2)+'\n');if(kept.length<40)console.log(`Only ${kept.length} audited and fact-checked puzzles are available. Demo mode alone uses the labelled fallback pack.`);console.log(JSON.stringify(summary,null,2));if(!quotaStopped&&kept.length<40)process.exitCode=1;
+/**
+ * Every valid candidate, ranked within its table, one puzzle per answer and per predicate pair. Unlike
+ * chooseCandidates there is no quota cap: the audit works down these lists until enough puzzles pass.
+ */
+export function rankCandidates(candidates:ForgeCandidate[]):Map<string,ForgeCandidate[]>{
+  const ranked=new Map<string,ForgeCandidate[]>();const answers=new Set<string>();
+  const sorted=[...candidates].sort((a,b)=>score(a)-score(b)||a.answer.localeCompare(b.answer));
+  for(const puzzle of sorted){const names=[puzzle.answer,...puzzle.aliases].map(name=>normaliseGuess(name));if(names.some(name=>answers.has(name)))continue;for(const name of names)answers.add(name);const list=ranked.get(puzzle.sourceTable)??[];list.push(puzzle);ranked.set(puzzle.sourceTable,list);}
+  return ranked;
 }
+
+/** The next candidates to audit: round robin over the tables furthest below their quota. */
+export function nextChunk(ranked:Map<string,ForgeCandidate[]>,quotas:Record<string,number>,passing:(table:string)=>number,eligible:(candidate:ForgeCandidate)=>boolean,size:number):ForgeCandidate[]{
+  const queues=[...ranked].map(([table,list])=>({table,deficit:(quotas[table]??0)-passing(table),items:list.filter(eligible)})).filter(queue=>queue.deficit>0&&queue.items.length).sort((a,b)=>b.deficit-a.deficit);
+  const chunk:ForgeCandidate[]=[];
+  for(let round=0;chunk.length<size&&queues.some(queue=>queue.items.length>round);round++)for(const queue of queues){if(chunk.length>=size)break;const taken=chunk.filter(item=>item.sourceTable===queue.table).length;if(taken>=queue.deficit)continue;const item=queue.items[round];if(item)chunk.push(item);}
+  return chunk;
+}
+
+interface ForgeCheckpoint {forgeVersion:number;auditVersion:number;solverModels:string[];factModels:string[];results:PuzzleAuditResult[];factRejected:Record<string,string[]>;factFlags:Record<string,string[]>;tokenUsage:Record<string,{promptTokens:number;completionTokens:number;totalTokens:number}>;}
+const FORGE_VERSION=6;
+const pct=(value:number|null)=>value===null?'not measured':`${(value*100).toFixed(1)}%`;
+
+async function main():Promise<void>{
+  const tables=await loadTables();const found=searchTables(tables,5);const valid=found.filter(candidate=>PuzzleSchema.safeParse(candidate).success&&validatePuzzle(candidate).length===0);const chosen=chooseCandidates(valid,maxPack);
+  const selectedCounts=Object.fromEntries(Object.entries(FORGE_QUOTAS).map(([table,quota])=>[table,{target:quota,available:valid.filter(candidate=>candidate.sourceTable===table).length,selected:chosen.filter(candidate=>candidate.sourceTable===table).length}]));
+  console.log(`Constraint search produced ${found.length} unique-answer candidates, ${found.length-valid.length} failed validation, ${chosen.length} selected.`);console.log(`Category quota availability: ${JSON.stringify(selectedCounts)}`);
+  if(dryRun){for(const [table,counts] of Object.entries(selectedCounts))console.log(`${table}: ${counts.available} available, ${counts.selected} selected of ${counts.target}`);console.log('Dry run: no model calls, audits, fact checks, pack files or checkpoints.');return;}
+  const ranked=rankCandidates(valid);const candidates=[...ranked.values()].flat();const byId=new Map(candidates.map(candidate=>[candidate.id,candidate]));
+
+  let saved:ForgeCheckpoint|undefined;try{saved=JSON.parse(await readFile(quotaPath,'utf8')) as ForgeCheckpoint;}catch{}
+  const reusable=saved?.forgeVersion===FORGE_VERSION&&saved.auditVersion===AUDIT_VERSION&&JSON.stringify(saved.solverModels)===JSON.stringify(solverModels)&&JSON.stringify(saved.factModels)===JSON.stringify(factModels);
+  if(saved&&!reusable)console.log(`Earlier forge results (audit version ${saved.auditVersion}) were made under the old rules and will be audited again.`);
+  const factLabel=factModels.join(' + ');
+  const knownShortNames=new Set(tables.flatMap(table=>table.entities.flatMap(entity=>[entity.name,...entity.aliases])).map(name=>normaliseGuess(name)).filter(name=>name&&name.length<=2));
+  const results=new Map<string,PuzzleAuditResult>();
+  // A saved result counts only if it matches the current clue text; pending results are always audited again.
+  // A saved answer that the current validity rules reject (a sentence, a label, a copied clue) sends its puzzle back for audit.
+  const stillValid=(result:PuzzleAuditResult,candidate:ForgeCandidate)=>(['halfA','halfB','both'] as const).every(kind=>result.solvers[kind].every(row=>!invalidAnswerReason(row,[],knownShortNames,clueText(candidate,kind))));
+  if(reusable)for(const result of saved!.results){const candidate=byId.get(result.id);if(candidate&&result.fingerprint===puzzleFingerprint(candidate,solverModels,factLabel)&&stillValid(result,candidate))results.set(result.id,result);}
+  const factRejected=new Map(Object.entries(reusable?saved!.factRejected:{}));const factFlags=new Map(Object.entries(reusable?saved!.factFlags:{}));
+  const clients=clientsForModels([...solverModels,...factModels]);if(reusable)for(const [model,usage] of Object.entries(saved!.tokenUsage??{}))clients[model]?.restoreTokenUsage(usage);
+  const auditor=new BlindPuzzleAuditor(clients,{solverModels,factModel:factLabel,batchSize:Number(process.env.AUDIT_BATCH??8),knownShortNames});
+  const tokenUsage=()=>Object.fromEntries([...new Set([...solverModels,...factModels])].map(model=>[model,clients[model]!.tokenUsage]));
+  const checkpoint=async()=>{await mkdir('data',{recursive:true});await writeFile(quotaPath,JSON.stringify({forgeVersion:FORGE_VERSION,auditVersion:AUDIT_VERSION,solverModels,factModels,results:[...results.values()],factRejected:Object.fromEntries(factRejected),factFlags:Object.fromEntries(factFlags),tokenUsage:tokenUsage()},null,2)+'\n');};
+
+  const isPassing=(candidate:ForgeCandidate)=>results.has(candidate.id)&&statusOf(results.get(candidate.id)!)==='passed'&&!factRejected.has(candidate.id);
+  const passing=(table:string)=>(ranked.get(table)??[]).filter(isPassing).length;
+  const keptCount=()=>Object.entries(FORGE_QUOTAS).reduce((sum,[table,quota])=>sum+Math.min(quota,passing(table)),0);
+  const attempted=new Set<string>();
+  const eligible=(candidate:ForgeCandidate)=>!attempted.has(candidate.id)&&!factRejected.has(candidate.id)&&!(results.has(candidate.id)&&statusOf(results.get(candidate.id)!)!=='pending');
+  let stopReason='candidates exhausted';
+  for(;;){
+    if(keptCount()>=passTarget){stopReason=`target of ${passTarget} passing puzzles reached`;break;}
+    if(auditor.availableSolvers.length<MIN_VALID_SOLVERS){stopReason=`fewer than ${MIN_VALID_SOLVERS} solvers still have quota today; pending puzzles resume on the next run`;break;}
+    const chunk=nextChunk(ranked,FORGE_QUOTAS,passing,eligible,Number(process.env.AUDIT_BATCH??8));
+    if(!chunk.length)break;
+    for(const candidate of chunk)attempted.add(candidate.id);
+    const facts=await factCheckCandidates(chunk,tables,clients,factModels,verdictsPath);
+    for(const removed of facts.removed)factRejected.set(removed.id,removed.reasons);
+    for(const flagged of facts.flagged)factFlags.set(flagged.id,flagged.notes);
+    if(facts.pending.length)console.log(`${facts.pending.length} candidates wait for a fact model with quota; they resume on the next run.`);
+    if(facts.valid.length){const audits=await auditor.auditMany(facts.valid);for(const result of audits)results.set(result.id,result);}
+    await checkpoint();
+    const settled=[...results.values()].filter(result=>statusOf(result)!=='pending');
+    console.log(`Audit v${AUDIT_VERSION}: ${settled.filter(result=>result.passed).length} passed, ${settled.filter(result=>!result.passed).length} failed, ${results.size-settled.length} pending, ${factRejected.size} fact-rejected; ${keptCount()} of ${passTarget} kept so far.`);
+  }
+  await checkpoint();
+  console.log(`Forge stopped: ${stopReason}.`);
+
+  // The final fact status of every passing puzzle comes from the panel cache, so a later rejection removes it.
+  const passingCandidates=candidates.filter(isPassing);
+  const finalFacts=passingCandidates.length?await factCheckCandidates(passingCandidates,tables,clients,factModels,verdictsPath):{valid:[],removed:[],flagged:[],pending:[],checked:0};
+  for(const removed of finalFacts.removed)factRejected.set(removed.id,removed.reasons);
+  const factOk=new Set(finalFacts.valid.map(candidate=>candidate.id));
+  const kept:ForgeCandidate[]=[];
+  for(const [table,quota] of Object.entries(FORGE_QUOTAS))kept.push(...(ranked.get(table)??[]).filter(candidate=>isPassing(candidate)&&factOk.has(candidate.id)).slice(0,quota));
+  await checkpoint();
+
+  await mkdir('src/puzzle',{recursive:true});
+  await writeFile('src/puzzle/forged-pack.ts',`import type { Puzzle } from './types.js';\nexport const forgedPack: Puzzle[]=${JSON.stringify(kept,null,2)};\n`);
+  await writeFile('src/puzzle/pack.ts',"import { forgedPack } from './forged-pack.js';\nexport const puzzlePack=forgedPack;\n");
+  const audited=candidates.filter(candidate=>results.has(candidate.id)).map(candidate=>results.get(candidate.id)!);
+  const categories=Object.fromEntries([...ranked].map(([table,list])=>{const rows=list.map(candidate=>results.get(candidate.id)).filter((row):row is PuzzleAuditResult=>Boolean(row));const passed=rows.filter(row=>statusOf(row)==='passed').length;const failed=rows.filter(row=>statusOf(row)==='failed').length;const pending=rows.filter(row=>statusOf(row)==='pending').length;return [table,{quota:FORGE_QUOTAS[table]??0,candidates:list.length,audited:passed+failed,passed,failed,pending,factRejected:list.filter(candidate=>factRejected.has(candidate.id)).length,passRate:passed+failed?passed/(passed+failed):null,kept:kept.filter(candidate=>candidate.sourceTable===table).length}];}));
+  const report={...buildReport(audited,solverModels,factLabel,tokenUsage(),[{round:1,puzzlesAudited:audited.length,passed:audited.filter(row=>row.passed).length}]),categories,factFlags:Object.fromEntries(factFlags),factRejected:Object.fromEntries(factRejected)};
+  await writeFile(reportPath,JSON.stringify(report,null,2)+'\n');
+  await writeFile('docs/PUZZLE_AUDIT.md',renderAuditDoc(report,categories,kept,stopReason));
+  const summary={generated:found.length,validationFailed:found.length-valid.length,ranked:candidates.length,audited:report.total,passed:report.passed,failed:report.failed,pending:report.pending,factRejected:factRejected.size,factFlagged:factFlags.size,kept:kept.length,passTarget,stopReason,categories,solverModels,factModels,tokenUsage:report.tokenUsage};
+  await writeFile('data/forge-stats.json',JSON.stringify(summary,null,2)+'\n');
+  console.log(JSON.stringify({kept:kept.length,passed:report.passed,failed:report.failed,pending:report.pending,factRejected:factRejected.size,stopReason},null,2));
+}
+
+function renderAuditDoc(report:ReturnType<typeof buildReport>,categories:Record<string,{quota:number;candidates:number;audited:number;passed:number;failed:number;pending:number;factRejected:number;passRate:number|null;kept:number}>,kept:ForgeCandidate[],stopReason:string):string{
+  const solverLine=(rows:PuzzleAuditResult['solvers']['halfA'])=>rows.map(row=>`${row.model}: ${row.best_answer} (${row.referee})`).join('; ')||'none';
+  return `# Puzzle audit
+
+## History
+
+- **Version 1** used shallow free-text prompts and let through single-half giveaways and false clues.
+- **Version 2** added a stricter blind audit and a fact verifier, but tested free-text model-written clues. All 8 audited v2 puzzles failed; the report is archived in docs/archive/slice-5.
+- **Version 2.1** moved to the Puzzle Forge: clues from curated attribute tables and deterministic set intersections.
+- **Version 3** (this report) fixes four faults found in the 2.1 run. Clue prompts carried the labels "Half A alone" and "Half B alone", and one solver answered the label "B" for every half B. A puzzle failed when only one of three solvers answered, because the Gemini models were dropped on a per-minute quota. A single fact model rejected true facts ("2011 is not in the 2010s", "Bolivia is not landlocked"). And only the first 80 candidates were ever audited. Every 2.1 result is audited again under the new rules.
+
+## Rules
+
+${report.passRule}
+
+- Solver prompts carry no labels. Clue ids are random 4 to 6 character strings, and the solver is told an id is only a label. An answer that repeats an id, has one or two characters (unless a fact table lists such a name, like Io), or puts the same value in all three fields is retried one clue at a time and otherwise ignored.
+- A per-minute quota error waits and continues with the same model. Only a daily quota drops a model, and only for the rest of the run.
+- Derived values (a debut decade, a discovery century) are computed in code from the table's raw year; the fact models are asked about the year itself.
+- Auditing works through every ranked candidate across runs until enough puzzles pass within the category quotas, or the candidates run out.
+
+## This run
+
+- Solvers: ${report.solverModels.join(', ')}
+- Fact panel: ${report.factModel}
+- Audited: ${report.total} (passed ${report.passed}, failed ${report.failed}, pending ${report.pending})
+- Pass rate of settled audits: ${pct(report.passRate)}
+- Single-half hit rate: ${pct(report.singleHalfHitRate)}; both-halves hit rate: ${pct(report.bothHalvesHitRate)}
+- Kept in the pack: ${kept.length}
+- Stopped because: ${stopReason}
+- Token usage: ${JSON.stringify(report.tokenUsage)}
+
+| Category | Quota | Candidates | Audited | Passed | Failed | Pending | Fact rejected | Pass rate | Kept |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+${Object.entries(categories).map(([table,row])=>`| ${table} | ${row.quota} | ${row.candidates} | ${row.audited} | ${row.passed} | ${row.failed} | ${row.pending} | ${row.factRejected} | ${pct(row.passRate)} | ${row.kept} |`).join('\n')}
+
+## Kept puzzles
+
+| Puzzle | Category | Set A | Set B | Answer |
+| --- | --- | ---: | ---: | --- |
+${kept.map(p=>`| ${p.id} | ${p.sourceTable} | ${p.predicates.setSizeA} | ${p.predicates.setSizeB} | ${p.answer} |`).join('\n')||'| none yet | | | | |'}
+
+## Every audited puzzle
+
+${report.results.map(result=>`### ${result.id}: ${result.answer} (${statusOf(result).toUpperCase()})\n- Half A alone: ${solverLine(result.solvers.halfA)}\n- Half B alone: ${solverLine(result.solvers.halfB)}\n- Both halves: ${solverLine(result.solvers.both)}${result.failures.length?`\n- Notes: ${result.failures.join(' ')}`:''}`).join('\n\n')||'No audits completed yet.'}
+`;
+}
+
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)await main();

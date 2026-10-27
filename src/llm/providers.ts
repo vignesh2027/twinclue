@@ -1,9 +1,11 @@
 import 'dotenv/config';
 import { LlmClient, type LlmConfig } from './client.js';
+// Default pacing: 5 requests a minute per Gemini model (free tier), 4 for Groq gpt-oss-20b, whose free tier allows
+// 30 requests but only 8,000 tokens a minute, and a reasoning batch uses about 2,000. AUDIT_RPM_* overrides.
 export function resolveModel(modelRef:string,env:NodeJS.ProcessEnv=process.env):LlmConfig {
  const colon=modelRef.indexOf(':');const provider=colon>0?modelRef.slice(0,colon):'';const model=colon>0?modelRef.slice(colon+1):modelRef;
  if(provider==='gemini') return {baseUrl:'https://generativelanguage.googleapis.com/v1beta/openai/',apiKey:required(env.GEMINI_API_KEY,'GEMINI_API_KEY'),model,maxCompletionTokens:8192,reasoningEffort:'medium',timeoutMs:90000,retries:4,minimumIntervalMs:rpmInterval(env.AUDIT_RPM_GEMINI,5)};
- if(provider==='groq') return {baseUrl:required(env.LLM_BASE_URL,'LLM_BASE_URL'),apiKey:required(env.LLM_API_KEY,'LLM_API_KEY'),model,maxCompletionTokens:8192,reasoningEffort:'low',timeoutMs:90000,retries:4,minimumIntervalMs:rpmInterval(env.AUDIT_RPM_GROQ,10)};
+ if(provider==='groq') return {baseUrl:required(env.LLM_BASE_URL,'LLM_BASE_URL'),apiKey:required(env.LLM_API_KEY,'LLM_API_KEY'),model,maxCompletionTokens:8192,reasoningEffort:'low',timeoutMs:90000,retries:4,minimumIntervalMs:rpmInterval(env.AUDIT_RPM_GROQ,4)};
  return {baseUrl:required(env.LLM_BASE_URL,'LLM_BASE_URL'),apiKey:required(env.LLM_API_KEY,'LLM_API_KEY'),model,maxCompletionTokens:8192,reasoningEffort:'medium',timeoutMs:90000,retries:4,minimumIntervalMs:rpmInterval(env.AUDIT_RPM_OPENAI,10)};
 }
 function rpmInterval(value:string|undefined,fallback:number):number{const rpm=Number(value);return 60_000/(Number.isFinite(rpm)&&rpm>0?rpm:fallback);}

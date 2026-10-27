@@ -681,8 +681,7 @@
         "originCountry": "China",
         "taste": "savoury",
         "cookingMethod": "deep-fried",
-        "eatenWithHands": true,
-        "servedHotOrCold": "hot"
+        "eatenWithHands": true
       }
     },
     {
