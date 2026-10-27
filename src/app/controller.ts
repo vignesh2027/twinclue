@@ -15,12 +15,12 @@ export interface Health { a: SideHealth; b: SideHealth; sharedChat: boolean; tok
 
 export interface OverlayState {
   type: 'state'; seq: number; serverNow: number; demo: boolean; unauditedDemo: boolean; rehearsal: boolean; side: OverlayView; commandPrefix: string;
-  roundStatus: 'idle' | 'active' | 'won' | 'timed-out'; category: string | null; half: string | null; startedAt: number | null; endsAt: number | null;
+  roundStatus: 'idle' | 'active' | 'won' | 'timed-out' | 'unscored'; category: string | null; half: string | null; startedAt: number | null; endsAt: number | null;
   leading: string | null; voters: number; buckets: VoteBucket[]; otherVotes: number; recentVotes: Array<{ user: string; label: string }>;
   scoreboard: { rounds: number; wins: number; streak: number };
   reveal?: { answer: string; halfA: string; halfB: string; alsoFitsA: string[]; alsoFitsB: string[]; setSizeA: number; setSizeB: number;
     sideA: { topAnswer: string | null; correct: boolean; voters: number }; sideB: { topAnswer: string | null; correct: boolean; voters: number };
-    solveTimeMs: number | null; finishReason: string | null };
+    solveTimeMs: number | null; finishReason: string | null; unscoredReason: string | null };
 }
 export interface PanelState {
   type: 'panel-state'; demo: boolean; rehearsal: boolean; health: Health; scoreboard: Session['scoreboard']; roundStatus: string; endsAt: number | null;
@@ -32,7 +32,7 @@ export type ClientMessage = OverlayState | PanelState;
 
 export interface ControllerOptions {
   demo?: boolean; now?: () => number; store?: SessionStore; metrics?: Metrics; vocabularies?: Map<string, VocabEntry[]>;
-  cooldownMs?: number; consensus?: Partial<ConsensusRule>; frameIntervalMs?: number; commandPrefix?: string;
+  cooldownMs?: number; consensus?: Partial<ConsensusRule>; minVotersToWin?: number; frameIntervalMs?: number; commandPrefix?: string;
   /** Above this many votes per second the ticker stops sampling; votes and transitions are never shed. */
   shedTickerAboveRate?: number;
   onRoundEvent?: (event: RoundEvent) => void;
@@ -41,8 +41,8 @@ export interface ControllerOptions {
 const MAX_PENDING_RECEIPTS = 20_000;
 const sideOf = (view: OverlayView): Community => (view === 'a' ? 'A' : 'B');
 
-export function makeRoundOptions(options: Pick<ControllerOptions, 'vocabularies' | 'cooldownMs' | 'consensus'>): (puzzle: Puzzle) => RoundOptions {
-  return puzzle => ({ vocabulary: options.vocabularies ? vocabularyFor(puzzle, options.vocabularies) : undefined, cooldownMs: options.cooldownMs, consensus: options.consensus });
+export function makeRoundOptions(options: Pick<ControllerOptions, 'vocabularies' | 'cooldownMs' | 'consensus' | 'minVotersToWin'>): (puzzle: Puzzle) => RoundOptions {
+  return puzzle => ({ vocabulary: options.vocabularies ? vocabularyFor(puzzle, options.vocabularies) : undefined, cooldownMs: options.cooldownMs, consensus: options.consensus, minVotersToWin: options.minVotersToWin });
 }
 
 export class GameController {
@@ -113,9 +113,9 @@ export class GameController {
   snapshot(view: OverlayView): OverlayState {
     const round = this.session.current;
     const side = sideOf(view);
-    const status = round?.status === 'active' || round?.status === 'won' || round?.status === 'timed-out' ? round.status : 'idle';
+    const status = round?.status === 'active' || round?.status === 'won' || round?.status === 'timed-out' || round?.status === 'unscored' ? round.status : 'idle';
     const display = round?.displayBuckets(side) ?? { buckets: [], other: 0 };
-    const reveal = round && (status === 'won' || status === 'timed-out');
+    const reveal = round && (status === 'won' || status === 'timed-out' || status === 'unscored');
     const puzzle = round?.puzzle;
     const alsoA = puzzle ? puzzle.alsoFitsA ?? puzzle.halfAAlsoFits : [];
     const alsoB = puzzle ? puzzle.alsoFitsB ?? puzzle.halfBAlsoFits : [];
@@ -133,7 +133,7 @@ export class GameController {
         setSizeA: puzzle!.predicates?.setSizeA ?? alsoA.length + 1, setSizeB: puzzle!.predicates?.setSizeB ?? alsoB.length + 1,
         sideA: round!.result?.A ?? { topAnswer: null, correct: false, voters: round!.voterCount('A') },
         sideB: round!.result?.B ?? { topAnswer: null, correct: false, voters: round!.voterCount('B') },
-        solveTimeMs: round!.solveTimeMs ?? null, finishReason: round!.finishReason ?? null,
+        solveTimeMs: round!.solveTimeMs ?? null, finishReason: round!.finishReason ?? null, unscoredReason: round!.unscoredReason ?? null,
       } } : {}),
     };
   }

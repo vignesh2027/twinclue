@@ -33,12 +33,17 @@ export class Histogram {
   constructor(readonly name: string, readonly help: string, readonly buckets: number[]) {
     this.counts = buckets.map(() => 0);
   }
+  /** The largest value observed, exact rather than bucketed. */
+  max = 0;
   observe(value: number): void {
     this.sum += value;
     this.count++;
+    if (value > this.max) this.max = value;
     for (let i = 0; i < this.buckets.length; i++) if (value <= this.buckets[i]!) { this.counts[i]!++; break; }
   }
   get observations(): number { return this.count; }
+  /** Benchmarks reset between phases; the server never does. */
+  reset(): void { this.counts.fill(0); this.sum = 0; this.count = 0; this.max = 0; }
   /** Bucket-resolution quantile estimate: the upper bound of the bucket holding the q-th observation. */
   quantile(q: number): number {
     if (!this.count) return 0;
@@ -70,11 +75,13 @@ export class Metrics {
   readonly eventsubConnected = new Counter('twinclue_eventsub_connected', 'Whether the EventSub socket has a live session (1) or not (0).', 'gauge');
   readonly snapshots = new Counter('twinclue_snapshots_total', 'Session snapshots written, by result.');
   readonly framesSent = new Counter('twinclue_overlay_frames_total', 'Overlay and panel frames sent, by view.');
+  readonly snapshotSeconds = new Histogram('twinclue_snapshot_seconds', 'Time to serialise and write one session snapshot, including file I/O.', [0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1]);
+  readonly snapshotBlockingSeconds = new Histogram('twinclue_snapshot_blocking_seconds', 'Event loop time one snapshot blocks while serialising the vote map.', [0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1]);
   readonly latency = new Histogram('twinclue_vote_to_frame_seconds', 'Time from a chat notification being received to the overlay frame that reflects it being sent.',
     [0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.2, 0.25, 0.5, 1, 2.5, 5]);
 
   render(): string {
     return [this.messagesIn, this.votes, this.duplicates, this.shed, this.reconnects, this.chatSends, this.overlayClients,
-      this.eventsubConnected, this.snapshots, this.framesSent, this.latency].map(metric => metric.render()).join('\n') + '\n';
+      this.eventsubConnected, this.snapshots, this.framesSent, this.snapshotSeconds, this.snapshotBlockingSeconds, this.latency].map(metric => metric.render()).join('\n') + '\n';
   }
 }

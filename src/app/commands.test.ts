@@ -21,4 +21,13 @@ describe('chat commands', () => {
     expect(parseCommand({ channel: 'A', userId: '555', user: '1001', text: '!tc skip' }, ids).type).toBe('denied');
     expect(parseCommand({ channel: 'B', userId: '1001', user: 'HostName', text: '!tc skip' }, ids).type).toBe('denied');
   });
+
+  it('lets only community A broadcasters and moderators skip; community B moderators can still lock', () => {
+    const ids = { A: '1001', B: '2002' };
+    const mod = [{ set_id: 'moderator' }];
+    expect(parseCommand({ channel: 'A', userId: '5', user: 'moda', text: '!tc skip', badges: mod }, ids).type).toBe('skip');
+    expect(parseCommand({ channel: 'B', userId: '6', user: 'modb', text: '!tc skip', badges: mod }, ids).type).toBe('denied');
+    expect(parseCommand({ channel: 'B', userId: '2002', user: 'ownerb', text: '!tc skip', badges: [{ set_id: 'broadcaster' }] }, ids).type).toBe('denied');
+    expect(parseCommand({ channel: 'B', userId: '6', user: 'modb', text: '!tc lock', badges: mod }, ids).type).toBe('lock');
+  });
 });

@@ -11,7 +11,7 @@ import type { GameController, View } from './controller.js';
 export interface WebSecurity {
   /** Required for the panel, /api/*, /auth/* and /metrics. When absent (demo and tests on localhost) those routes are open. */
   adminToken?: string;
-  /** Extra origins allowed to open sockets and post, such as PUBLIC_URL's origin. Same-host origins are always allowed. */
+  /** Extra origins allowed to open sockets and post. PUBLIC_URL's origin and localhost on the listening port are always allowed. */
   allowedOrigins?: string[];
 }
 export interface Readiness { ready: boolean; reasons: string[]; detail: unknown }
@@ -45,14 +45,23 @@ export function adminTokenFrom(headers: IncomingMessage['headers']): string | un
   return bearer ?? (typeof header === 'string' ? header : undefined);
 }
 
-/** Browsers always send Origin on WebSocket upgrades and cross-site posts; a page on another site is refused. */
-export function originAllowed(origin: string | undefined, host: string | undefined, allowed: string[] = []): boolean {
+/**
+ * Browsers always send Origin on WebSocket upgrades and cross-site posts. It must be on an explicit list; the Host
+ * header is never trusted, because a DNS-rebinding page sends a Host that matches its own Origin.
+ * Requests without Origin (OBS on some versions, curl, the benchmark) are not browsers acting for another site.
+ */
+export function originAllowed(origin: string | undefined, allowed: string[]): boolean {
   if (!origin) return true;
   try {
     const url = new URL(origin);
-    if (host && url.host === host) return true;
     return allowed.some(entry => { try { return new URL(entry).origin === url.origin; } catch { return false; } });
   } catch { return false; }
+}
+
+/** PUBLIC_URL plus localhost, 127.0.0.1 and [::1] on the port this server is actually listening on. */
+export function allowedOrigins(extra: string[], port: number | undefined): string[] {
+  const local = port ? [`http://localhost:${port}`, `http://127.0.0.1:${port}`, `http://[::1]:${port}`] : [];
+  return [...extra, ...local];
 }
 
 const files: Record<string, { path: string; type: string }> = {
@@ -67,13 +76,14 @@ const files: Record<string, { path: string; type: string }> = {
 export function registerWebRoutes(app: FastifyInstance, controller: GameController, options: WebOptions = {}): WebSocketServer {
   const security = options.security ?? {};
   const keys = security.adminToken ? overlayKeys(security.adminToken) : undefined;
-  const allowed = [...(security.allowedOrigins ?? []), ...(options.publicUrl ? [options.publicUrl] : [])];
+  const extraOrigins = [...(security.allowedOrigins ?? []), ...(options.publicUrl ? [options.publicUrl] : [])];
+  const allowed = () => { const address = app.server.address(); return allowedOrigins(extraOrigins, address && typeof address === 'object' ? address.port : undefined); };
   const metrics = options.metrics;
   const slowBytes = options.slowSocketBytes ?? 512 * 1024;
   const wss = new WebSocketServer({ noServer: true, maxPayload: 4096 });
 
   const requireAdmin: preHandlerHookHandler = async (request: FastifyRequest, reply: FastifyReply) => {
-    if (!originAllowed(request.headers.origin, request.headers.host, allowed)) return reply.code(403).send({ error: 'Cross-site request refused.' });
+    if (!originAllowed(request.headers.origin, allowed())) return reply.code(403).send({ error: 'Cross-site request refused.' });
     if (security.adminToken && !safeEqual(adminTokenFrom(request.headers), security.adminToken)) return reply.code(401).send({ error: 'Admin token required.' });
   };
   app.decorate('requireAdmin', requireAdmin);
@@ -83,7 +93,7 @@ export function registerWebRoutes(app: FastifyInstance, controller: GameControll
     const view = url.pathname.match(/^\/overlay\/ws\/(a|b|panel)$/)?.[1] as View | undefined;
     const reject = (code: number, text: string) => { socket.write(`HTTP/1.1 ${code} ${text}\r\nConnection: close\r\nContent-Length: 0\r\n\r\n`); socket.destroy(); };
     if (!view) return reject(404, 'Not Found');
-    if (!originAllowed(request.headers.origin, request.headers.host, allowed)) return reject(403, 'Forbidden');
+    if (!originAllowed(request.headers.origin, allowed())) return reject(403, 'Forbidden');
     if (keys && view !== 'panel' && !safeEqual(url.searchParams.get('k') ?? undefined, keys[view])) return reject(403, 'Forbidden');
     wss.handleUpgrade(request, socket, head, ws => attach(ws, view));
   });
@@ -130,9 +140,11 @@ export function registerWebRoutes(app: FastifyInstance, controller: GameControll
 
   app.get('/healthz', async () => ({ ok: true }));
   app.get('/health', async () => ({ ok: true }));
-  app.get('/readyz', async (_request, reply) => {
+  // Publicly only the verdict; reasons name channels and accounts, so they need the admin token.
+  app.get('/readyz', async (request, reply) => {
     const readiness = options.readiness?.() ?? { ready: true, reasons: [], detail: null };
-    return reply.code(readiness.ready ? 200 : 503).send(readiness);
+    const admin = !security.adminToken || safeEqual(adminTokenFrom(request.headers), security.adminToken);
+    return reply.code(readiness.ready ? 200 : 503).send(admin ? readiness : { ready: readiness.ready });
   });
   app.get('/metrics', { preHandler: requireAdmin }, async (_request, reply) => reply.type('text/plain; version=0.0.4; charset=utf-8').send(metrics?.render() ?? ''));
 

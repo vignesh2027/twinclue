@@ -114,6 +114,30 @@ describe('web routes', () => {
     expect((await app.inject({ url: '/healthz' })).json()).toEqual({ ok: true });
     const ready = await app.inject({ url: '/readyz' });
     expect(ready.statusCode).toBe(503);
-    expect(ready.json().reasons).toEqual(['Channel B: EventSub not connected.']);
+    expect(ready.json()).toEqual({ ready: false });
+    const detailed = await app.inject({ url: '/readyz', headers: { authorization: `Bearer ${ADMIN}` } });
+    expect(detailed.statusCode).toBe(503);
+    expect(detailed.json().reasons).toEqual(['Channel B: EventSub not connected.']);
+  });
+
+  it('checks Origin against PUBLIC_URL and localhost only, never the Host header (DNS rebinding)', async () => {
+    const app = Fastify();
+    apps.push(app);
+    const controller = new GameController(new Session(), [puzzleFixture]);
+    app.addHook('onClose', async () => controller.close());
+    registerWebRoutes(app, controller, { security: { adminToken: ADMIN }, publicUrl: 'https://tc.example' });
+    const address = await app.listen({ host: '127.0.0.1', port: 0 });
+    const port = new URL(address).port;
+    const keys = overlayKeys(ADMIN);
+    const post = (origin: string, host: string) => fetch(`${address}/api/settings`, { method: 'POST', headers: { authorization: `Bearer ${ADMIN}`, 'content-type': 'application/json', origin, host }, body: '{}' });
+    // A rebinding page: its Origin and Host agree, but neither is on the list.
+    expect((await post(`http://rebind.example:${port}`, `rebind.example:${port}`)).status).toBe(403);
+    expect((await post(`http://localhost:${port}`, `localhost:${port}`)).status).toBe(200);
+    expect((await post('https://tc.example', 'tc.example')).status).toBe(200);
+    const ws = address.replace('http', 'ws');
+    expect((await open(`${ws}/overlay/ws/a?k=${keys.a}`, { origin: `http://rebind.example:${port}`, host: `rebind.example:${port}` })).status).toBe(403);
+    const allowed = await open(`${ws}/overlay/ws/a?k=${keys.a}`, { origin: 'https://tc.example' });
+    expect(allowed.first?.type).toBe('state');
+    allowed.ws?.close();
   });
 });

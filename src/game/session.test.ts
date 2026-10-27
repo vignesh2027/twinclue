@@ -44,7 +44,7 @@ describe('session persistence', () => {
   it('keeps history bounded, drops finished vote maps and leaves rehearsal rounds out of the score', () => withDir(async dir => {
     const session = new Session();
     for (let i = 0; i < 70; i++) {
-      const round = new Round(puzzleFixture, { rehearsal: i === 69 });
+      const round = new Round(puzzleFixture, { rehearsal: i === 69, minVotersToWin: 1 });
       round.start(0);
       round.vote('A', `${i}`, 'Paris', 1);
       round.vote('B', `${i}b`, 'Paris', 1);

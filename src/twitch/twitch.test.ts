@@ -55,12 +55,15 @@ describe('tokens', () => {
     const app = Fastify();
     const store = new TokenStore({ path: join(dir, 't.json'), clientId: 'id', clientSecret: 's' });
     let now = 0;
-    const fetcher = vi.fn(async (url: string | URL | Request) => String(url).endsWith('/validate') ? json({ login: 'someoneelse', user_id: '7', scopes: [], expires_in: 100 }) : json({ access_token: 'x', refresh_token: 'y', expires_in: 3600, scope: [], token_type: 'bearer' }));
+    const fetcher = vi.fn(async (url: string | URL | Request, _init?: RequestInit) => String(url).endsWith('/validate') ? json({ login: 'someoneelse', user_id: '7', scopes: [], expires_in: 100 }) : json({ access_token: 'x', refresh_token: 'y', expires_in: 3600, scope: [], token_type: 'bearer' }));
     registerAuthRoutes(app, { clientId: 'id', clientSecret: 's', publicUrl: 'https://tc.example', store, fetcher: fetcher as typeof fetch, now: () => now, expectedLogin: () => 'sickoncode', requireAdmin: async () => undefined });
     const state = (body: string) => new URL(JSON.parse(body).url).searchParams.get('state');
     const first = state((await app.inject({ method: 'POST', url: '/auth/start', payload: { role: 'bot' } })).body);
     const wrong = await app.inject({ url: `/auth/callback?code=c&state=${first}` });
     expect(wrong.statusCode).toBe(403);
+    const revoke = fetcher.mock.calls.find(([url]) => String(url) === 'https://id.twitch.tv/oauth2/revoke');
+    expect(revoke, 'the wrong account token is revoked before it is discarded').toBeDefined();
+    expect(String((revoke![1] as RequestInit).body)).toContain('token=x');
     expect(wrong.body).toContain('Wrong Twitch account');
     expect(store.get('bot')).toBeUndefined();
     const second = state((await app.inject({ method: 'POST', url: '/auth/start', payload: { role: 'bot' } })).body);

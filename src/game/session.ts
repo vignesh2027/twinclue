@@ -4,22 +4,22 @@ import { z } from 'zod';
 import { PuzzleSchema, type Puzzle } from '../puzzle/types.js';
 import { silentLog, type Log } from '../obs/log.js';
 import type { Metrics } from '../obs/metrics.js';
-import { Round, type RoundOptions, type SerializedRound, type SideReveal } from './round.js';
+import { Round, type RoundOptions, type SerializedRound, type SideReveal, type UnscoredReason } from './round.js';
 
-export interface RoundSummary { puzzleId: string; answer: string; status: 'won' | 'timed-out'; rehearsal: boolean; startedAt?: number; endedAt?: number; sideA: SideReveal; sideB: SideReveal }
+export interface RoundSummary { puzzleId: string; answer: string; status: 'won' | 'timed-out' | 'unscored'; unscoredReason?: UnscoredReason; rehearsal: boolean; startedAt?: number; endedAt?: number; sideA: SideReveal; sideB: SideReveal }
 
 const SideRevealSchema = z.object({ topAnswer: z.string().nullable(), correct: z.boolean(), voters: z.number() });
 const RoundSchema = z.object({
-  puzzle: PuzzleSchema, status: z.enum(['pending', 'active', 'won', 'timed-out']), startedAt: z.number().optional(), endedAt: z.number().optional(),
+  puzzle: PuzzleSchema, status: z.enum(['pending', 'active', 'won', 'timed-out', 'unscored']), startedAt: z.number().optional(), endedAt: z.number().optional(),
   endsAt: z.number().optional(), rehearsal: z.boolean(), buckets: z.array(z.string()), votesA: z.array(z.tuple([z.string(), z.number().int()])),
   votesB: z.array(z.tuple([z.string(), z.number().int()])),
   samples: z.array(z.object({ community: z.enum(['A', 'B']), user: z.string(), label: z.string(), at: z.number() })),
-  result: z.object({ A: SideRevealSchema, B: SideRevealSchema }).nullable(), finishReason: z.string().optional(),
+  result: z.object({ A: SideRevealSchema, B: SideRevealSchema }).nullable(), finishReason: z.string().optional(), unscoredReason: z.enum(['not-enough-voters', 'skipped']).optional(),
 });
 const SessionFileSchema = z.object({
   version: z.literal(2),
   stats: z.object({ rounds: z.number().int().nonnegative(), wins: z.number().int().nonnegative(), streak: z.number().int().nonnegative() }),
-  recent: z.array(z.object({ puzzleId: z.string(), answer: z.string(), status: z.enum(['won', 'timed-out']), rehearsal: z.boolean(), startedAt: z.number().optional(), endedAt: z.number().optional(), sideA: SideRevealSchema, sideB: SideRevealSchema })),
+  recent: z.array(z.object({ puzzleId: z.string(), answer: z.string(), status: z.enum(['won', 'timed-out', 'unscored']), unscoredReason: z.enum(['not-enough-voters', 'skipped']).optional(), rehearsal: z.boolean(), startedAt: z.number().optional(), endedAt: z.number().optional(), sideA: SideRevealSchema, sideB: SideRevealSchema })),
   current: RoundSchema.nullable(),
 });
 export type SessionFile = z.infer<typeof SessionFileSchema>;
@@ -36,14 +36,17 @@ export class Session {
 
   addRound(round: Round): void { this.current = round; }
 
-  /** Rehearsal rounds never touch the score. Only a finished round that was not won resets the streak. */
+  /**
+   * Rehearsal rounds and unscored rounds (skipped, or not enough voters) never touch the score or the streak.
+   * Only a scored round that was not won resets the streak.
+   */
   recordResult(round: Round): void {
-    if (round.status !== 'won' && round.status !== 'timed-out') return;
-    if (!round.rehearsal) {
+    if (round.status !== 'won' && round.status !== 'timed-out' && round.status !== 'unscored') return;
+    if (!round.rehearsal && round.status !== 'unscored') {
       this.stats.rounds++;
       if (round.status === 'won') { this.stats.wins++; this.stats.streak++; } else this.stats.streak = 0;
     }
-    this.recent.push({ puzzleId: round.puzzle.id, answer: round.puzzle.answer, status: round.status, rehearsal: round.rehearsal, startedAt: round.startedAt, endedAt: round.endedAt,
+    this.recent.push({ puzzleId: round.puzzle.id, answer: round.puzzle.answer, status: round.status, ...(round.unscoredReason ? { unscoredReason: round.unscoredReason } : {}), rehearsal: round.rehearsal, startedAt: round.startedAt, endedAt: round.endedAt,
       sideA: round.result?.A ?? { topAnswer: null, correct: false, voters: 0 }, sideB: round.result?.B ?? { topAnswer: null, correct: false, voters: 0 } });
     if (this.recent.length > this.historyLimit) this.recent.splice(0, this.recent.length - this.historyLimit);
   }
@@ -125,6 +128,7 @@ export class SessionStore {
     this.lastStartAt = Date.now();
     try {
       const body = JSON.stringify(session.serialize());
+      this.metrics?.snapshotBlockingSeconds.observe((performance.now() - started) / 1000);
       await mkdir(dirname(this.path), { recursive: true });
       const temp = `${this.path}.tmp-${process.pid}`;
       await writeFile(temp, body, 'utf8');
@@ -135,6 +139,7 @@ export class SessionStore {
       this.log.error({ event: 'session_save_failed', reason: error instanceof Error ? error.message : String(error) }, 'Could not save the session snapshot.');
     } finally {
       this.lastDurationMs = performance.now() - started;
+      this.metrics?.snapshotSeconds.observe(this.lastDurationMs / 1000);
     }
   }
 

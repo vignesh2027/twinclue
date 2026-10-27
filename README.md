@@ -56,7 +56,8 @@ The `data` volume keeps the session (score, streak, the round in progress) and t
 
 - `GET /healthz`: the process is up.
 - `GET /readyz`: 200 when the bot token is valid and each configured channel's chat subscription is live,
-  otherwise 503 with the reasons in plain words.
+  otherwise 503. Publicly it returns only `{"ready": true}` or `false`; with the admin token it adds the reasons
+  in plain words.
 - `GET /metrics` with the admin token: Prometheus text (votes, duplicates, reconnects, chat sends, latency).
 
 ## How it works
@@ -86,6 +87,6 @@ license. The uploader is responsible for rights to custom data.
 ```sh
 npm test            # unit, fault-injection and log-safety tests
 npm run typecheck
-npm run demo        # local demo on 127.0.0.1 with scripted votes, labelled DEMO
+npm run demo        # local demo with scripted votes, labelled DEMO; prints the panel link with a fresh admin token
 npm run bench       # throughput benchmark; rewrites docs/BENCHMARKS.md
 ```

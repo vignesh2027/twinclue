@@ -9,7 +9,7 @@ const vocabularies = new Map([['fixture', [{ name: 'Paris', aliases: [] }, { nam
 const puzzle = { ...puzzleFixture, sourceTable: 'fixture' };
 const controllers: GameController[] = [];
 function make(options: ConstructorParameters<typeof GameController>[2] = {}, session = new Session()) {
-  const controller = new GameController(session, [puzzle], { vocabularies, ...options });
+  const controller = new GameController(session, [puzzle], { vocabularies, minVotersToWin: 1, ...options });
   controllers.push(controller);
   return controller;
 }
@@ -85,9 +85,10 @@ describe('game controller', () => {
     vi.useFakeTimers();
     let now = 1_000_000;
     const session = new Session();
-    const round = new Round(puzzle);
+    const round = new Round(puzzle, { minVotersToWin: 1 });
     round.start(now - 250_000, 300_000);
     round.vote('A', '1', 'Paris', now - 1000);
+    round.vote('B', '2', 'Rome', now - 1000);
     session.addRound(round);
     const controller = make({ now: () => now }, session);
     expect(controller.snapshot('a').endsAt).toBe(1_050_000);
@@ -124,7 +125,44 @@ describe('game controller', () => {
     expect(() => controller.rehearsalVote('Paris')).toThrow(/counts for real/);
     expect(controller.activeRound!.voterCount('B')).toBe(0);
     expect(controller.snapshot('a').rehearsal).toBe(false);
+    controller.vote('B', '2', 'Rome');
     controller.lockRound();
     expect(controller.session.scoreboard).toMatchObject({ rounds: 1, wins: 0 });
+  });
+
+  it('counts wrong-side refusals in metrics', () => {
+    const metrics = new Metrics();
+    const controller = make({ metrics });
+    controller.startRound();
+    controller.vote('A', '1', 'Paris');
+    expect(controller.vote('B', '1', 'Paris')).toBe('wrong-side');
+    expect(metrics.votes.get({ result: 'wrong_side' })).toBe(1);
+    expect(controller.snapshot('b').voters).toBe(0);
+  });
+
+  it('leaves score and streak untouched when a round is skipped, and posts it as unscored', () => {
+    const events: string[] = [];
+    const controller = make({ onRoundEvent: event => events.push(`${event.type}:${event.round.status}`) });
+    Object.assign(controller.session.stats, { rounds: 4, wins: 3, streak: 2 });
+    controller.startRound();
+    for (const [side, id] of [['A', '1'], ['B', '2']] as const) controller.vote(side, id, 'Paris');
+    controller.skipRound();
+    expect(controller.session.scoreboard).toEqual({ rounds: 4, wins: 3, streak: 2 });
+    expect(controller.snapshot('a').roundStatus).toBe('unscored');
+    expect(controller.snapshot('a').reveal?.unscoredReason).toBe('skipped');
+    expect(controller.session.recent.at(-1)).toMatchObject({ status: 'unscored', unscoredReason: 'skipped' });
+    expect(events).toEqual(['started:active', 'finished:unscored']);
+  });
+
+  it('does not score a timeout with too few voters (controller default minimum is 2)', () => {
+    const controller = new GameController(new Session(), [puzzle], { vocabularies });
+    controllers.push(controller);
+    Object.assign(controller.session.stats, { streak: 5 });
+    controller.startRound();
+    controller.vote('A', '1', 'Paris');
+    controller.vote('B', '2', 'Paris');
+    controller.timeout();
+    expect(controller.activeRound?.unscoredReason).toBe('not-enough-voters');
+    expect(controller.session.scoreboard).toEqual({ rounds: 0, wins: 0, streak: 5 });
   });
 });

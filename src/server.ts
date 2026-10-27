@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { randomBytes } from 'node:crypto';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
@@ -24,19 +25,28 @@ const EnvSchema = z.object({
   CHANNEL_A: z.string().trim().min(1, 'CHANNEL_A (the host channel login) is required.'), CHANNEL_B: optional, BOT_LOGIN: optional,
   ADMIN_TOKEN: z.string().min(24, 'ADMIN_TOKEN must be at least 24 characters. Generate one with: openssl rand -hex 24'),
   PORT: optional, PUBLIC: optional, COMMAND_PREFIX: z.string().min(1).max(20).default('!g'),
+  MIN_VOTERS_TO_WIN: z.coerce.number().int().min(1).max(1000).default(2),
 });
 
 export interface ServerOverrides { logStream?: NodeJS.WritableStream; sessionPath?: string; tokenPath?: string; fetcher?: typeof fetch; eventsubUrl?: string; socketFactory?: SocketFactory; pack?: Puzzle[] }
-export interface BuiltServer { app: FastifyInstance; session: Session; controller: GameController; metrics: Metrics; listen: () => Promise<string>; shutdown: () => Promise<void> }
+export interface BuiltServer {
+  app: FastifyInstance; session: Session; controller: GameController; metrics: Metrics; listen: () => Promise<string>; shutdown: () => Promise<void>;
+  /** Demo mode only: the random admin token generated for this run, so the demo can print the panel link once. */
+  demoAdminToken?: string;
+  /** Resolves when any EventSub (re)start in progress has finished. */
+  twitchSettled: () => Promise<void>;
+}
 
 async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: ServerOverrides = {}): Promise<BuiltServer> {
   const config = demo ? undefined : EnvSchema.parse(env);
   const publicBind = env.PUBLIC === '1';
-  if (demo && publicBind) throw new Error('Demo mode has no admin token, so it only runs on 127.0.0.1. Unset PUBLIC.');
+  // Demo mode gets its own random admin token, so it is protected exactly like a live server.
+  const demoAdminToken = demo ? randomBytes(24).toString('hex') : undefined;
   const metrics = new Metrics();
   const app = Fastify({ logger: loggerOptions(overrides.logStream), disableRequestLogging: false });
   const vocabularies = loadFactVocabularies();
-  const roundOptions = makeRoundOptions({ vocabularies });
+  const minVotersToWin = config?.MIN_VOTERS_TO_WIN ?? 2;
+  const roundOptions = makeRoundOptions({ vocabularies, minVotersToWin });
   const store = new SessionStore(overrides.sessionPath ?? 'data/session.json', app.log.child({ component: 'session' }), metrics);
   const session = demo ? new Session() : await store.load(roundOptions);
   const prefix = config?.COMMAND_PREFIX ?? (env.COMMAND_PREFIX?.trim() || '!g');
@@ -45,6 +55,7 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
   let chat: ChatSender | undefined;
   let eventsub: EventSubClient | undefined;
   let validation: ReturnType<typeof setInterval> | undefined;
+  let twitchChain: Promise<void> = Promise.resolve();
   const onRoundEvent = (event: RoundEvent) => {
     if (!chat || event.round.rehearsal) return;
     const round = event.round;
@@ -52,10 +63,12 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
     const result = round.result;
     const text = round.status === 'won'
       ? `Both communities locked in ${round.puzzle.answer}. That is a win! Streak: ${session.stats.streak}.`
+      : round.unscoredReason === 'skipped' ? `Round skipped, so it does not count. The answer was ${round.puzzle.answer}.`
+      : round.unscoredReason === 'not-enough-voters' ? `Round over, but each community needs at least ${round.minVotersToWin} voters for it to count. The answer was ${round.puzzle.answer}.`
       : `Round over. The answer was ${round.puzzle.answer}. Community A chose ${result?.A.topAnswer ?? 'nothing'}, community B chose ${result?.B.topAnswer ?? 'nothing'}.`;
     void chat.send('both', text);
   };
-  const controller = new GameController(session, pack, { demo, store: demo ? undefined : store, metrics, vocabularies, commandPrefix: prefix, onRoundEvent });
+  const controller = new GameController(session, pack, { demo, store: demo ? undefined : store, metrics, vocabularies, minVotersToWin, commandPrefix: prefix, onRoundEvent });
 
   let readiness: () => Readiness = () => ({ ready: true, reasons: [], detail: { mode: 'demo' } });
   if (config) {
@@ -99,11 +112,15 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
       });
       eventsub.connect();
     };
-    const startSafely = () => startTwitch().catch(error => {
-      const message = error instanceof Error ? error.message : String(error);
-      app.log.error({ event: 'twitch_start_failed', reason: message }, 'Could not start the Twitch connection.');
-      controller.setHealth({ lastError: `Could not connect to Twitch: ${message}` });
-    });
+    // Restarts run one at a time: two OAuth callbacks in quick succession must never leave two clients running.
+    const startSafely = () => {
+      twitchChain = twitchChain.then(startTwitch).catch(error => {
+        const message = error instanceof Error ? error.message : String(error);
+        app.log.error({ event: 'twitch_start_failed', reason: message }, 'Could not start the Twitch connection.');
+        controller.setHealth({ lastError: `Could not connect to Twitch: ${message}` });
+      });
+      return twitchChain;
+    };
 
     registerWebRoutes(app, controller, { security: { adminToken: config.ADMIN_TOKEN }, publicUrl: config.PUBLIC_URL, metrics, readiness: () => readiness(),
       onRecap: async () => chat ? chat.send('both', `Twinclue recap: ${session.stats.rounds} rounds played, ${session.stats.wins} won together, current streak ${session.stats.streak}. Thanks for playing!`) : false });
@@ -132,11 +149,12 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
     }, 60 * 60_000);
     validation.unref();
   } else {
-    registerWebRoutes(app, controller, { metrics, readiness: () => readiness() });
+    registerWebRoutes(app, controller, { security: { adminToken: demoAdminToken }, metrics, readiness: () => readiness() });
   }
 
   const shutdown = async () => {
     if (validation) clearInterval(validation);
+    await twitchChain;
     eventsub?.stop();
     controller.close();
     store.stop();
@@ -144,7 +162,7 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
     await app.close();
   };
   const host = publicBind ? '0.0.0.0' : '127.0.0.1';
-  return { app, session, controller, metrics, shutdown, listen: () => app.listen({ host, port: Number(config?.PORT ?? env.PORT ?? 3000) }) };
+  return { app, session, controller, metrics, shutdown, demoAdminToken, twitchSettled: () => twitchChain, listen: () => app.listen({ host, port: Number(config?.PORT ?? env.PORT ?? 3000) }) };
 }
 
 export function buildServer(env: NodeJS.ProcessEnv = process.env, overrides?: ServerOverrides) { return createServer(false, env, overrides); }

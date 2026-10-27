@@ -5,7 +5,6 @@ import { fork } from 'node:child_process';
 import { cpus, totalmem, platform, release, arch, tmpdir, loadavg } from 'node:os';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
-import { monitorEventLoopDelay } from 'node:perf_hooks';
 import Fastify from 'fastify';
 import { GameController } from '../app/controller.js';
 import { registerWebRoutes, overlayKeys } from '../app/web.js';
@@ -37,9 +36,23 @@ const phases: PhaseSpec[] = QUICK ? [
 ];
 
 interface Result { spec: PhaseSpec; report: PhaseReport; exact: boolean; mismatches: string[]; serverCpuMs: number; peakRssMb: number; loopDelayP99Ms: number; loopDelayMaxMs: number;
-  serverLatency: { p50: number; p95: number; p99: number }; rateLimited: number; shedTicker: number; shedFrames: number; duplicatesDropped: number; votesCounted: number; snapshots: number }
+  serverLatency: { p50: number; p95: number; p99: number }; rateLimited: number; shedTicker: number; shedFrames: number; duplicatesDropped: number; votesCounted: number;
+  snapshots: number; snapshotBlockingP50Ms: number; snapshotBlockingMaxMs: number; snapshotTotalMaxMs: number }
+interface Run { load: number; results: Result[] }
 
-async function main(): Promise<void> {
+/** Event loop lag: how late a 10 ms timer fires. Simple and robust on a busy machine. */
+function lagSampler(): { stop: () => { p99: number; max: number } } {
+  const lags: number[] = [];
+  let expected = performance.now() + 10;
+  const timer = setInterval(() => { const now = performance.now(); lags.push(Math.max(0, now - expected)); expected = now + 10; }, 10);
+  return { stop: () => { clearInterval(timer); const sorted = lags.sort((a, b) => a - b); return { p99: sorted[Math.max(0, Math.ceil(sorted.length * 0.99) - 1)] ?? 0, max: sorted.at(-1) ?? 0 }; } };
+}
+
+const RUNS = QUICK ? 1 : Number(process.argv.find((_arg, i, all) => all[i - 1] === '--runs') ?? 3);
+
+/** One complete run: a fresh server pipeline, a fresh load-generator process, both phases. */
+async function runOnce(runIndex: number): Promise<Run> {
+  const load = loadavg()[0]!;
   const dir = await mkdtemp(join(tmpdir(), 'twinclue-bench-'));
   const metrics = new Metrics();
   const store = new SessionStore(join(dir, 'session.json'), undefined, metrics);
@@ -72,21 +85,19 @@ async function main(): Promise<void> {
       shedFrames: metrics.shed.get({ kind: 'frame' }), duplicates: metrics.duplicates.total(), snapshots: metrics.snapshots.total() };
     let peakRss = process.memoryUsage.rss();
     const rssTimer = setInterval(() => { peakRss = Math.max(peakRss, process.memoryUsage.rss()); }, 50);
-    const loop = monitorEventLoopDelay({ resolution: 10 });
-    loop.enable();
-    // A fresh histogram per phase so its percentiles describe this phase only.
-    const phaseMetrics = new Metrics();
-    const original = metrics.latency;
-    (metrics as { latency: typeof original }).latency = phaseMetrics.latency;
-    console.log(`Phase ${spec.name}: ${spec.rate} messages per second for ${spec.seconds} seconds...`);
+    const loop = lagSampler();
+    // Per-phase histograms, so percentiles describe this phase only.
+    metrics.latency.reset();
+    metrics.snapshotBlockingSeconds.reset();
+    metrics.snapshotSeconds.reset();
+    console.log(`Run ${runIndex + 1}, phase ${spec.name}: ${spec.rate} messages per second for ${spec.seconds} seconds...`);
     child.send({ type: 'phase', spec, seed: 42 + index, seqBase: controller.ingested });
     const { report } = await nextMessage<{ report: PhaseReport }>('phase-done');
     const deadline = Date.now() + 15_000;
     while (controller.ingested < report.routerMessages && Date.now() < deadline) await new Promise(r => setTimeout(r, 20));
     clearInterval(rssTimer);
-    loop.disable();
+    const lag = loop.stop();
     const cpu = process.cpuUsage(before.cpu);
-    (metrics as { latency: typeof original }).latency = original;
 
     const round = controller.activeRound!;
     const mismatches: string[] = [];
@@ -102,14 +113,15 @@ async function main(): Promise<void> {
     if (rateLimited !== report.plantedRapidChanges) mismatches.push(`rate limited ${rateLimited}, planted rapid changes ${report.plantedRapidChanges}`);
     if (votesCounted !== report.acceptedVotes) mismatches.push(`votes counted ${votesCounted}, expected ${report.acceptedVotes}`);
     if (duplicatesDropped !== report.plantedSharedCopies) mismatches.push(`duplicates dropped ${duplicatesDropped}, planted Shared Chat copies ${report.plantedSharedCopies}`);
-    results.push({ spec, report, exact: mismatches.length === 0, mismatches, serverCpuMs: (cpu.user + cpu.system) / 1000, peakRssMb: peakRss / 2 ** 20,
-      loopDelayP99Ms: loop.percentile(99) / 1e6, loopDelayMaxMs: loop.max / 1e6,
-      serverLatency: { p50: phaseMetrics.latency.quantile(0.5) * 1000, p95: phaseMetrics.latency.quantile(0.95) * 1000, p99: phaseMetrics.latency.quantile(0.99) * 1000 },
+    const last: Result = { spec, report, exact: mismatches.length === 0, mismatches, serverCpuMs: (cpu.user + cpu.system) / 1000, peakRssMb: peakRss / 2 ** 20,
+      loopDelayP99Ms: lag.p99, loopDelayMaxMs: lag.max,
+      serverLatency: { p50: metrics.latency.quantile(0.5) * 1000, p95: metrics.latency.quantile(0.95) * 1000, p99: metrics.latency.quantile(0.99) * 1000 },
       rateLimited, shedTicker: metrics.shed.get({ kind: 'ticker' }) - before.shedTicker, shedFrames: metrics.shed.get({ kind: 'frame' }) - before.shedFrames,
-      duplicatesDropped, votesCounted, snapshots: metrics.snapshots.total() - before.snapshots });
-    const last = results.at(-1)!;
+      duplicatesDropped, votesCounted, snapshots: metrics.snapshots.total() - before.snapshots,
+      snapshotBlockingP50Ms: metrics.snapshotBlockingSeconds.quantile(0.5) * 1000, snapshotBlockingMaxMs: metrics.snapshotBlockingSeconds.max * 1000, snapshotTotalMaxMs: metrics.snapshotSeconds.max * 1000 };
+    results.push(last);
     console.log(`  ${report.sentMessages} messages in ${report.sendSeconds.toFixed(1)} s (${Math.round(report.achievedRate)} per second); end-to-end p50 ${report.latency.p50.toFixed(1)} ms, p95 ${report.latency.p95.toFixed(1)} ms, p99 ${report.latency.p99.toFixed(1)} ms; peak RSS ${last.peakRssMb.toFixed(0)} MB; exact: ${last.exact}`);
-    console.log(`  server: CPU ${Math.round(last.serverCpuMs)} ms, loop delay p99 ${last.loopDelayP99Ms.toFixed(1)} ms max ${last.loopDelayMaxMs.toFixed(1)} ms, receive-to-frame p50/p95/p99 ${last.serverLatency.p50}/${last.serverLatency.p95}/${last.serverLatency.p99} ms, max frame gap ${Math.round(report.maxFrameGapMs)} ms, snapshots ${last.snapshots}, shed ticker ${last.shedTicker}, frames ${last.shedFrames}`);
+    console.log(`  server: CPU ${Math.round(last.serverCpuMs)} ms, loop delay p99 ${last.loopDelayP99Ms.toFixed(1)} ms max ${last.loopDelayMaxMs.toFixed(1)} ms, max frame gap ${Math.round(report.maxFrameGapMs)} ms, snapshots ${last.snapshots} (blocking max ${last.snapshotBlockingMaxMs.toFixed(1)} ms)`);
     for (const line of mismatches) console.log(`  MISMATCH ${line}`);
   }
 
@@ -119,20 +131,43 @@ async function main(): Promise<void> {
   await app.close();
   store.stop();
   await rm(dir, { recursive: true, force: true });
-  if (!QUICK) await writeFile('docs/BENCHMARKS.md', render(results));
+  return { load, results };
+}
+
+async function main(): Promise<void> {
+  const runs: Run[] = [];
+  for (let i = 0; i < RUNS; i++) {
+    console.log(`Run ${i + 1} of ${RUNS}: one-minute load average ${loadavg()[0]!.toFixed(1)}`);
+    runs.push(await runOnce(i));
+  }
+  if (!QUICK) await writeFile('docs/BENCHMARKS.md', render(runs));
   console.log(QUICK ? 'Quick run: docs/BENCHMARKS.md not updated.' : 'Wrote docs/BENCHMARKS.md');
-  const failed = results.some(result => !result.exact || result.report.maxFrameGapMs > 1_000);
+  const failed = runs.some(run => run.results.some(result => !result.exact || result.report.maxFrameGapMs > 1_000));
   process.exit(failed ? 1 : 0);
 }
 
 const fmt = (value: number, digits = 1) => value.toFixed(digits);
 const int = (value: number) => Math.round(value).toLocaleString('en-US');
 
-function render(results: Result[]): string {
+function median(values: number[]): number { const sorted = [...values].sort((a, b) => a - b); const mid = Math.floor(sorted.length / 2); return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2; }
+/** "median (min to max)" across runs; a single run prints just the value. */
+function spread(values: number[], digits = 1, unit = ''): string {
+  if (values.length === 1) return `${fmt(values[0]!, digits)}${unit}`;
+  return `${fmt(median(values), digits)}${unit} (${fmt(Math.min(...values), digits)} to ${fmt(Math.max(...values), digits)})`;
+}
+const label = (name: string) => (name === 'sustained' ? 'Sustained' : 'Burst');
+
+function render(runs: Run[]): string {
   const cpu = cpus();
-  const rows = results.map(r => `| ${r.spec.name === 'sustained' ? 'Sustained' : 'Burst'} | ${int(r.spec.rate)}/s for ${r.spec.seconds} s | ${int(r.report.sentMessages)} | ${int(r.report.achievedRate)}/s | ${fmt(r.report.latency.p50)} | ${fmt(r.report.latency.p95)} | ${fmt(r.report.latency.p99)} | ${fmt(r.report.latency.max)} | ${fmt(r.peakRssMb, 0)} MB | ${int(r.serverCpuMs)} ms (${fmt(r.serverCpuMs / 10 / r.report.sendSeconds, 0)}% of one core) |`).join('\n');
-  const integrity = results.map(r => `| ${r.spec.name === 'sustained' ? 'Sustained' : 'Burst'} | ${int(r.report.expected.A.length + r.report.expected.B.length)} | ${int(r.votesCounted)} of ${int(r.report.acceptedVotes)} | ${int(r.rateLimited)} of ${int(r.report.plantedRapidChanges)} | ${int(r.duplicatesDropped)} of ${int(r.report.plantedSharedCopies)} | ${int(r.shedTicker)} | ${int(r.shedFrames)} | ${r.exact ? 'yes' : `NO: ${r.mismatches.join('; ')}`} |`).join('\n');
-  const server = results.map(r => `| ${r.spec.name === 'sustained' ? 'Sustained' : 'Burst'} | ${fmt(r.serverLatency.p50, 0)} | ${fmt(r.serverLatency.p95, 0)} | ${fmt(r.serverLatency.p99, 0)} | ${fmt(r.loopDelayP99Ms)} | ${fmt(r.loopDelayMaxMs)} | ${fmt(r.report.maxFrameGapMs, 0)} | ${r.snapshots} |`).join('\n');
+  const phaseRows = (pick: (result: Result) => string) => phases.map((_spec, index) => pick(runs[0]!.results[index]!)).join('\n');
+  const across = (index: number, value: (result: Result) => number) => runs.map(run => value(run.results[index]!));
+  const latencyRows = phases.map((spec, i) => `| ${label(spec.name)} | ${int(spec.rate)}/s for ${spec.seconds} s | ${int(runs[0]!.results[i]!.report.sentMessages)} | ${spread(across(i, r => r.report.achievedRate), 0)} | ${spread(across(i, r => r.report.latency.p50))} | ${spread(across(i, r => r.report.latency.p95))} | ${spread(across(i, r => r.report.latency.p99))} | ${spread(across(i, r => r.report.latency.max))} |`).join('\n');
+  const resourceRows = phases.map((spec, i) => `| ${label(spec.name)} | ${spread(across(i, r => r.peakRssMb), 0, ' MB')} | ${spread(across(i, r => r.serverCpuMs / 10 / r.report.sendSeconds), 0, '%')} | ${spread(across(i, r => r.loopDelayP99Ms))} | ${spread(across(i, r => r.loopDelayMaxMs))} | ${spread(across(i, r => r.report.maxFrameGapMs), 0)} |`).join('\n');
+  const serverRows = phases.map((spec, i) => `| ${label(spec.name)} | ${spread(across(i, r => r.serverLatency.p50), 0)} | ${spread(across(i, r => r.serverLatency.p95), 0)} | ${spread(across(i, r => r.serverLatency.p99), 0)} |`).join('\n');
+  const snapshotRows = phases.map((spec, i) => `| ${label(spec.name)} | ${spread(across(i, r => r.snapshots), 0)} | ${spread(across(i, r => r.snapshotBlockingMaxMs))} | ${spread(across(i, r => r.snapshotTotalMaxMs))} |`).join('\n');
+  const integrity = runs.flatMap((run, runIndex) => run.results.map(r => `| ${runIndex + 1} | ${label(r.spec.name)} | ${int(r.report.expected.A.length + r.report.expected.B.length)} | ${int(r.votesCounted)} of ${int(r.report.acceptedVotes)} | ${int(r.rateLimited)} of ${int(r.report.plantedRapidChanges)} | ${int(r.duplicatesDropped)} of ${int(r.report.plantedSharedCopies)} | ${int(r.shedTicker)} | ${int(r.shedFrames)} | ${r.exact ? 'yes' : `NO: ${r.mismatches.join('; ')}`} |`)).join('\n');
+  const loads = runs.map(run => fmt(run.load)).join(', ');
+  const heavy = runs.some(run => run.load > cpu.length / 2);
   return `# Benchmarks
 
 This measures **our pipeline, not Twitch's delivery**. Nothing here says that 100,000 viewers were tested. It says
@@ -153,30 +188,38 @@ Each phase plants traffic from a fixed seed and checks the result against an ind
 
 | Phase | Distinct chatters | First votes | Vote changes (5 s or more later) | Rapid changes (200 ms later, must be rejected) | Shared Chat copies (must be dropped) | Plain chat |
 | --- | --- | --- | --- | --- | --- | --- |
-${results.map(r => `| ${r.spec.name === 'sustained' ? 'Sustained' : 'Burst'} | ${int(r.spec.chatters)} | ${int(r.spec.chatters)} | ${int(r.spec.changes)} | ${int(r.spec.rapidChanges)} | ${int(r.spec.sharedCopies)} | ${int(r.spec.plainChat)} |`).join('\n')}
+${phaseRows(r => `| ${label(r.spec.name)} | ${int(r.spec.chatters)} | ${int(r.spec.chatters)} | ${int(r.spec.changes)} | ${int(r.spec.rapidChanges)} | ${int(r.spec.sharedCopies)} | ${int(r.spec.plainChat)} |`)}
 
 Votes go 35 percent to the answer, 55 percent to eleven other countries, and 10 percent to text that is not a
 country (shown as "other answers"), so the consensus lock never ends a phase early.
 
+The whole benchmark ran ${runs.length} times, each with a fresh server pipeline and a fresh load-generator process.
+The runs share one Node process, so later runs' peak RSS includes garbage left by earlier runs. Every figure below is the
+**median across runs, with the range (lowest to highest) in brackets**.
+
 Machine: ${cpu[0]?.model ?? 'unknown CPU'}, ${cpu.length} cores, ${fmt(totalmem() / 2 ** 30, 0)} GB RAM, ${platform()} ${release()} ${arch()}. Node ${process.version}.
-The load generator and the server share this machine. One-minute load average when the run started: ${startLoad}
-(this is a developer laptop with other work running, so treat the numbers as conservative).
+The load generator and the server share this machine. One-minute load average at the start of each run: ${loads}.
+${heavy ? 'Some runs started with the machine busy (load above half the core count), so treat those numbers as conservative.' : 'Every run started with the load average below half the core count.'}
 Generated ${new Date().toISOString().slice(0, 10)}.
 
-## Results
+## Latency and throughput
 
 End-to-end latency is measured in the child process, from the moment a vote's notification is written to the
 EventSub socket until the first frame that includes it arrives at that community's overlay client. Frames are
 coalesced to at most ten per second, so about 50 ms of the median is the deliberate frame interval.
 
-| Phase | Offered load | Messages | Achieved | p50 ms | p95 ms | p99 ms | max ms | Peak RSS (server) | Server CPU |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-${rows}
+| Phase | Offered load | Messages | Achieved per second | p50 ms | p95 ms | p99 ms | max ms |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+${latencyRows}
+
+| Phase | Peak RSS (server) | Server CPU (share of one core) | Event loop delay p99 ms | Event loop delay max ms | Longest gap between overlay frames ms |
+| --- | --- | --- | --- | --- | --- |
+${resourceRows}
 
 ## Every planted vote counted exactly once
 
-| Phase | Viewers checked one by one | Votes counted | Rate limited | Duplicates dropped | Ticker samples shed | Frames shed | Exact |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| Run | Phase | Viewers checked one by one | Votes counted | Rate limited | Duplicates dropped | Ticker samples shed | Frames shed | Exact |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${integrity}
 
 "Viewers checked one by one" compares each simulated viewer's final vote on the server with the model.
@@ -186,19 +229,30 @@ overlay socket.
 
 ## Inside the server
 
-| Phase | Receive to frame sent, p50 ms | p95 ms | p99 ms | Event loop delay p99 ms | Event loop delay max ms | Longest gap between overlay frames ms | Snapshots written |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-${server}
+| Phase | Receive to frame sent, p50 ms | p95 ms | p99 ms |
+| --- | --- | --- | --- |
+${serverRows}
 
 Receive to frame sent comes from the \`twinclue_vote_to_frame_seconds\` histogram that \`/metrics\` exports, so
-its values are bucket upper bounds. Snapshots are atomic writes of the full vote map, throttled to at most one
-per second and stretched to ten times the last write's duration under load.
+its values are bucket upper bounds.
+
+### Snapshots under load
+
+| Phase | Snapshots written | Longest event-loop block while serialising, ms | Longest snapshot including file write, ms |
+| --- | --- | --- | --- |
+${snapshotRows}
+
+A snapshot serialises the whole live vote map (up to 100,000 votes here) synchronously, then writes it to a temp
+file and renames it without blocking. While votes arrive, snapshot starts are at least one second apart, and the
+gap stretches to ten times the previous snapshot's duration if snapshots get slow. Round transitions and
+shutdown write at once. The blocking figures are exact maxima from \`twinclue_snapshot_blocking_seconds\`.
 
 ## Reproduce
 
 \`\`\`sh
-npm run bench            # about 90 seconds; rewrites this file
-npm run bench -- --quick # full rates, 12 s and 8 s phases; leaves this file alone
+npm run bench               # three full runs, about five minutes; rewrites this file
+npm run bench -- --runs 1   # one full run
+npm run bench -- --quick    # full rates, 12 s and 8 s phases; leaves this file alone
 \`\`\`
 `;
 }

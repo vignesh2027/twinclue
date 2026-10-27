@@ -23,6 +23,7 @@ export interface TokenStoreConfig { path?: string; clientId: string; clientSecre
 export class TokenStore {
   private tokens: Partial<Record<AuthRole, TwitchToken>> = {};
   private readonly refreshing = new Map<AuthRole, Promise<TwitchToken>>();
+  private writes: Promise<void> = Promise.resolve();
   readonly status: Record<AuthRole, TokenStatus> = { bot: { present: false, valid: false }, a: { present: false, valid: false }, b: { present: false, valid: false } };
   readonly path: string;
   private readonly fetcher: typeof fetch;
@@ -48,15 +49,22 @@ export class TokenStore {
 
   get(role: AuthRole): TwitchToken | undefined { return this.tokens[role]; }
 
-  /** Writes the token file with mode 0600 through a temp file, so a crash never leaves a half-written file. */
-  async put(role: AuthRole, token: TwitchToken): Promise<void> {
+  /**
+   * Writes the token file with mode 0600 through a temp file, so a crash never leaves a half-written file.
+   * Writes are queued, so two quick sign-ins cannot race on the temp file and the last one always lands.
+   */
+  put(role: AuthRole, token: TwitchToken): Promise<void> {
     this.tokens[role] = token;
     this.status[role].present = true;
-    await mkdir(dirname(this.path), { recursive: true });
-    const temp = `${this.path}.tmp-${process.pid}`;
-    await writeFile(temp, JSON.stringify(this.tokens, null, 2), { encoding: 'utf8', mode: 0o600 });
-    await chmod(temp, 0o600);
-    await rename(temp, this.path);
+    const write = this.writes.then(async () => {
+      await mkdir(dirname(this.path), { recursive: true });
+      const temp = `${this.path}.tmp-${process.pid}-${randomBytes(4).toString('hex')}`;
+      await writeFile(temp, JSON.stringify(this.tokens, null, 2), { encoding: 'utf8', mode: 0o600 });
+      await chmod(temp, 0o600);
+      await rename(temp, this.path);
+    });
+    this.writes = write.catch(() => undefined);
+    return write;
   }
 
   /** A token with at least a minute left, refreshed if needed. Concurrent callers share one refresh. */
@@ -122,6 +130,15 @@ export async function validateAccessToken(accessToken: string, fetcher: typeof f
   return { login: data.login, userId: data.user_id, scopes: data.scopes ?? [], expiresIn: data.expires_in };
 }
 
+/** POST /oauth2/revoke. Returns whether Twitch confirmed the revocation; never throws. */
+export async function revokeToken(clientId: string, token: string, fetcher: typeof fetch = fetch): Promise<boolean> {
+  try {
+    const response = await fetcher('https://id.twitch.tv/oauth2/revoke', { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, signal: AbortSignal.timeout(10_000),
+      body: new URLSearchParams({ client_id: clientId, token }).toString() });
+    return response.ok;
+  } catch { return false; }
+}
+
 export interface AuthRoutesConfig {
   clientId: string; clientSecret: string; publicUrl: string; store: TokenStore;
   /** The Twitch login each role must sign in as. A different account is refused and its token is discarded. */
@@ -171,7 +188,9 @@ export function registerAuthRoutes(app: FastifyInstance, config: AuthRoutesConfi
     const identity = await validateAccessToken(data.access_token, fetcher);
     const expected = config.expectedLogin(entry.role)?.toLowerCase();
     if (!identity || (expected && identity.login.toLowerCase() !== expected)) {
-      log.warn({ event: 'oauth_identity_mismatch', role: entry.role, expected, actual: identity?.login }, 'OAuth sign-in used the wrong Twitch account; token discarded.');
+      // Revoke before discarding, so a token for the wrong account does not stay valid at Twitch.
+      const revoked = await revokeToken(config.clientId, data.access_token, fetcher);
+      log.warn({ event: 'oauth_identity_mismatch', role: entry.role, expected, actual: identity?.login, revoked }, 'OAuth sign-in used the wrong Twitch account; token revoked and discarded.');
       return reply.code(403).send(page('Wrong Twitch account', `This role must sign in as ${escapeHtml(expected ?? 'the configured account')}, but Twitch signed in ${escapeHtml(identity?.login ?? 'an unknown account')}. Log out of Twitch or use a private window, then try again.`));
     }
     await config.store.put(entry.role, { access_token: data.access_token, refresh_token: data.refresh_token, expires_at: now() + data.expires_in * 1000, scope: data.scope ?? [], token_type: data.token_type, login: identity.login, user_id: identity.userId });

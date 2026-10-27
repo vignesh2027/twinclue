@@ -6,9 +6,9 @@ const server = await buildDemoServer();
 installShutdown(server);
 const address = await server.listen();
 console.log(`Twinclue DEMO is running at ${address}`);
-console.log(`Overlay A: ${address}/overlay/a`);
-console.log(`Overlay B: ${address}/overlay/b`);
-console.log(`Control panel: ${address}/panel`);
+// The demo's admin token is random per run and printed once, here, inside the panel link (the part after # never reaches the server).
+console.log(`Control panel: ${address}/panel#token=${server.demoAdminToken}`);
+console.log('Copy the overlay links (each with its own key) from the panel.');
 
 const { controller } = server;
 const vote = (side: 'A' | 'B', user: string, text: string) => controller.vote(side, user, text, { displayName: user });

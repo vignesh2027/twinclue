@@ -6,12 +6,14 @@ const vocabulary = [
   { name: 'Paris', aliases: ['City of Light'] }, { name: 'Rome', aliases: [] }, { name: 'Vienna', aliases: [] },
   { name: 'Prague', aliases: [] }, { name: 'Rouen', aliases: [] }, { name: 'Berlin', aliases: [] },
 ];
-const round = (options = {}) => { const r = new Round(puzzleFixture, { vocabulary, ...options }); r.start(0, 90_000); return r; };
+// Most tests use one voter per side, so they lower the minimum; the minimum has its own tests below.
+const round = (options = {}) => { const r = new Round(puzzleFixture, { vocabulary, minVotersToWin: 1, ...options }); r.start(0, 90_000); return r; };
 
 describe('community lock-in votes', () => {
   it('wins only when both sides lead with the answer', () => {
     const r = round();
     r.vote('A', '1', 'Paris', 100);
+    r.vote('B', '2', 'Rome', 100);
     r.timeout(200);
     expect(r.status).toBe('timed-out');
     const s = round();
@@ -114,5 +116,48 @@ describe('community lock-in votes', () => {
     }
     expect(restored.endsAt).toBe(90_000);
     expect(restored.vote('A', 'u1', 'Paris', 10_000)).toBe('unchanged');
+  });
+
+  it('refuses a viewer on the other side once they have voted, and never restores them on both', () => {
+    const r = round();
+    expect(r.vote('A', '7', 'Paris', 0)).toBe('voted');
+    expect(r.vote('B', '7', 'Paris', 5_000)).toBe('wrong-side');
+    expect(r.voterCount('B')).toBe(0);
+    expect(r.vote('A', '7', 'Rome', 5_000)).toBe('voted');
+    const saved = r.serialize();
+    saved.votesB.push(['7', 0]);
+    const restored = Round.restore(saved, { vocabulary });
+    expect(restored.voterCount('A') + restored.voterCount('B')).toBe(1);
+  });
+
+  it('ends unscored with not enough voters below the per-side minimum (default 2), even when both sides are right', () => {
+    const r = new Round(puzzleFixture, { vocabulary });
+    r.start(0, 90_000);
+    r.vote('A', '1', 'Paris', 0);
+    r.vote('A', '2', 'Paris', 0);
+    r.vote('B', '3', 'Paris', 0);
+    r.timeout(1_000);
+    expect(r.status).toBe('unscored');
+    expect(r.unscoredReason).toBe('not-enough-voters');
+    expect(r.result?.B.correct).toBe(true);
+    const enough = new Round(puzzleFixture, { vocabulary });
+    enough.start(0, 90_000);
+    for (const [side, id] of [['A', '1'], ['A', '2'], ['B', '3'], ['B', '4']] as const) enough.vote(side, id, 'Paris', 0);
+    enough.timeout(1_000);
+    expect(enough.status).toBe('won');
+    const strict = new Round(puzzleFixture, { vocabulary, minVotersToWin: 3 });
+    strict.start(0, 90_000);
+    for (const [side, id] of [['A', '1'], ['A', '2'], ['B', '3'], ['B', '4']] as const) strict.vote(side, id, 'Paris', 0);
+    strict.lock(1_000);
+    expect(strict.status).toBe('unscored');
+  });
+
+  it('records a skip as unscored, whatever the votes say', () => {
+    const r = round();
+    r.vote('A', '1', 'Paris', 0);
+    r.vote('B', '2', 'Paris', 0);
+    r.finish(1_000, 'skip');
+    expect(r.status).toBe('unscored');
+    expect(r.unscoredReason).toBe('skipped');
   });
 });

@@ -13,7 +13,7 @@
   const fmtTime = ms => { if (ms == null) return 'Not available'; const seconds = Math.floor(ms / 1000); return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`; };
 
   function setStatus(s) {
-    const text = { active: 'VOTING LIVE', won: 'BOTH SIDES LOCKED', 'timed-out': 'TIME UP', idle: 'NEXT ROUND SOON' };
+    const text = { active: 'VOTING LIVE', won: 'BOTH SIDES LOCKED', 'timed-out': 'TIME UP', unscored: 'NOT SCORED', idle: 'NEXT ROUND SOON' };
     el.status.textContent = text[s.roundStatus] || text.idle;
     el.status.dataset.state = s.roundStatus;
     el.idle.hidden = s.roundStatus !== 'idle';
@@ -67,7 +67,10 @@
     const reveal = s.reveal;
     el.celebration.hidden = true;
     el.reveal.hidden = false;
-    el.timeout.hidden = s.roundStatus !== 'timed-out';
+    el.timeout.hidden = s.roundStatus !== 'timed-out' && s.roundStatus !== 'unscored';
+    el.timeout.textContent = reveal.unscoredReason === 'skipped' ? 'Round skipped. It does not count.'
+      : reveal.unscoredReason === 'not-enough-voters' ? 'Too few voters on one side, so this round does not count.'
+      : 'So close. Here is how the clues fit.';
     $('#answer').textContent = reveal.answer;
     $('#half-a').textContent = reveal.halfA;
     $('#half-b').textContent = reveal.halfB;
@@ -113,7 +116,7 @@
       stageTimer = setTimeout(() => { if (state === s) showReveal(s); setTimeout(() => { if (state === s) root.classList.remove('expanded'); }, 4500); }, 2200);
       return;
     }
-    if (s.roundStatus === 'timed-out') {
+    if (s.roundStatus === 'timed-out' || s.roundStatus === 'unscored') {
       root.classList.add('expanded');
       showReveal(s);
       clearTimeout(stageTimer);

@@ -3,16 +3,20 @@ import { normaliseGuess } from './referee.js';
 import { Vocabulary, type VocabEntry } from './vocabulary.js';
 
 export type Community = 'A' | 'B';
-export type RoundStatus = 'pending' | 'active' | 'won' | 'timed-out';
-export type VoteResult = 'voted' | 'unchanged' | 'blocked' | 'rate-limited' | 'inactive';
+export type RoundStatus = 'pending' | 'active' | 'won' | 'timed-out' | 'unscored';
+export type UnscoredReason = 'not-enough-voters' | 'skipped';
+export type VoteResult = 'voted' | 'unchanged' | 'blocked' | 'rate-limited' | 'inactive' | 'wrong-side';
 export interface VoteSample { community: Community; user: string; label: string; at: number }
 export interface VoteBucket { answer: string; count: number }
 export interface SideReveal { topAnswer: string | null; correct: boolean; voters: number }
 export interface ConsensusRule { share: number; holdMs: number; minVotes: number }
-export interface RoundOptions { vocabulary?: VocabEntry[]; cooldownMs?: number; consensus?: Partial<ConsensusRule>; rehearsal?: boolean; sampleTicker?: boolean }
+export interface RoundOptions { vocabulary?: VocabEntry[]; cooldownMs?: number; consensus?: Partial<ConsensusRule>; rehearsal?: boolean; sampleTicker?: boolean;
+  /** A round with fewer voters than this on either side ends unscored as "not enough voters". */
+  minVotersToWin?: number }
 
 export const OTHER_LABEL = 'other answers';
 export const DEFAULT_CONSENSUS: ConsensusRule = { share: 0.6, holdMs: 5_000, minVotes: 3 };
+export const DEFAULT_MIN_VOTERS_TO_WIN = 2;
 const MAX_VOTE_CHARS = 200;
 const blockedWords = ['fuck', 'shit', 'bitch', 'cunt', 'nigger', 'faggot'];
 const blockedPattern = new RegExp(`\\b(${blockedWords.join('|')})\\b`, 'i');
@@ -66,7 +70,7 @@ class SideTally {
 export interface SerializedRound {
   puzzle: Puzzle; status: RoundStatus; startedAt?: number; endedAt?: number; endsAt?: number; rehearsal: boolean;
   buckets: string[]; votesA: Array<[string, number]>; votesB: Array<[string, number]>;
-  samples: VoteSample[]; result: Record<Community, SideReveal> | null; finishReason?: string;
+  samples: VoteSample[]; result: Record<Community, SideReveal> | null; finishReason?: string; unscoredReason?: UnscoredReason;
 }
 
 export class Round {
@@ -77,6 +81,8 @@ export class Round {
   consensusSince?: number;
   private consensusLeaders?: string;
   finishReason?: 'timeout' | 'lock' | 'consensus' | 'skip';
+  unscoredReason?: UnscoredReason;
+  readonly minVotersToWin: number;
   result: Record<Community, SideReveal> | null = null;
   readonly rehearsal: boolean;
   readonly vocabulary: Vocabulary;
@@ -94,6 +100,7 @@ export class Round {
     this.cooldownMs = options.cooldownMs ?? 2_000;
     this.consensus = { ...DEFAULT_CONSENSUS, ...options.consensus };
     this.rehearsal = options.rehearsal ?? false;
+    this.minVotersToWin = Math.max(1, options.minVotersToWin ?? DEFAULT_MIN_VOTERS_TO_WIN);
   }
 
   start(at = Date.now(), durationMs?: number): void {
@@ -110,6 +117,8 @@ export class Round {
     if (!clean || isBlockedGuess(clean)) return 'blocked';
     const normalised = normaliseGuess(clean);
     if (!normalised) return 'blocked';
+    // One person, one side: a viewer who voted for one community cannot also vote for the other this round.
+    if (this.tallies[community === 'A' ? 'B' : 'A'].votes.has(userId)) return 'wrong-side';
     const tally = this.tallies[community];
     const current = tally.votes.get(userId);
     const bucket = this.vocabulary.match(normalised) ?? `t:${normalised}`;
@@ -194,7 +203,9 @@ export class Round {
       return { topAnswer: leader === null ? null : this.label(leader), correct: leader === answer, voters: this.voterCount(community) };
     };
     this.result = { A: side('A'), B: side('B') };
-    this.status = this.result.A.correct && this.result.B.correct ? 'won' : 'timed-out';
+    const tooFew = this.result.A.voters < this.minVotersToWin || this.result.B.voters < this.minVotersToWin;
+    this.unscoredReason = reason === 'skip' ? 'skipped' : tooFew ? 'not-enough-voters' : undefined;
+    this.status = this.unscoredReason ? 'unscored' : this.result.A.correct && this.result.B.correct ? 'won' : 'timed-out';
     this.endedAt = at;
     this.finishReason = reason;
     this.consensusSince = undefined;
@@ -222,7 +233,7 @@ export class Round {
     const votesA = pack('A');
     const votesB = pack('B');
     return { puzzle: this.puzzle, status: this.status, startedAt: this.startedAt, endedAt: this.endedAt, endsAt: this.endsAt, rehearsal: this.rehearsal,
-      buckets, votesA, votesB, samples: this.recentSamples(), result: this.result, finishReason: this.finishReason };
+      buckets, votesA, votesB, samples: this.recentSamples(), result: this.result, finishReason: this.finishReason, unscoredReason: this.unscoredReason };
   }
 
   static restore(saved: SerializedRound, options: RoundOptions = {}): Round {
@@ -233,6 +244,7 @@ export class Round {
     round.endsAt = saved.endsAt;
     round.result = saved.result;
     round.finishReason = saved.finishReason as Round['finishReason'];
+    round.unscoredReason = saved.unscoredReason;
     // Entity buckets are stored by name, not by key, so a changed fact table cannot misfile a restored vote.
     const buckets = saved.buckets.map(bucket => {
       if (!bucket.startsWith('=')) return bucket;
@@ -243,7 +255,7 @@ export class Round {
       const tally = round.tallies[community];
       for (const [user, index] of votes) {
         const bucket = buckets[index];
-        if (bucket === undefined || tally.votes.has(user)) continue;
+        if (bucket === undefined || tally.votes.has(user) || round.tallies[community === 'A' ? 'B' : 'A'].votes.has(user)) continue;
         tally.votes.set(user, bucket);
         tally.add(bucket);
       }

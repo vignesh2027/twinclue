@@ -14,39 +14,60 @@ Candidates come from curated attribute tables and deterministic set intersection
 
 - Solvers: gemini:gemini-3.5-flash, gemini:gemini-2.5-flash, groq:openai/gpt-oss-20b
 - Fact model: groq:openai/gpt-oss-20b
-- Constraint candidates generated: 25
+- Constraint candidates generated: 196
 - Failed validation: 0
-- Passed validation: 25
+- Passed validation: 196
 - Selected for blind audit: 25
-- Category quota targets and availability: {"video game characters":{"target":18,"available":9,"selected":9},"countries":{"target":14,"available":12,"selected":12},"animals":{"target":12,"available":2,"selected":2},"foods and dishes":{"target":12,"available":1,"selected":1},"musical instruments":{"target":8,"available":0,"selected":0},"space objects":{"target":8,"available":1,"selected":1},"sports":{"target":8,"available":0,"selected":0}}
-- Fame distribution among selected candidates: {"2":12,"3":13}
-- Difficulty distribution among selected candidates: {"medium":13,"easy":4,"hard":8}
+- Category quota targets and availability: {"video game characters":{"target":18,"available":37,"selected":18},"countries":{"target":14,"available":65,"selected":14},"animals":{"target":12,"available":17,"selected":12},"foods and dishes":{"target":12,"available":34,"selected":12},"musical instruments":{"target":8,"available":13,"selected":8},"space objects":{"target":8,"available":13,"selected":8},"sports":{"target":8,"available":17,"selected":8}}
+- Fame distribution among selected candidates: {"1":11,"2":60,"3":9}
+- Difficulty distribution among selected candidates: {"medium":71,"hard":4,"easy":5}
 - Unique answer selection: one puzzle per answer, swapped predicate mirrors deduplicated
-- Fact table pairs checked for kept puzzles: 0
-- Fact table rejections: []
-- Completed blind audits: 0
-- Audit failures: not measured because no audit completed
-- Kept: 0
-- Pass rate: not measured, 0 audited
-- Aggregate single-half hit rate: not measured
-- Aggregate both-halves hit rate: not measured
+- Fact table pairs checked for kept puzzles: 21
+- Fact table rejections: [{"id":"forge-e912a8e629","reasons":["landlocked true: false (Bolivia is not landlocked; it has a coastline on the Caribbean Sea)"]},{"id":"forge-2973d3dfee","reasons":["taste \"savoury\": unsure (Taste is subjective; commonly described as savoury but not a factual attribute)"]}]
+- Completed blind audits: 25
+- Audit failures: 18
+- Kept: 5
+- Pass rate: 20%
+- Aggregate single-half hit rate: 4.9%
+- Aggregate both-halves hit rate: 34.1%
 - Generation wording model: predicate templates
-- Token usage by model: {"gemini:gemini-3.5-flash":{"promptTokens":0,"completionTokens":0,"totalTokens":0},"gemini:gemini-2.5-flash":{"promptTokens":0,"completionTokens":0,"totalTokens":0},"groq:openai/gpt-oss-20b":{"promptTokens":4455,"completionTokens":4414,"totalTokens":8869}}
-- Quota state: Rate limit reached for model `openai/gpt-oss-20b` in organization [hidden] service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199993, Requested 939. Please try again in 6m42.624s. Need more tokens? Upgrade to Dev Tier toda
+- Token usage by model: {"gemini:gemini-3.5-flash":{"promptTokens":1831,"completionTokens":1187,"totalTokens":9011},"gemini:gemini-2.5-flash":{"promptTokens":2304,"completionTokens":1627,"totalTokens":26639},"groq:openai/gpt-oss-20b":{"promptTokens":13053,"completionTokens":13384,"totalTokens":26437}}
+- Quota state: no quota stop
 - Resume checkpoint: data/forge-progress.json
-- Final pack category counts: {}
-- Selected candidates by category before audit: {"games":9,"geography":12,"science":3,"food":1}
+- Final pack category counts: {"games":2,"geography":2,"science":1}
+- Selected candidates by category before audit: {"games":18,"geography":14,"science":20,"food":12,"music":8,"sport":8}
 
 | Round | Puzzles audited | Passed |
 |---:|---:|---:|
-| 1 | 0 | 0 |
+| 1 | 25 | 7 |
 
 The Gemini solvers stopped on per-minute quotas. Groq returned partial model output, then hit its token-per-day quota before the full puzzle panel completed. Partial responses are not counted as audited puzzles.
 
 | Puzzle | Category | Set A | Set B | Answer | Pass |
 |---|---|---:|---:|---|---|
-
+| forge-3d0b48650f | games | 8 | 7 | Aloy | yes |
+| forge-3b7865ae49 | games | 11 | 10 | Link | yes |
+| forge-3037239655 | geography | 14 | 7 | Switzerland | yes |
+| forge-a13da6a82d | geography | 18 | 7 | Jamaica | yes |
+| forge-4c21df59f2 | science | 17 | 11 | penguin | yes |
 
 ## Audit failures
 
-No completed audit results.
+- forge-79a44e9119 (Ganondorf): Both halves accepted by 0/3 available solvers; majority required. Fact check half B false: Ganondorf uses magic, no sword
+- forge-8ead5667f3 (Jin Sakai): Both halves accepted by 0/3 available solvers; majority required.
+- forge-35d95abb0b (Alexios): Both halves accepted by 0/3 available solvers; majority required. Fact check half B false: Appeared 2011 not 2010s decade start
+- forge-f9a25090e0 (Samus): Both halves accepted by 0/3 available solvers; majority required. Fact check half A false: Samus is a space marine, not human
+- forge-661bf01f68 (Olimar): Both halves accepted by 0/3 available solvers; majority required.
+- forge-220332678c (Ryu): halfB alone accepted by 3/3 available solvers; majority required to fail.
+- forge-8d8762c974 (Chun-Li): Both halves accepted by 0/1 available solvers; majority required.
+- forge-d6a1b8d920 (Ghana): Both halves accepted by 0/1 available solvers; majority required.
+- forge-091487601d (Türkiye): Both halves accepted by 0/1 available solvers; majority required.
+- forge-09bb6d4eff (Canada): Both halves accepted by 0/1 available solvers; majority required.
+- forge-e119dda249 (Peru): Both halves accepted by 0/1 available solvers; majority required.
+- forge-7afd6fbe55 (Chile): Both halves accepted by 0/1 available solvers; majority required.
+- forge-33064a02bc (Cuba): Both halves accepted by 0/1 available solvers; majority required.
+- forge-2114d9c528 (Thailand): Both halves accepted by 0/1 available solvers; majority required.
+- forge-265b8e1590 (Ethiopia): Both halves accepted by 0/1 available solvers; majority required.
+- forge-be29f40710 (Hungary): Both halves accepted by 0/1 available solvers; majority required.
+- forge-7a451ab96f (bat): Fact check half A false: Bats are mammals but do swim
+- forge-690876c4cb (Haumea): Both halves accepted by 0/1 available solvers; majority required.
