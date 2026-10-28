@@ -21,6 +21,8 @@ while (true) {
   const [b1] = round.puzzle.alsoFitsB ?? round.puzzle.halfBAlsoFits;
   await pause(2500); vote('A', 'DemoA1', a1 ?? 'a guess'); vote('A', 'DemoA2', a2 ?? 'another guess'); vote('B', 'DemoB1', b1 ?? 'a guess');
   await pause(3500); vote('A', 'DemoA3', a1 ?? 'a guess'); vote('B', 'DemoB2', 'maybe a console game');
+  // Community A is stuck: three viewers ask for the hint, which unlocks A's extra line.
+  await pause(1500); for (const viewer of ['DemoA1', 'DemoA2', 'DemoA3']) controller.requestHint('A', viewer);
   await pause(4500); vote('A', 'DemoA1', answer); vote('A', 'DemoA2', answer);
   await pause(4500); vote('B', 'DemoB1', answer); vote('B', 'DemoB2', answer);
   await pause(6000); if (round.status === 'active') controller.lockRound();

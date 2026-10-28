@@ -37,8 +37,26 @@ and an overlay link from you.
 7. **Add the overlays.** In the panel, **Copy overlay A link** and add it to your OBS as a 1920 x 1080 browser
    source. **Copy overlay B link for streamer B** and send it to your partner. Each link carries its own key, so it
    only shows its own half.
-8. **Play.** Press **Start round**, or a moderator types `!tc start`. `!tc lock` and `!tc skip` also work for
-   moderators and both broadcasters.
+8. **Play.** Press **Start round** (or <kbd>S</kbd>), or a moderator types `!tc start`. The panel's shortcuts are
+   <kbd>S</kbd> start, <kbd>L</kbd> lock, <kbd>K</kbd> skip, <kbd>,</kbd> settings and <kbd>?</kbd> help.
+9. **End the session.** Press **End session and post recap**. Twinclue builds a shareable page at
+   `PUBLIC_URL/recap/<id>` (rounds, wins, best streak, fastest solve, top voters and the best "your half alone"
+   moments) and the bot posts one chat line with the link.
+
+### Chat commands
+
+| Command | Who | What it does |
+| --- | --- | --- |
+| `!g answer` | Everyone | Votes for your community's answer. You can change it; one person votes for one community per round. |
+| `!hint` | Everyone | Asks for your community's extra hint line. When 3 viewers (or a fifth of your voters, if more) ask, it unlocks on your overlay only. A win is worth 3 points, minus 1 for each community that used its hint. |
+| `!tc start`, `!tc lock` | Moderators and both broadcasters | Starts a round, or locks votes and reveals now. |
+| `!tc skip` | Community A's moderators and broadcaster | Skips the round. It does not count. |
+
+### Sound cues
+
+Add `&sound=1` to an overlay link for short synthesised cues: round start, the last 10 seconds, a hint unlock, the
+reveal and a win. Sound is off by default, so an OBS source never plays anything you did not ask for. In a normal
+browser, click the page once to allow audio.
 
 No partner yet? Turn on **Rehearsal mode** in the panel and type community B's votes yourself. Both overlays and the
 panel say "REHEARSAL", and rehearsal rounds never change the score or post in chat.

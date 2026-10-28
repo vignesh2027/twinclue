@@ -5,6 +5,8 @@ import { Vocabulary, type VocabEntry } from './vocabulary.js';
 export type Community = 'A' | 'B';
 export type RoundStatus = 'pending' | 'active' | 'won' | 'timed-out' | 'unscored';
 export type UnscoredReason = 'not-enough-voters' | 'skipped';
+export type HintResult = 'inactive' | 'unavailable' | 'wrong-side' | 'already-unlocked' | 'repeat' | 'asked' | 'unlocked';
+export const DEFAULT_HINT_THRESHOLD = 3;
 export type VoteResult = 'voted' | 'unchanged' | 'blocked' | 'rate-limited' | 'inactive' | 'wrong-side';
 export interface VoteSample { community: Community; user: string; label: string; at: number }
 export interface VoteBucket { answer: string; count: number }
@@ -12,7 +14,9 @@ export interface SideReveal { topAnswer: string | null; correct: boolean; voters
 export interface ConsensusRule { share: number; holdMs: number; minVotes: number }
 export interface RoundOptions { vocabulary?: VocabEntry[]; cooldownMs?: number; consensus?: Partial<ConsensusRule>; rehearsal?: boolean; sampleTicker?: boolean;
   /** A round with fewer voters than this on either side ends unscored as "not enough voters". */
-  minVotersToWin?: number }
+  minVotersToWin?: number;
+  /** Distinct viewers on one side who must ask (!hint) to unlock that side's hint; scaled up with the side's voters. */
+  hintThreshold?: number }
 
 export const OTHER_LABEL = 'other answers';
 export const DEFAULT_CONSENSUS: ConsensusRule = { share: 0.6, holdMs: 5_000, minVotes: 3 };
@@ -71,6 +75,7 @@ export interface SerializedRound {
   puzzle: Puzzle; status: RoundStatus; startedAt?: number; endedAt?: number; endsAt?: number; rehearsal: boolean;
   buckets: string[]; votesA: Array<[string, number]>; votesB: Array<[string, number]>;
   samples: VoteSample[]; result: Record<Community, SideReveal> | null; finishReason?: string; unscoredReason?: UnscoredReason;
+  hintAsks?: Record<Community, string[]>; hintUnlocked?: Record<Community, boolean>;
 }
 
 export class Round {
@@ -83,6 +88,11 @@ export class Round {
   finishReason?: 'timeout' | 'lock' | 'consensus' | 'skip';
   unscoredReason?: UnscoredReason;
   readonly minVotersToWin: number;
+  readonly hintThreshold: number;
+  readonly hintAsks: Record<Community, Set<string>> = { A: new Set(), B: new Set() };
+  readonly hintUnlocked: Record<Community, boolean> = { A: false, B: false };
+  /** Display names by viewer id, for the session recap's top voters. Never shown on the overlay. */
+  private readonly names: Record<Community, Map<string, string>> = { A: new Map(), B: new Map() };
   result: Record<Community, SideReveal> | null = null;
   readonly rehearsal: boolean;
   readonly vocabulary: Vocabulary;
@@ -101,6 +111,7 @@ export class Round {
     this.consensus = { ...DEFAULT_CONSENSUS, ...options.consensus };
     this.rehearsal = options.rehearsal ?? false;
     this.minVotersToWin = Math.max(1, options.minVotersToWin ?? DEFAULT_MIN_VOTERS_TO_WIN);
+    this.hintThreshold = Math.max(1, options.hintThreshold ?? DEFAULT_HINT_THRESHOLD);
   }
 
   start(at = Date.now(), durationMs?: number): void {
@@ -122,6 +133,7 @@ export class Round {
     const tally = this.tallies[community];
     const current = tally.votes.get(userId);
     const bucket = this.vocabulary.match(normalised) ?? `t:${normalised}`;
+    this.names[community].set(userId, cleanVoteText(displayName, 24) || 'viewer');
     if (current === bucket) { if (sample) this.sample(community, displayName, bucket, at); return 'unchanged'; }
     const changeKey = `${community}:${userId}`;
     if (current !== undefined) {
@@ -214,6 +226,32 @@ export class Round {
   lock(at = Date.now()): void { this.finish(at, 'lock'); }
   timeout(at = Date.now()): void { this.finish(at, 'timeout'); }
 
+  hintText(community: Community): string | undefined { return community === 'A' ? this.puzzle.hintA : this.puzzle.hintB; }
+  /** At least the base threshold, rising with the side's voter count (one fifth of them). */
+  hintNeeded(community: Community): number { return Math.max(this.hintThreshold, Math.ceil(this.voterCount(community) * 0.2)); }
+  get hintsUsed(): number { return Number(this.hintUnlocked.A) + Number(this.hintUnlocked.B); }
+
+  /** One !hint request. Each viewer counts once, and only for the community they belong to this round. */
+  requestHint(community: Community, userId: string): HintResult {
+    if (this.status !== 'active') return 'inactive';
+    if (!this.hintText(community)) return 'unavailable';
+    if (this.hintUnlocked[community]) return 'already-unlocked';
+    if (this.tallies[community === 'A' ? 'B' : 'A'].votes.has(userId) || this.hintAsks[community === 'A' ? 'B' : 'A'].has(userId)) return 'wrong-side';
+    const asks = this.hintAsks[community];
+    if (asks.has(userId)) return 'repeat';
+    asks.add(userId);
+    if (asks.size < this.hintNeeded(community)) return 'asked';
+    this.hintUnlocked[community] = true;
+    return 'unlocked';
+  }
+
+  /** Each voter's display name and whether their final vote was right, per side. */
+  voterOutcomes(): Record<Community, Array<{ name: string; correct: boolean }>> {
+    const answer = this.vocabulary.answerKey;
+    const side = (community: Community) => [...this.tallies[community].votes].map(([user, bucket]) => ({ name: this.names[community].get(user) ?? 'viewer', correct: bucket === answer }));
+    return { A: side('A'), B: side('B') };
+  }
+
   get solveTimeMs(): number | undefined { return this.startedAt === undefined || this.endedAt === undefined ? undefined : this.endedAt - this.startedAt; }
 
   /** Compact snapshot: each vote is [userId, bucket index], so 100,000 votes stay a few megabytes. */
@@ -233,7 +271,8 @@ export class Round {
     const votesA = pack('A');
     const votesB = pack('B');
     return { puzzle: this.puzzle, status: this.status, startedAt: this.startedAt, endedAt: this.endedAt, endsAt: this.endsAt, rehearsal: this.rehearsal,
-      buckets, votesA, votesB, samples: this.recentSamples(), result: this.result, finishReason: this.finishReason, unscoredReason: this.unscoredReason };
+      buckets, votesA, votesB, samples: this.recentSamples(), result: this.result, finishReason: this.finishReason, unscoredReason: this.unscoredReason,
+      hintAsks: { A: [...this.hintAsks.A], B: [...this.hintAsks.B] }, hintUnlocked: { ...this.hintUnlocked } };
   }
 
   static restore(saved: SerializedRound, options: RoundOptions = {}): Round {
@@ -245,6 +284,10 @@ export class Round {
     round.result = saved.result;
     round.finishReason = saved.finishReason as Round['finishReason'];
     round.unscoredReason = saved.unscoredReason;
+    for (const community of ['A', 'B'] as const) {
+      for (const user of saved.hintAsks?.[community] ?? []) round.hintAsks[community].add(user);
+      round.hintUnlocked[community] = Boolean(saved.hintUnlocked?.[community]);
+    }
     // Entity buckets are stored by name, not by key, so a changed fact table cannot misfile a restored vote.
     const buckets = saved.buckets.map(bucket => {
       if (!bucket.startsWith('=')) return bucket;

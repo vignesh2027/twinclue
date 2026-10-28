@@ -24,5 +24,14 @@ export function validatePuzzle(puzzle: Puzzle): string[] {
     if (terms.some((term) => normalized.includes(term))) reasons.push('A half contains the answer or an alias.');
   }
   if (halves.some((half) => blocklist.some((word) => new RegExp(`\\b${word}\\b`, 'i').test(normalisePuzzleText(half))))) reasons.push('A half contains a blocklisted word.');
+  // Hints get the same leak checks as the halves.
+  for (const hint of [puzzle.hintA, puzzle.hintB]) {
+    if (hint === undefined) continue;
+    const normalized = normalisePuzzleText(hint);
+    if (!normalized) reasons.push('A hint must not be empty.');
+    if (hint.trim().split(/\s+/).length > 14) reasons.push('Each hint must use at most 14 words.');
+    if (terms.some((term) => normalized.includes(term))) reasons.push('A hint contains the answer or an alias.');
+    if (blocklist.some((word) => new RegExp(`\\b${word}\\b`, 'i').test(normalized))) reasons.push('A hint contains a blocklisted word.');
+  }
   return [...new Set(reasons)];
 }

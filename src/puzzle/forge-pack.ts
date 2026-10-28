@@ -8,6 +8,7 @@ import {PuzzleSchema,type Puzzle} from './types.js';
 import {clientsForModels} from '../llm/providers.js';
 import {BlindPuzzleAuditor,AUDIT_VERSION,MIN_VALID_SOLVERS,buildReport,clueText,invalidAnswerReason,puzzleFingerprint,statusOf,type PuzzleAuditResult} from './audit.js';
 import {DEFAULT_FACT_MODELS,factCheckCandidates} from './fact-check.js';
+import {withHints} from './hints.js';
 import {normaliseGuess} from '../game/referee.js';
 import {parseCsv} from './csv.js';
 
@@ -18,6 +19,8 @@ const maxPack=Number(process.env.FORGE_TARGET??80);
 const passTarget=Number(process.env.FORGE_PASS_TARGET??60);
 // --dry-run stops after the deterministic search, validation and quota selection.
 const dryRun=process.argv.includes('--dry-run');
+// --hints adds hint lines to the shipped pack without auditing again; halves, ids and fingerprints do not change.
+const hintsOnly=process.argv.includes('--hints');
 const quotaPath=resolve('data/forge-progress.json');const reportPath=resolve('src/puzzle/audit-report.json');const verdictsPath=resolve('facts/verdicts.json');
 async function loadTables():Promise<FactTable[]>{const custom=process.argv.find((x,i,a)=>a[i-1]==='--table');if(custom){if(!/^custom\/[A-Za-z0-9._/-]+\.csv$/.test(custom)||custom.split('/').includes('..'))throw new Error('Use a CSV path inside facts/custom/.');return [await readCustomCsv(resolve('facts',custom))];}const files=(await readdir('facts')).filter(f=>f.endsWith('.json')&&f!=='verdicts.json');return Promise.all(files.map(async file=>{const raw=JSON.parse(await readFile(resolve('facts',file),'utf8')) as {_meta:{category:string;sources:string[];license:string};entities:FactTable['entities']};return {category:raw._meta.category,entities:raw.entities,sources:raw._meta.sources,license:raw._meta.license};}));}
 async function readCustomCsv(path:string):Promise<FactTable>{const text=await readFile(path,'utf8');const rows=parseCsv(text);if(rows.length<2)throw new Error('Custom fact table needs a header and at least one entity.');const [header,...data]=rows;if(!header||header[0]?.toLowerCase()!=='name'||header[1]?.toLowerCase()!=='aliases'||header[2]?.toLowerCase()!=='fame')throw new Error('CSV columns must start with name, aliases, fame, then attributes.');const entities=data.filter(row=>row.some(Boolean)).map(row=>{const values=Object.fromEntries(header.map((key,i)=>[key,row[i]??'']));const fame=Number(values.fame);if(!values.name?.trim()||![1,2,3].includes(fame))throw new Error('Every custom row needs a name and fame score of 1, 2, or 3.');const attributes:Record<string,string|string[]|number|boolean>={};for(const key of header.slice(3)){const raw=values[key]??'';if(raw)attributes[key]=raw.includes('|')?raw.split('|').map(v=>v.trim()).filter(Boolean):raw;}return {name:values.name??'',aliases:(values.aliases??'').split('|').filter(Boolean),fame:fame as 1|2|3,attributes};});return {category:basename(path,'.csv'),entities,sources:[`User supplied ${path}`],license:'User supplied; rights remain with the uploader'};}
@@ -62,7 +65,8 @@ const FORGE_VERSION=6;
 const pct=(value:number|null)=>value===null?'not measured':`${(value*100).toFixed(1)}%`;
 
 async function main():Promise<void>{
-  const tables=await loadTables();const found=searchTables(tables,5);const valid=found.filter(candidate=>PuzzleSchema.safeParse(candidate).success&&validatePuzzle(candidate).length===0);const chosen=chooseCandidates(valid,maxPack);
+  const tables=await loadTables();
+  if(hintsOnly){const {forgedPack}=await import('./forged-pack.js');const updated=forgedPack.map(puzzle=>withHints(puzzle,tables));await writeFile('src/puzzle/forged-pack.ts',`import type { Puzzle } from './types.js';\nexport const forgedPack: Puzzle[]=${JSON.stringify(updated,null,2)};\n`);console.log(`Hints added: ${updated.filter(p=>p.hintA).length} half A and ${updated.filter(p=>p.hintB).length} half B of ${updated.length} puzzles.`);return;}const found=searchTables(tables,5);const valid=found.filter(candidate=>PuzzleSchema.safeParse(candidate).success&&validatePuzzle(candidate).length===0);const chosen=chooseCandidates(valid,maxPack);
   const selectedCounts=Object.fromEntries(Object.entries(FORGE_QUOTAS).map(([table,quota])=>[table,{target:quota,available:valid.filter(candidate=>candidate.sourceTable===table).length,selected:chosen.filter(candidate=>candidate.sourceTable===table).length}]));
   console.log(`Constraint search produced ${found.length} unique-answer candidates, ${found.length-valid.length} failed validation, ${chosen.length} selected.`);console.log(`Category quota availability: ${JSON.stringify(selectedCounts)}`);
   if(dryRun){for(const [table,counts] of Object.entries(selectedCounts))console.log(`${table}: ${counts.available} available, ${counts.selected} selected of ${counts.target}`);console.log('Dry run: no model calls, audits, fact checks, pack files or checkpoints.');return;}
@@ -118,7 +122,8 @@ async function main():Promise<void>{
   await checkpoint();
 
   await mkdir('src/puzzle',{recursive:true});
-  await writeFile('src/puzzle/forged-pack.ts',`import type { Puzzle } from './types.js';\nexport const forgedPack: Puzzle[]=${JSON.stringify(kept,null,2)};\n`);
+  // Each kept puzzle carries one !hint line per half, chosen from its own table and leak-checked.
+  await writeFile('src/puzzle/forged-pack.ts',`import type { Puzzle } from './types.js';\nexport const forgedPack: Puzzle[]=${JSON.stringify(kept.map(puzzle=>withHints(puzzle as Puzzle,tables)),null,2)};\n`);
   await writeFile('src/puzzle/pack.ts',"import { forgedPack } from './forged-pack.js';\nexport const puzzlePack=forgedPack;\n");
   const audited=candidates.filter(candidate=>results.has(candidate.id)).map(candidate=>results.get(candidate.id)!);
   const categories=Object.fromEntries([...ranked].map(([table,list])=>{const rows=list.map(candidate=>results.get(candidate.id)).filter((row):row is PuzzleAuditResult=>Boolean(row));const passed=rows.filter(row=>statusOf(row)==='passed').length;const failed=rows.filter(row=>statusOf(row)==='failed').length;const pending=rows.filter(row=>statusOf(row)==='pending').length;return [table,{quota:FORGE_QUOTAS[table]??0,candidates:list.length,audited:passed+failed,passed,failed,pending,factRejected:list.filter(candidate=>factRejected.has(candidate.id)).length,passRate:passed+failed?passed/(passed+failed):null,kept:kept.filter(candidate=>candidate.sourceTable===table).length}];}));

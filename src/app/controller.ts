@@ -1,5 +1,6 @@
 import { Session, type SessionStore } from '../game/session.js';
-import { Round, type Community, type ConsensusRule, type RoundOptions, type VoteBucket, type VoteResult } from '../game/round.js';
+import { Round, type Community, type ConsensusRule, type HintResult, type RoundOptions, type VoteBucket, type VoteResult } from '../game/round.js';
+import type { Scoreboard } from '../game/session.js';
 import type { VocabEntry } from '../game/vocabulary.js';
 import type { Puzzle } from '../puzzle/types.js';
 import { vocabularyFor } from '../puzzle/vocabulary-source.js';
@@ -17,22 +18,27 @@ export interface OverlayState {
   type: 'state'; seq: number; serverNow: number; demo: boolean; unauditedDemo: boolean; rehearsal: boolean; side: OverlayView; commandPrefix: string;
   roundStatus: 'idle' | 'active' | 'won' | 'timed-out' | 'unscored'; category: string | null; half: string | null; startedAt: number | null; endsAt: number | null;
   leading: string | null; voters: number; buckets: VoteBucket[]; otherVotes: number; recentVotes: Array<{ user: string; label: string }>;
-  scoreboard: { rounds: number; wins: number; streak: number };
+  scoreboard: Scoreboard;
+  /** This side's hint vote. The text is present only once this side has unlocked it. */
+  hint: { available: boolean; asks: number; needed: number; text: string | null };
   reveal?: { answer: string; halfA: string; halfB: string; alsoFitsA: string[]; alsoFitsB: string[]; setSizeA: number; setSizeB: number;
     sideA: { topAnswer: string | null; correct: boolean; voters: number }; sideB: { topAnswer: string | null; correct: boolean; voters: number };
-    solveTimeMs: number | null; finishReason: string | null; unscoredReason: string | null };
+    solveTimeMs: number | null; finishReason: string | null; unscoredReason: string | null; hintsUsed: number };
 }
+export interface HintStatus { available: boolean; asks: number; needed: number; unlocked: boolean }
 export interface PanelState {
   type: 'panel-state'; demo: boolean; rehearsal: boolean; health: Health; scoreboard: Session['scoreboard']; roundStatus: string; endsAt: number | null;
   roundLengthSeconds: number; category: string; difficulty: string; options: { categories: string[]; difficultiesByCategory: Record<string, string[]> };
   recentVotes: { a: Array<{ user: string; label: string }>; b: Array<{ user: string; label: string }> }; leading: { a: string | null; b: string | null };
-  voters: { a: number; b: number }; packSize: number;
+  voters: { a: number; b: number }; packSize: number; startedAt: number | null; serverNow: number;
+  /** Hint progress per side, without the hint text: the panel never shows clue content. */
+  hints: { a: HintStatus; b: HintStatus };
 }
 export type ClientMessage = OverlayState | PanelState;
 
 export interface ControllerOptions {
   demo?: boolean; now?: () => number; store?: SessionStore; metrics?: Metrics; vocabularies?: Map<string, VocabEntry[]>;
-  cooldownMs?: number; consensus?: Partial<ConsensusRule>; minVotersToWin?: number; frameIntervalMs?: number; commandPrefix?: string;
+  cooldownMs?: number; consensus?: Partial<ConsensusRule>; minVotersToWin?: number; hintThreshold?: number; frameIntervalMs?: number; commandPrefix?: string;
   /** Above this many votes per second the ticker stops sampling; votes and transitions are never shed. */
   shedTickerAboveRate?: number;
   onRoundEvent?: (event: RoundEvent) => void;
@@ -41,8 +47,8 @@ export interface ControllerOptions {
 const MAX_PENDING_RECEIPTS = 20_000;
 const sideOf = (view: OverlayView): Community => (view === 'a' ? 'A' : 'B');
 
-export function makeRoundOptions(options: Pick<ControllerOptions, 'vocabularies' | 'cooldownMs' | 'consensus' | 'minVotersToWin'>): (puzzle: Puzzle) => RoundOptions {
-  return puzzle => ({ vocabulary: options.vocabularies ? vocabularyFor(puzzle, options.vocabularies) : undefined, cooldownMs: options.cooldownMs, consensus: options.consensus, minVotersToWin: options.minVotersToWin });
+export function makeRoundOptions(options: Pick<ControllerOptions, 'vocabularies' | 'cooldownMs' | 'consensus' | 'minVotersToWin' | 'hintThreshold'>): (puzzle: Puzzle) => RoundOptions {
+  return puzzle => ({ vocabulary: options.vocabularies ? vocabularyFor(puzzle, options.vocabularies) : undefined, cooldownMs: options.cooldownMs, consensus: options.consensus, minVotersToWin: options.minVotersToWin, hintThreshold: options.hintThreshold });
 }
 
 export class GameController {
@@ -128,14 +134,26 @@ export class GameController {
       leading: round?.leaderLabel(side) ?? null, voters: round?.voterCount(side) ?? 0, buckets: display.buckets, otherVotes: display.other,
       recentVotes: (round?.recentSamples(side, 3) ?? []).map(sample => ({ user: sample.user, label: sample.label })),
       scoreboard: this.session.scoreboard,
+      hint: this.hintStatus(round, side, true),
       ...(reveal ? { reveal: {
         answer: puzzle!.answer, halfA: puzzle!.halfA, halfB: puzzle!.halfB, alsoFitsA: alsoA, alsoFitsB: alsoB,
         setSizeA: puzzle!.predicates?.setSizeA ?? alsoA.length + 1, setSizeB: puzzle!.predicates?.setSizeB ?? alsoB.length + 1,
         sideA: round!.result?.A ?? { topAnswer: null, correct: false, voters: round!.voterCount('A') },
         sideB: round!.result?.B ?? { topAnswer: null, correct: false, voters: round!.voterCount('B') },
-        solveTimeMs: round!.solveTimeMs ?? null, finishReason: round!.finishReason ?? null, unscoredReason: round!.unscoredReason ?? null,
+        solveTimeMs: round!.solveTimeMs ?? null, finishReason: round!.finishReason ?? null, unscoredReason: round!.unscoredReason ?? null, hintsUsed: round!.hintsUsed,
       } } : {}),
     };
+  }
+
+  private hintStatus(round: Round | undefined, side: Community, withText: true): OverlayState['hint'];
+  private hintStatus(round: Round | undefined, side: Community, withText: false): HintStatus;
+  private hintStatus(round: Round | undefined, side: Community, withText: boolean): OverlayState['hint'] | HintStatus {
+    const active = round?.status === 'active';
+    const available = Boolean(active && round!.hintText(side));
+    const asks = round?.hintAsks[side].size ?? 0;
+    const needed = round ? round.hintNeeded(side) : 0;
+    const unlocked = Boolean(round?.hintUnlocked[side]);
+    return withText ? { available, asks, needed, text: unlocked ? round!.hintText(side) ?? null : null } : { available, asks, needed, unlocked };
   }
 
   /** The panel never receives either clue half: the streamer running it plays on one side. */
@@ -149,7 +167,8 @@ export class GameController {
       roundStatus: round?.status ?? 'idle', endsAt: round?.status === 'active' ? round.endsAt ?? null : null, roundLengthSeconds: this.roundLengthSeconds,
       category: this.category, difficulty: this.difficulty, options: { categories, difficultiesByCategory },
       recentVotes: { a: recent('A'), b: recent('B') }, leading: { a: round?.leaderLabel('A') ?? null, b: round?.leaderLabel('B') ?? null },
-      voters: { a: round?.voterCount('A') ?? 0, b: round?.voterCount('B') ?? 0 }, packSize: this.pack.length,
+      voters: { a: round?.voterCount('A') ?? 0, b: round?.voterCount('B') ?? 0 }, packSize: this.pack.length, startedAt: round?.status === 'active' ? round.startedAt ?? null : null, serverNow: this.now(),
+      hints: { a: this.hintStatus(round, 'A', false), b: this.hintStatus(round, 'B', false) },
     };
   }
 
@@ -191,6 +210,17 @@ export class GameController {
       if (shedTicker) metrics?.shed.inc({ kind: 'ticker' }); else this.markDirty(opts.receivedAt);
     }
     if (shedTicker && result === 'voted') metrics?.shed.inc({ kind: 'ticker' });
+    return result;
+  }
+
+  /** A viewer's !hint. Unlocking flushes at once so the overlay can celebrate it. */
+  requestHint(community: Community, userId: string): HintResult {
+    const round = this.session.current;
+    if (!round) return 'inactive';
+    const result = round.requestHint(community, userId);
+    this.options.metrics?.hints.inc({ result: result.replace(/-/g, '_') });
+    if (result === 'unlocked') { void this.options.store?.now(this.session); this.flush(true); }
+    else if (result === 'asked') { this.options.store?.request(this.session); this.markDirty(); }
     return result;
   }
 

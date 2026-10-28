@@ -73,7 +73,9 @@ export const forgedPack: Puzzle[]=[
       "Geralt",
       "Sephiroth",
       "Shulk"
-    ]
+    ],
+    "hintA": "A character is a silent protagonist.",
+    "hintB": "A character debuted in an action-adventure game."
   },
   {
     "id": "forge-7e8cb07986",
@@ -140,7 +142,9 @@ export const forgedPack: Puzzle[]=[
       "Ryu",
       "Albert Wesker",
       "Ken Masters"
-    ]
+    ],
+    "hintA": "A character is male.",
+    "hintB": "A character is male."
   },
   {
     "id": "forge-4fc54ce6db",
@@ -203,7 +207,9 @@ export const forgedPack: Puzzle[]=[
       "Dr. Eggman",
       "Porky Minch",
       "King K. Rool"
-    ]
+    ],
+    "hintA": "A character first appeared in the 1990s.",
+    "hintB": "A character first appeared in the 1990s."
   },
   {
     "id": "forge-c4a645943d",
@@ -283,7 +289,9 @@ export const forgedPack: Puzzle[]=[
       "Philippines",
       "Singapore",
       "United Kingdom"
-    ]
+    ],
+    "hintA": "A country has a cross on its flag.",
+    "hintB": "A country is in Europe."
   },
   {
     "id": "forge-3f36e4a0b8",
@@ -363,7 +371,9 @@ export const forgedPack: Puzzle[]=[
       "Kenya",
       "Nigeria",
       "South Africa"
-    ]
+    ],
+    "hintA": "A country has green in its flag.",
+    "hintB": "A country is mainly Arabic-speaking."
   },
   {
     "id": "forge-165704b5d9",
@@ -436,7 +446,9 @@ export const forgedPack: Puzzle[]=[
       "Fiji",
       "New Zealand",
       "Singapore"
-    ]
+    ],
+    "hintA": "A country is in South America.",
+    "hintB": "A country drives on the right."
   },
   {
     "id": "forge-08838cb671",
@@ -518,7 +530,9 @@ export const forgedPack: Puzzle[]=[
       "Netherlands",
       "Sweden",
       "United Kingdom"
-    ]
+    ],
+    "hintA": "A country has a coastline.",
+    "hintB": "A country is a monarchy."
   },
   {
     "id": "forge-5843427be1",
@@ -589,7 +603,9 @@ export const forgedPack: Puzzle[]=[
       "Greece",
       "Iran",
       "Iraq"
-    ]
+    ],
+    "hintA": "A country has green in its flag.",
+    "hintB": "A country is in Europe."
   },
   {
     "id": "forge-289c87bf59",
@@ -673,7 +689,9 @@ export const forgedPack: Puzzle[]=[
       "New Zealand",
       "Norway",
       "United Kingdom"
-    ]
+    ],
+    "hintA": "A country is not in the European Union.",
+    "hintB": "A country borders Germany."
   },
   {
     "id": "forge-20e5fc7f57",
@@ -748,7 +766,9 @@ export const forgedPack: Puzzle[]=[
       "Singapore",
       "Sri Lanka",
       "United Kingdom"
-    ]
+    ],
+    "hintA": "A country uses the peso as its currency.",
+    "hintB": "A country has a star on its flag."
   },
   {
     "id": "forge-836ad8450a",
@@ -856,7 +876,9 @@ export const forgedPack: Puzzle[]=[
       "Spain",
       "Sweden",
       "United Kingdom"
-    ]
+    ],
+    "hintA": "A country is an island nation.",
+    "hintB": "A country drives on the left."
   },
   {
     "id": "forge-cdbfc9b572",
@@ -936,7 +958,9 @@ export const forgedPack: Puzzle[]=[
       "opossum",
       "raccoon",
       "skunk"
-    ]
+    ],
+    "hintA": "An animal has hooves.",
+    "hintB": "An animal has four legs."
   },
   {
     "id": "forge-1d1813e286",
@@ -1028,7 +1052,8 @@ export const forgedPack: Puzzle[]=[
       "pig",
       "rabbit",
       "sheep"
-    ]
+    ],
+    "hintA": "An animal has four legs."
   },
   {
     "id": "forge-161e9d7023",
@@ -1147,7 +1172,9 @@ export const forgedPack: Puzzle[]=[
       "parrot",
       "peacock",
       "swan"
-    ]
+    ],
+    "hintA": "An animal is black and white.",
+    "hintB": "An animal lives in the wild."
   },
   {
     "id": "forge-b8813f0192",
@@ -1219,7 +1246,9 @@ export const forgedPack: Puzzle[]=[
       "satay",
       "tacos",
       "tteokbokki"
-    ]
+    ],
+    "hintA": "A dish is usually served hot.",
+    "hintB": "A dish is usually served hot."
   },
   {
     "id": "forge-19753100c9",
@@ -1291,7 +1320,9 @@ export const forgedPack: Puzzle[]=[
       "pani puri",
       "samosa",
       "spring roll"
-    ]
+    ],
+    "hintA": "A dish is usually served hot.",
+    "hintB": "A dish is usually savoury."
   },
   {
     "id": "forge-0fc13d8985",
@@ -1353,7 +1384,8 @@ export const forgedPack: Puzzle[]=[
       "nachos",
       "polenta",
       "tamales"
-    ]
+    ],
+    "hintA": "A dish comes from the United States."
   },
   {
     "id": "forge-774c053ae4",
@@ -1473,7 +1505,9 @@ export const forgedPack: Puzzle[]=[
       "nachos",
       "tamales",
       "cornbread"
-    ]
+    ],
+    "hintA": "A dish is usually served hot.",
+    "hintB": "A dish is usually savoury."
   },
   {
     "id": "forge-ed80615956",
@@ -1537,7 +1571,9 @@ export const forgedPack: Puzzle[]=[
       "chole bhature",
       "hummus",
       "dhokla"
-    ]
+    ],
+    "hintA": "A dish is a popular street food.",
+    "hintB": "A dish is usually served hot."
   },
   {
     "id": "forge-5de71bc762",
@@ -1618,7 +1654,9 @@ export const forgedPack: Puzzle[]=[
       "spring roll",
       "mapo tofu",
       "xiaolongbao"
-    ]
+    ],
+    "hintA": "A dish is usually stir-fried.",
+    "hintB": "A dish is usually served hot."
   },
   {
     "id": "forge-2973d3dfee",
@@ -1703,7 +1741,9 @@ export const forgedPack: Puzzle[]=[
       "poha",
       "onigiri",
       "tteokbokki"
-    ]
+    ],
+    "hintA": "A dish is usually served hot.",
+    "hintB": "A dish is usually served hot."
   },
   {
     "id": "forge-29194f9716",
@@ -1759,7 +1799,9 @@ export const forgedPack: Puzzle[]=[
       "nachos",
       "quesadilla",
       "tacos"
-    ]
+    ],
+    "hintA": "A dish is usually served hot.",
+    "hintB": "A dish is mainly made with corn."
   },
   {
     "id": "forge-3d42d657d0",
@@ -1811,7 +1853,9 @@ export const forgedPack: Puzzle[]=[
       "pad see ew",
       "pad thai",
       "mango sticky rice"
-    ]
+    ],
+    "hintA": "A dish is usually served hot.",
+    "hintB": "A dish is usually savoury."
   },
   {
     "id": "forge-bfb227a198",
@@ -1883,7 +1927,9 @@ export const forgedPack: Puzzle[]=[
       "sarod",
       "shehnai",
       "tambura"
-    ]
+    ],
+    "hintA": "An instrument is made of bamboo.",
+    "hintB": "An instrument belongs to the woodwind family."
   },
   {
     "id": "forge-30054dde67",
@@ -1943,7 +1989,9 @@ export const forgedPack: Puzzle[]=[
       "erhu",
       "guzheng",
       "pipa"
-    ]
+    ],
+    "hintA": "An instrument comes from Asia.",
+    "hintB": "An instrument is made of bamboo."
   },
   {
     "id": "forge-0154b54d89",
@@ -2005,7 +2053,9 @@ export const forgedPack: Puzzle[]=[
       "veena",
       "bouzouki",
       "pipa"
-    ]
+    ],
+    "hintA": "An instrument belongs to the strings family.",
+    "hintB": "An instrument comes from Europe."
   },
   {
     "id": "forge-5245adec6a",
@@ -2059,7 +2109,9 @@ export const forgedPack: Puzzle[]=[
       "guzheng",
       "pipa",
       "sheng"
-    ]
+    ],
+    "hintA": "An instrument comes from Asia.",
+    "hintB": "An instrument is a fretless string instrument."
   },
   {
     "id": "forge-cec9a54e17",
@@ -2126,7 +2178,9 @@ export const forgedPack: Puzzle[]=[
       "Deimos",
       "Triton",
       "Umbriel"
-    ]
+    ],
+    "hintA": "An object has no moons.",
+    "hintB": "An object has a name from Roman myth."
   },
   {
     "id": "forge-ac5b802003",
@@ -2195,7 +2249,9 @@ export const forgedPack: Puzzle[]=[
       "Eris",
       "Haumea",
       "Makemake"
-    ]
+    ],
+    "hintA": "An object has a name from Roman myth.",
+    "hintB": "An object has been known since ancient times."
   },
   {
     "id": "forge-431df05c79",
@@ -2252,7 +2308,9 @@ export const forgedPack: Puzzle[]=[
       "Enceladus",
       "Europa",
       "Titan"
-    ]
+    ],
+    "hintA": "An object is an icy world.",
+    "hintB": "An object was discovered by Galileo Galilei."
   },
   {
     "id": "forge-0352d68a5e",
@@ -2329,7 +2387,9 @@ export const forgedPack: Puzzle[]=[
       "surfing",
       "taekwondo",
       "wrestling"
-    ]
+    ],
+    "hintA": "A sport has never been in the Olympics.",
+    "hintB": "A sport is not a combat sport."
   },
   {
     "id": "forge-09857ed25d",
@@ -2414,7 +2474,9 @@ export const forgedPack: Puzzle[]=[
       "squash",
       "volleyball",
       "padel"
-    ]
+    ],
+    "hintA": "A sport keeps score in points.",
+    "hintB": "A sport is an individual sport."
   },
   {
     "id": "forge-abf8ec3239",
@@ -2494,7 +2556,9 @@ export const forgedPack: Puzzle[]=[
       "table tennis",
       "taekwondo",
       "wrestling"
-    ]
+    ],
+    "hintA": "A sport comes from England.",
+    "hintB": "A sport is played with a racket."
   },
   {
     "id": "forge-f0db3d3caa",
@@ -2600,6 +2664,8 @@ export const forgedPack: Puzzle[]=[
       "taekwondo",
       "weightlifting",
       "wrestling"
-    ]
+    ],
+    "hintA": "A sport is usually played on grass.",
+    "hintB": "A sport is not a combat sport."
   }
 ];

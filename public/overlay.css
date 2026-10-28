@@ -84,6 +84,12 @@ html,body{width:100%;height:100%;margin:0;background:transparent;color:var(--pap
 .hook{font-size:1rem;line-height:1.35;color:var(--text);margin:0 0 .25rem}
 .cta{display:inline-block;font-size:1.05rem;line-height:1.25;font-weight:900;margin:0 0 .8rem;padding:.3rem .7rem;border-radius:.55rem;color:#fff;background:color-mix(in srgb,var(--accent),transparent 80%);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent),transparent 55%)}
 
+.hint{display:flex;align-items:baseline;gap:.6rem;margin:-.2rem 0 .75rem;padding:.4rem .7rem;border-radius:.6rem;background:rgba(255,255,255,.05);font-size:.9rem;color:var(--text)}
+.hint-label{flex:none;font-size:.875rem;font-weight:900;letter-spacing:.12em;color:var(--muted)}
+.hint-text{margin:0;line-height:1.35}
+.hint.unlocked{position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(253,230,138,.16),rgba(253,230,138,.06));box-shadow:inset 0 0 0 1px rgba(253,230,138,.45);font-size:1.05rem;font-weight:800;color:#fff;animation:hint-in .7s var(--ease) both}
+.hint.unlocked .hint-label{color:var(--gold)}
+.hint.unlocked::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-100%);animation:hint-sweep 1.6s .3s var(--ease) both}
 .meters{display:flex;align-items:stretch;gap:.5rem}
 .meter{flex:1;min-width:0;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:.1rem .55rem;padding:.5rem .65rem;border-radius:.75rem;background:rgba(255,255,255,.05);color:var(--a)}
 .meter-b{color:var(--b)}
@@ -204,6 +210,8 @@ html,body{width:100%;height:100%;margin:0;background:transparent;color:var(--pap
 .burst i:nth-child(24){--x:36.2rem;--y:-1.7rem;--r:520deg;--d:0.58s;--c:#ffffff;--s:0.81}
 
 @keyframes confetti{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.4)}8%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translate(var(--x),calc(var(--y) + 9rem)) rotate(var(--r)) scale(1)}}
+@keyframes hint-in{0%{opacity:0;transform:scale(.96)}60%{opacity:1;transform:scale(1.02)}100%{transform:none}}
+@keyframes hint-sweep{to{transform:translateX(100%)}}
 @keyframes live{0%{box-shadow:0 0 0 0 rgba(239,68,68,.7)}100%{box-shadow:0 0 0 .55rem rgba(239,68,68,0)}}
 @keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(14rem,8rem) scale(1.15)}}
 @keyframes appear{from{opacity:0;transform:translateY(.6rem)}to{opacity:1;transform:none}}

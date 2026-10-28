@@ -7,6 +7,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { z } from 'zod';
 import type { Metrics } from '../obs/metrics.js';
 import type { GameController, View } from './controller.js';
+import { RecapStore, buildRecap, newRecapId, renderRecapPage, type Recap } from './recap.js';
 
 export interface WebSecurity {
   /** Required for the panel, /api/*, /auth/* and /metrics. When absent (demo and tests on localhost) those routes are open. */
@@ -17,7 +18,9 @@ export interface WebSecurity {
 export interface Readiness { ready: boolean; reasons: string[]; detail: unknown }
 export interface WebOptions {
   security?: WebSecurity; metrics?: Metrics; readiness?: () => Readiness; publicUrl?: string;
-  onRecap?: () => Promise<boolean>;
+  /** Posts the recap link in chat (once, even under Shared Chat). Resolves whether Twitch accepted it. */
+  postRecap?: (url: string, recap: Recap) => Promise<boolean>;
+  recaps?: RecapStore;
   /** Frames above this many buffered bytes are skipped for that socket (and resent shortly), except round transitions. */
   slowSocketBytes?: number;
 }
@@ -180,10 +183,22 @@ export function registerWebRoutes(app: FastifyInstance, controller: GameControll
     if (!parsed.success) return reply.code(400).send({ error: 'Type a vote of up to 80 characters.' });
     try { return { result: controller.rehearsalVote(parsed.data.text) }; } catch (error) { return reply.code(409).send({ error: error instanceof Error ? error.message : 'Rehearsal is off.' }); }
   });
-  app.post('/api/recap', { preHandler: requireAdmin }, async (_request, reply) => {
-    if (!options.onRecap) return reply.code(409).send({ error: 'Chat is not connected.' });
-    return { sent: await options.onRecap() };
+  // End of session: a shareable recap page, and one chat line linking to it.
+  const recaps = options.recaps ?? new RecapStore();
+  const baseUrl = (request: FastifyRequest) => (options.publicUrl ?? `${request.protocol}://${request.headers.host}`).replace(/\/$/, '');
+  app.post('/api/recap', { preHandler: requireAdmin }, async request => {
+    const recap = buildRecap(controller.session, newRecapId());
+    await recaps.save(recap);
+    const url = `${baseUrl(request)}/recap/${recap.id}`;
+    const sent = options.postRecap ? await options.postRecap(url, recap) : false;
+    return { id: recap.id, url, sent };
   });
+  app.get('/recap/:id', async (request, reply) => {
+    const recap = await recaps.load((request.params as { id: string }).id);
+    if (!recap) return reply.code(404).type('text/html; charset=utf-8').send('<!doctype html><title>Twinclue</title><p>This recap does not exist.</p>');
+    return reply.type('text/html; charset=utf-8').header('cache-control', 'public, max-age=300').send(renderRecapPage(recap, baseUrl(request)));
+  });
+  app.get('/og-recap.png', async (_request, reply) => reply.type('image/png').header('cache-control', 'public, max-age=86400').send(await readFile(resolve('public/og-recap.png'))));
   app.addHook('onClose', async () => { for (const client of wss.clients) client.terminate(); wss.close(); });
   return wss;
 }

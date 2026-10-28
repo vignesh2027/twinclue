@@ -1,50 +1,100 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Twinclue Control Panel</title><link rel="stylesheet" href="/panel.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Twinclue Control</title><link rel="icon" href="/logo.svg"><link rel="stylesheet" href="/panel.css"></head>
 <body>
-<header>
-  <div class="identity"><img src="/logo.svg" alt=""><div><div class="brand">TWINCLUE</div><h1>Show control</h1></div></div>
-  <div class="tags"><span id="rehearsal-tag" class="demo rehearsal" hidden>REHEARSAL</span><span id="demo" class="demo" hidden>DEMO MODE</span></div>
+<header class="top">
+  <div class="brand"><img src="/logo.svg" alt=""><span class="wordmark">TWIN<em>CLUE</em></span><span class="divider"></span><span class="title">Show control</span></div>
+  <div class="tags"><span id="demo" class="tag tag-demo" hidden>DEMO</span><span id="rehearsal-tag" class="tag tag-rehearsal" hidden>REHEARSAL</span></div>
+  <div class="top-right"><span id="health-summary" class="summary"><i></i><span>Checking</span></span><button id="open-settings" class="ghost" type="button">Settings <kbd>,</kbd></button><button id="open-help" class="ghost" type="button" aria-label="Keyboard shortcuts"><kbd>?</kbd></button></div>
 </header>
+
 <main>
-  <section id="login" class="login" hidden>
+  <section id="login" class="card login" hidden>
     <h2>Enter the admin token</h2>
     <p>Use the ADMIN_TOKEN from your .env file. It stays in this browser tab only.</p>
-    <form id="login-form"><input id="token" type="password" autocomplete="off" aria-label="Admin token"><button class="primary" type="submit">Open panel</button></form>
+    <form id="login-form"><input id="token" type="password" autocomplete="off" aria-label="Admin token"><button class="btn btn-start" type="submit">Open panel</button></form>
   </section>
-  <div id="app" hidden>
-    <section class="connections">
-      <article class="community-a"><span class="status-dot" id="status-a"></span><div><small>COMMUNITY A</small><strong id="channel-a">Not connected</strong><p id="error-a" class="error"></p></div></article>
-      <article class="community-b"><span class="status-dot" id="status-b"></span><div><small>COMMUNITY B</small><strong id="channel-b">Not connected</strong><p id="error-b" class="error"></p></div></article>
+
+  <div id="app" class="layout" hidden>
+    <section class="card actions" aria-label="Round controls">
+      <button id="start" class="btn btn-start" type="button"><span>Start round</span><kbd>S</kbd></button>
+      <button id="lock" class="btn btn-lock" type="button"><span>Lock votes</span><kbd>L</kbd></button>
+      <button id="skip" class="btn btn-skip" type="button"><span>Skip round</span><kbd>K</kbd></button>
+      <div class="actions-note"><b id="next-up">Next: games, medium, 90 seconds</b><span>Skip does not count. Lock reveals now and scores both chats' current leaders.</span></div>
     </section>
-    <section class="account">
-      <span id="bot-status">Bot account: checking</span>
-      <span id="shared-status"></span>
-      <button id="connect-bot" class="secondary" type="button">Connect bot account</button>
-    </section>
-    <section class="controls">
-      <div class="actions"><button id="start" class="primary">Start round</button><button id="lock" class="secondary">Lock votes now</button><button id="skip" class="secondary">Skip round</button></div>
-      <div class="settings">
-        <label>Category<select id="category"></select></label>
-        <label>Difficulty<select id="difficulty"></select></label>
-        <label>Round length <span id="duration-label">90 seconds</span><input id="duration" type="range" min="30" max="300" step="15" value="90"></label>
+
+    <section class="card round" aria-label="Live round">
+      <div class="card-head"><h2>Live round</h2><span id="round-status" class="pill" data-state="idle">NEXT ROUND SOON</span></div>
+      <div class="timer"><strong id="time-left">0:00</strong><div class="bar"><i id="time-bar"></i></div><small id="round-meta">No round running</small></div>
+      <div class="sides">
+        <article class="side side-a">
+          <header><b>COMMUNITY A</b><span id="voters-a">0 voters</span></header>
+          <p class="leader">Leading <strong id="leader-a">No leader yet</strong></p>
+          <p class="hint-status" id="hint-a">Hint: not used</p>
+          <ul id="votes-a" class="votes"></ul>
+        </article>
+        <article class="side side-b">
+          <header><b>COMMUNITY B</b><span id="voters-b">0 voters</span></header>
+          <p class="leader">Leading <strong id="leader-b">No leader yet</strong></p>
+          <p class="hint-status" id="hint-b">Hint: not used</p>
+          <ul id="votes-b" class="votes"></ul>
+        </article>
       </div>
+      <p class="fine">Neither clue is ever shown here, so the host can play fairly.</p>
     </section>
-    <section class="score"><span>SESSION SCORE</span><strong id="wins">0</strong><small id="wins-label">wins</small><span class="streak-label">CURRENT STREAK</span><strong id="streak">0</strong><button id="recap" class="secondary" type="button">Post recap in chat</button></section>
-    <section class="rehearsal-box">
-      <label class="toggle"><input id="rehearsal" type="checkbox"> Rehearsal mode (no partner yet: you play community B from here)</label>
-      <form id="rehearsal-form" hidden><input id="rehearsal-text" maxlength="80" placeholder="Type a vote as a community B viewer" aria-label="Rehearsal vote for community B"><button class="secondary" type="submit">Send as B</button></form>
+
+    <section class="card health" aria-label="Connection health">
+      <div class="card-head"><h2>Connections</h2><button id="connect-bot" class="ghost small" type="button">Connect bot account</button></div>
+      <ul class="health-list">
+        <li id="health-a"><i></i><div><b>Channel A</b><span>Checking</span></div></li>
+        <li id="health-b"><i></i><div><b>Channel B</b><span>Checking</span></div></li>
+        <li id="health-bot"><i></i><div><b>Bot account</b><span>Checking</span></div></li>
+        <li id="health-shared"><i></i><div><b>Shared Chat</b><span>Off: the bot posts in each chat</span></div></li>
+      </ul>
     </section>
-    <section class="previews">
-      <div class="section-title"><h2>Your overlay (community A)</h2><span>1920 × 1080 source</span></div>
-      <div class="preview-grid single"><article class="preview-a"><b>COMMUNITY A</b><iframe id="preview-a" title="Community A overlay preview"></iframe></article></div>
-      <p class="note">Community B's clue never appears on this panel, so the host cannot read both halves. Send streamer B their overlay link.</p>
-      <div class="links"><button id="copy-a" class="secondary" type="button">Copy overlay A link</button><button id="copy-b" class="secondary" type="button">Copy overlay B link for streamer B</button></div>
+
+    <section class="card score" aria-label="Session score">
+      <div class="card-head"><h2>Session</h2></div>
+      <div class="stats">
+        <div><strong id="stat-rounds">0</strong><span>Rounds</span></div>
+        <div><strong id="stat-wins">0</strong><span>Wins</span></div>
+        <div><strong id="stat-points">0</strong><span>Points</span></div>
+        <div><strong id="stat-streak">0</strong><span>Streak</span></div>
+        <div><strong id="stat-best">0</strong><span>Best</span></div>
+      </div>
+      <button id="recap" class="btn btn-recap" type="button">End session and post recap</button>
+      <p id="recap-link" class="fine" hidden></p>
     </section>
-    <section class="activity"><h2>Recent votes</h2><div class="columns"><article class="community-a"><h3>Community A</h3><ul id="votes-a"></ul></article><article class="community-b"><h3>Community B</h3><ul id="votes-b"></ul></article></div></section>
-    <p id="message" role="status"></p>
+
+    <section class="card links" aria-label="Overlay links">
+      <div class="card-head"><h2>Overlays</h2></div>
+      <div class="preview"><iframe id="preview-a" title="Community A overlay preview"></iframe><span>Your overlay (community A)</span></div>
+      <div class="link-buttons"><button id="copy-a" class="ghost" type="button">Copy overlay A link</button><button id="copy-b" class="ghost" type="button">Copy overlay B link for streamer B</button></div>
+      <p class="fine"><b>In OBS:</b> add a Browser source, paste the link, set 1920 x 1080. Add <code>&amp;sound=1</code> to the link for sound cues. Overlay B's clue never appears here.</p>
+    </section>
+
+    <section class="card rehearsal-box" aria-label="Rehearsal">
+      <div class="card-head"><h2>Rehearsal</h2><label class="switch"><input id="rehearsal" type="checkbox"><span>Rehearsal mode</span></label></div>
+      <p class="fine">No partner yet? Turn this on and play community B from here. Rehearsal rounds never score and the bot stays quiet.</p>
+      <form id="rehearsal-form" hidden><input id="rehearsal-text" maxlength="80" placeholder="Type a vote as a community B viewer" aria-label="Rehearsal vote for community B"><button class="btn btn-small" type="submit">Send as B</button></form>
+    </section>
   </div>
 </main>
+
+<aside id="drawer" class="drawer" aria-label="Round settings" hidden>
+  <div class="card-head"><h2>Round settings</h2><button id="close-settings" class="ghost small" type="button">Close <kbd>Esc</kbd></button></div>
+  <label>Category<select id="category"></select></label>
+  <label>Difficulty<select id="difficulty"></select></label>
+  <label>Round length <b id="duration-label">90 seconds</b><input id="duration" type="range" min="30" max="300" step="15" value="90"></label>
+  <p class="fine">Changes apply to the next round.</p>
+</aside>
+
+<div id="help" class="help" role="dialog" aria-label="Keyboard shortcuts" hidden>
+  <div class="card"><h2>Keyboard shortcuts</h2>
+    <dl><dt><kbd>S</kbd></dt><dd>Start round</dd><dt><kbd>L</kbd></dt><dd>Lock votes</dd><dt><kbd>K</kbd></dt><dd>Skip round</dd><dt><kbd>,</kbd></dt><dd>Round settings</dd><dt><kbd>?</kbd></dt><dd>This help</dd><dt><kbd>Esc</kbd></dt><dd>Close</dd></dl>
+    <button id="close-help" class="ghost small" type="button">Close</button></div>
+</div>
+<p id="message" class="toast" role="status"></p>
 <script src="/panel.js"></script>
 </body>
 </html>

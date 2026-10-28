@@ -18,6 +18,7 @@ export function createChatRouter(config: RouterConfig): (chat: ParsedChat) => vo
       case 'start': try { config.controller.startRound(); } catch { /* already running or no puzzles; the panel shows why */ } return;
       case 'lock': config.controller.lockRound(); return;
       case 'skip': config.controller.skipRound(); return;
+      case 'hint': config.controller.requestHint(community, chat.userId); return;
       default: return;
     }
   };

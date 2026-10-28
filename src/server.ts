@@ -10,6 +10,7 @@ import { loadFactVocabularies } from './puzzle/vocabulary-source.js';
 import type { Puzzle } from './puzzle/types.js';
 import { GameController, makeRoundOptions, type RoundEvent } from './app/controller.js';
 import { registerWebRoutes, type Readiness } from './app/web.js';
+import { recapSummary } from './app/recap.js';
 import { createChatRouter } from './app/router.js';
 import { sideHealth } from './app/health.js';
 import { registerAuthRoutes, TokenStore } from './twitch/auth.js';
@@ -26,6 +27,7 @@ const EnvSchema = z.object({
   ADMIN_TOKEN: z.string().min(24, 'ADMIN_TOKEN must be at least 24 characters. Generate one with: openssl rand -hex 24'),
   PORT: optional, PUBLIC: optional, COMMAND_PREFIX: z.string().min(1).max(20).default('!g'),
   MIN_VOTERS_TO_WIN: z.coerce.number().int().min(1).max(1000).default(2),
+  HINT_THRESHOLD: z.coerce.number().int().min(1).max(1000).default(3),
 });
 
 export interface ServerOverrides { logStream?: NodeJS.WritableStream; sessionPath?: string; tokenPath?: string; fetcher?: typeof fetch; eventsubUrl?: string; socketFactory?: SocketFactory; pack?: Puzzle[] }
@@ -46,7 +48,8 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
   const app = Fastify({ logger: loggerOptions(overrides.logStream), disableRequestLogging: false });
   const vocabularies = loadFactVocabularies();
   const minVotersToWin = config?.MIN_VOTERS_TO_WIN ?? 2;
-  const roundOptions = makeRoundOptions({ vocabularies, minVotersToWin });
+  const hintThreshold = config?.HINT_THRESHOLD ?? 3;
+  const roundOptions = makeRoundOptions({ vocabularies, minVotersToWin, hintThreshold });
   const store = new SessionStore(overrides.sessionPath ?? 'data/session.json', app.log.child({ component: 'session' }), metrics);
   const session = demo ? new Session() : await store.load(roundOptions);
   const prefix = config?.COMMAND_PREFIX ?? (env.COMMAND_PREFIX?.trim() || '!g');
@@ -68,7 +71,7 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
       : `Round over. The answer was ${round.puzzle.answer}. Community A chose ${result?.A.topAnswer ?? 'nothing'}, community B chose ${result?.B.topAnswer ?? 'nothing'}.`;
     void chat.send('both', text);
   };
-  const controller = new GameController(session, pack, { demo, store: demo ? undefined : store, metrics, vocabularies, minVotersToWin, commandPrefix: prefix, onRoundEvent });
+  const controller = new GameController(session, pack, { demo, store: demo ? undefined : store, metrics, vocabularies, minVotersToWin, hintThreshold, commandPrefix: prefix, onRoundEvent });
 
   let readiness: () => Readiness = () => ({ ready: true, reasons: [], detail: { mode: 'demo' } });
   if (config) {
@@ -123,7 +126,7 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
     };
 
     registerWebRoutes(app, controller, { security: { adminToken: config.ADMIN_TOKEN }, publicUrl: config.PUBLIC_URL, metrics, readiness: () => readiness(),
-      onRecap: async () => chat ? chat.send('both', `Twinclue recap: ${session.stats.rounds} rounds played, ${session.stats.wins} won together, current streak ${session.stats.streak}. Thanks for playing!`) : false });
+      postRecap: async (url, recap) => chat ? chat.send('both', `Twinclue recap: ${recapSummary(recap)} Highlights: ${url}`) : false });
     registerAuthRoutes(app, { clientId: config.TWITCH_CLIENT_ID, clientSecret: config.TWITCH_CLIENT_SECRET, publicUrl: config.PUBLIC_URL, store: tokens, fetcher: overrides.fetcher,
       expectedLogin: role => (role === 'bot' ? config.BOT_LOGIN ?? config.CHANNEL_A : channelLogins[role]), requireAdmin: app.requireAdmin, log: app.log.child({ component: 'auth' }),
       onAuthorized: () => { void startSafely(); } });

@@ -27,3 +27,19 @@ describe('overlay assets', () => {
     expect(css).toMatch(/@media\(prefers-reduced-motion:reduce\)\{\*,\*::before,\*::after\{animation:none!important;transition:none!important\}/);
   });
 });
+
+describe('overlay sound cues', () => {
+  it('stays silent unless ?sound=1 and synthesises every cue with WebAudio, with no audio files', () => {
+    expect(script).toMatch(/const soundOn = params\.get\('sound'\) === '1';/);
+    expect(script).toMatch(/AudioContext/);
+    for (const name of ['start', 'tenSeconds', 'hint', 'reveal', 'win']) expect(script).toContain(`${name}: () =>`);
+    expect(script).not.toMatch(/\.(mp3|wav|ogg|m4a)\b/);
+    expect(html).not.toMatch(/<audio/);
+  });
+
+  it('shows a hint prompt and an animated unlocked hint line', () => {
+    expect(html).toContain('id="hint"');
+    expect(script).toContain('HINT UNLOCKED');
+    expect(css).toMatch(/\.hint\.unlocked\{[^}]*animation:hint-in/);
+  });
+});

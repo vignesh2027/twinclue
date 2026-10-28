@@ -70,6 +70,7 @@ export class Metrics {
   readonly duplicates = new Counter('twinclue_duplicates_dropped_total', 'EventSub notifications dropped as duplicates, by reason.');
   readonly shed = new Counter('twinclue_shed_total', 'Display work skipped under load, by kind (ticker, frame). Votes and round transitions are never shed.');
   readonly reconnects = new Counter('twinclue_eventsub_reconnects_total', 'EventSub reconnects by reason.');
+  readonly hints = new Counter('twinclue_hint_requests_total', 'Viewer !hint requests by outcome (asked, unlocked, repeat, wrong_side, unavailable, inactive).');
   readonly chatSends = new Counter('twinclue_chat_sends_total', 'Bot chat sends by result (sent, dropped, failed, rate_limited).');
   readonly overlayClients = new Counter('twinclue_overlay_clients', 'Connected overlay and panel sockets, by view.', 'gauge');
   readonly eventsubConnected = new Counter('twinclue_eventsub_connected', 'Whether the EventSub socket has a live session (1) or not (0).', 'gauge');
@@ -81,7 +82,7 @@ export class Metrics {
     [0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.2, 0.25, 0.5, 1, 2.5, 5]);
 
   render(): string {
-    return [this.messagesIn, this.votes, this.duplicates, this.shed, this.reconnects, this.chatSends, this.overlayClients,
+    return [this.messagesIn, this.votes, this.hints, this.duplicates, this.shed, this.reconnects, this.chatSends, this.overlayClients,
       this.eventsubConnected, this.snapshots, this.framesSent, this.snapshotSeconds, this.snapshotBlockingSeconds, this.latency].map(metric => metric.render()).join('\n') + '\n';
   }
 }

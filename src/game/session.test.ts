@@ -23,7 +23,7 @@ describe('session persistence', () => {
     await store.now(session);
     expect((await readdir(dir)).filter(name => name.includes('.tmp'))).toEqual([]);
     const loaded = await store.load();
-    expect(loaded.scoreboard).toEqual({ rounds: 3, wins: 2, streak: 2 });
+    expect(loaded.scoreboard).toMatchObject({ rounds: 3, wins: 2, streak: 2 });
     expect(loaded.current?.voterCount('A')).toBe(1);
     expect(loaded.current?.endsAt).toBe(60_005);
   }));
@@ -33,7 +33,7 @@ describe('session persistence', () => {
     await writeFile(path, '{"version":2, broken');
     const log = { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() };
     const loaded = await new SessionStore(path, log).load();
-    expect(loaded.scoreboard).toEqual({ rounds: 0, wins: 0, streak: 0 });
+    expect(loaded.scoreboard).toMatchObject({ rounds: 0, wins: 0, streak: 0 });
     expect(log.error).toHaveBeenCalledOnce();
     expect(log.error.mock.calls[0]![1]).toMatch(/CORRUPT/);
     const files = await readdir(dir);
@@ -53,7 +53,7 @@ describe('session persistence', () => {
       session.recordResult(round);
     }
     expect(session.recent).toHaveLength(50);
-    expect(session.scoreboard).toEqual({ rounds: 69, wins: 69, streak: 69 });
+    expect(session.scoreboard).toMatchObject({ rounds: 69, wins: 69, streak: 69 });
     const path = join(dir, 'session.json');
     await new SessionStore(path).now(session);
     const saved = JSON.parse(await readFile(path, 'utf8'));

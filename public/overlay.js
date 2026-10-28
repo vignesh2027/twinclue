@@ -1,6 +1,8 @@
 (() => {
   const side = location.pathname.endsWith('/b') ? 'b' : 'a';
   const params = new URLSearchParams(location.search);
+  // Sound is off unless ?sound=1, so an OBS source never makes noise the streamer did not ask for.
+  const soundOn = params.get('sound') === '1';
   const key = params.get('k') || '';
   // Preview mode: opened directly in a browser rather than in OBS or embedded in the panel. ?preview=0|1 forces it.
   const embedded = (() => { try { return window.self !== window.top; } catch { return true; } })();
@@ -35,6 +37,7 @@
     el.statusText.textContent = text;
     el.previewStatus.textContent = text;
     $('#wins').textContent = plural(s.scoreboard.wins, 'win');
+    $('#points').textContent = plural(s.scoreboard.points ?? 0, 'point');
     $('#streak').textContent = `${s.scoreboard.streak} streak`;
   }
 
@@ -127,7 +130,8 @@
       $(`#voters-${name}`).textContent = plural(result.voters, 'voter');
     }
     const how = reveal.finishReason === 'consensus' ? 'Both chats agreed, so votes locked early. ' : '';
-    $('#solve-time').textContent = `${how}Round time: ${fmtTime(reveal.solveTimeMs)}`;
+    const hints = reveal.hintsUsed ? ` · ${plural(reveal.hintsUsed, 'hint')} used` : '';
+    $('#solve-time').textContent = `${how}Round time: ${fmtTime(reveal.solveTimeMs)}${hints}`;
     // Centre stage once per finished round, then the card settles back into its corner.
     const id = `${s.roundStatus}|${reveal.answer}|${reveal.solveTimeMs}`;
     if (id !== revealKey) {
@@ -138,9 +142,68 @@
     }
   }
 
+  // Short cues synthesised with WebAudio: no audio files, nothing to license.
+  let audio;
+  function ensureAudio() {
+    if (!soundOn) return undefined;
+    if (!audio) {
+      const Context = window.AudioContext || window.webkitAudioContext;
+      if (!Context) return undefined;
+      audio = new Context();
+      // A normal browser starts audio suspended until the first click; OBS does not.
+      if (audio.state === 'suspended') document.addEventListener('pointerdown', () => audio.resume(), { once: true });
+    }
+    return audio;
+  }
+  function tone(frequency, at, duration, type = 'sine', volume = 0.08) {
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    const start = ctx.currentTime + at;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(frequency, start);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(volume, start + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(start);
+    osc.stop(start + duration + 0.05);
+  }
+  const CUES = {
+    start: () => { tone(523.25, 0, 0.18, 'triangle'); tone(783.99, 0.12, 0.28, 'triangle'); },
+    tenSeconds: () => { tone(880, 0, 0.08, 'square', 0.03); tone(880, 0.16, 0.08, 'square', 0.03); },
+    hint: () => { tone(739.99, 0, 0.14, 'sine', 0.06); tone(987.77, 0.1, 0.24, 'sine', 0.06); },
+    reveal: () => { [659.25, 880, 1318.5].forEach((f, i) => tone(f, i * 0.07, 0.35, 'triangle', 0.05)); },
+    win: () => { [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, i * 0.09, 0.5, 'triangle', 0.07)); },
+  };
+  const cue = name => { if (soundOn) CUES[name](); };
+  let lastStatus = '';
+  let lastHintUnlocked = false;
+  let tenSecondCue = false;
+
+  // The hint row: a quiet prompt while it is locked, a highlighted line once this community unlocks it.
+  function renderHint(hint) {
+    const box = $('#hint');
+    const unlocked = Boolean(hint?.text);
+    box.hidden = !hint || (!hint.available && !unlocked);
+    if (box.hidden) return;
+    box.classList.toggle('unlocked', unlocked);
+    $('#hint-label').textContent = unlocked ? 'HINT UNLOCKED' : 'STUCK?';
+    $('#hint-text').textContent = unlocked ? hint.text : `Type !hint in chat. ${hint.asks} of ${hint.needed} viewers asked.`;
+    if (unlocked && !lastHintUnlocked) cue('hint');
+    lastHintUnlocked = unlocked;
+  }
+
   function render(s) {
     if (s.type !== 'state') return;
     state = s;
+    if (s.roundStatus !== lastStatus) {
+      if (s.roundStatus === 'active' && lastStatus) { cue('start'); tenSecondCue = false; lastHintUnlocked = false; }
+      if (s.roundStatus === 'won') cue('win');
+      else if ((s.roundStatus === 'timed-out' || s.roundStatus === 'unscored') && lastStatus === 'active') cue('reveal');
+      lastStatus = s.roundStatus;
+    }
     if (typeof s.serverNow === 'number') clockOffset = s.serverNow - Date.now();
     const tags = [];
     if (s.demo) tags.push(s.unauditedDemo ? 'DEMO MODE, UNAUDITED PUZZLE' : 'DEMO');
@@ -167,6 +230,7 @@
       if (s.leading) el.wait.textContent = 'Chat is converging on a leading answer';
       renderVotes(s);
       renderTicker(s.recentVotes ?? []);
+      renderHint(s.hint);
     }
     if (finished && s.reveal) showReveal(s);
   }
@@ -180,6 +244,7 @@
       el.time.textContent = String(Math.ceil(remaining / 1000));
       el.ring.style.strokeDashoffset = String(RING * (1 - left));
       el.card.classList.toggle('urgent', remaining <= 10_000);
+      if (remaining <= 10_000 && remaining > 0 && !tenSecondCue) { tenSecondCue = true; cue('tenSeconds'); }
     } else el.card.classList.remove('urgent');
     requestAnimationFrame(tick);
   }

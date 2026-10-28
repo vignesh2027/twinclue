@@ -8,6 +8,8 @@ export const PuzzleSchema = z.object({
   halfAAlsoFits: z.array(z.string()).min(2), halfBAlsoFits: z.array(z.string()).min(2),
   alsoFitsA:z.array(z.string()).optional(),alsoFitsB:z.array(z.string()).optional(),
   sourceTable:z.string().optional(),
+  /** One extra hint line per half, unlocked by that community's !hint vote. Never names the answer. */
+  hintA:z.string().optional(),hintB:z.string().optional(),
   predicates:z.object({halfA:z.array(PredicateSchema).min(1).max(2),halfB:z.array(PredicateSchema).min(1).max(2),setSizeA:z.number().int().positive(),setSizeB:z.number().int().positive()}).optional(),
 });
 export type Puzzle = z.infer<typeof PuzzleSchema>;

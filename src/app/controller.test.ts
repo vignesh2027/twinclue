@@ -147,7 +147,7 @@ describe('game controller', () => {
     controller.startRound();
     for (const [side, id] of [['A', '1'], ['B', '2']] as const) controller.vote(side, id, 'Paris');
     controller.skipRound();
-    expect(controller.session.scoreboard).toEqual({ rounds: 4, wins: 3, streak: 2 });
+    expect(controller.session.scoreboard).toMatchObject({ rounds: 4, wins: 3, streak: 2 });
     expect(controller.snapshot('a').roundStatus).toBe('unscored');
     expect(controller.snapshot('a').reveal?.unscoredReason).toBe('skipped');
     expect(controller.session.recent.at(-1)).toMatchObject({ status: 'unscored', unscoredReason: 'skipped' });
@@ -163,6 +163,6 @@ describe('game controller', () => {
     controller.vote('B', '2', 'Paris');
     controller.timeout();
     expect(controller.activeRound?.unscoredReason).toBe('not-enough-voters');
-    expect(controller.session.scoreboard).toEqual({ rounds: 0, wins: 0, streak: 5 });
+    expect(controller.session.scoreboard).toMatchObject({ rounds: 0, wins: 0, streak: 5 });
   });
 });
