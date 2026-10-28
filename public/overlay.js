@@ -76,8 +76,11 @@
     });
   }
 
+  // The two newest votes, newest first: three chips at a readable size truncated every name.
+  const TICKER_CHIPS = 2;
   const tickerItems = new Map();
-  function renderTicker(rows) {
+  function renderTicker(samples) {
+    const rows = samples.slice(-TICKER_CHIPS).reverse();
     const keys = rows.map(row => `${row.user}|${row.label}`);
     for (const [k, item] of tickerItems) if (!keys.includes(k)) { item.remove(); tickerItems.delete(k); }
     rows.forEach((row, index) => {

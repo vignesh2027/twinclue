@@ -1,7 +1,7 @@
 /*
  * Twinclue overlay. Drawn on a 1920 x 1080 canvas (OBS browser source); one rem is 1/120 of the width, so 16 px at
  * 1920 and 10.7 px at 1280, and the layout is identical at every canvas width. Text minimums at 1920: 14 px
- * (0.875rem) everywhere, 16 px for the call to action and hook, 13 px for ticker chips.
+ * (0.875rem) everywhere, 16 px for the call to action and hook.
  *
  * States on .overlay: is-idle, is-active, is-revealed (round finished), is-centered (the 8 second centre-stage
  * reveal), is-won; side-a or side-b; preview when opened directly in a browser.
@@ -105,8 +105,10 @@ html,body{width:100%;height:100%;margin:0;background:transparent;color:var(--pap
 
 .footer{display:flex;align-items:center;gap:.75rem;margin-top:.65rem}
 .ticker{flex:1;display:flex;gap:.4rem;list-style:none;padding:0;margin:0;min-width:0;overflow:hidden}
-.ticker li{display:flex;gap:.3rem;flex:0 1 auto;max-width:50%;min-width:0;padding:.28rem .6rem;border-radius:99rem;background:rgba(255,255,255,.11);color:#fff;font-size:.8125rem;font-weight:650;animation:tick-in .5s var(--ease) both}
+.ticker li{display:flex;gap:.3rem;flex:0 1 auto;max-width:50%;min-width:0;padding:.28rem .6rem;border-radius:99rem;background:rgba(255,255,255,.11);color:#fff;font-size:.875rem;font-weight:650;animation:tick-in .5s var(--ease) both}
 .ticker li b,.ticker li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ticker li b{flex:0 0 auto;max-width:70%}
+.ticker li span{flex:0 1 auto;min-width:0}
 .ticker li b{color:color-mix(in srgb,var(--accent),white 25%)}
 .wait-message{margin:.45rem 0 0;color:var(--text);font-size:.875rem;font-weight:800}
 .timer-wrap{position:relative;width:3.2rem;height:3.2rem;flex:none;display:grid;place-items:center;font-size:1.2rem;font-weight:900;font-variant-numeric:tabular-nums;color:#fff}
@@ -172,7 +174,7 @@ html,body{width:100%;height:100%;margin:0;background:transparent;color:var(--pap
 .is-centered .solve-time{text-align:center}
 
 /* A CSS-only confetti burst from behind the centred card on a win. */
-.burst{position:fixed;left:50%;top:50%;width:0;height:0;z-index:6;display:none}
+.burst{position:fixed;left:50%;top:50%;width:0;height:0;z-index:4;display:none}
 .is-won.is-centered .burst{display:block}
 .burst i{position:absolute;left:0;top:0;width:calc(.7rem * var(--s));height:calc(1.1rem * var(--s));border-radius:.15rem;background:var(--c);opacity:0;animation:confetti 2.8s cubic-bezier(.16,.8,.3,1) var(--d) infinite}
 .burst i:nth-child(3n){border-radius:50%;height:calc(.7rem * var(--s))}
