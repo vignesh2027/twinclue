@@ -4,6 +4,7 @@ import type { Scoreboard } from '../game/session.js';
 import type { VocabEntry } from '../game/vocabulary.js';
 import type { Puzzle } from '../puzzle/types.js';
 import { vocabularyFor } from '../puzzle/vocabulary-source.js';
+import { isVideoSafe } from '../puzzle/showcase.js';
 import type { Metrics } from '../obs/metrics.js';
 
 export type OverlayView = 'a' | 'b';
@@ -15,19 +16,23 @@ export interface SideHealth { configured: boolean; connected: boolean; subscribe
 export interface Health { a: SideHealth; b: SideHealth; sharedChat: boolean; tokenValid: boolean; lastError: string | null }
 
 export interface OverlayState {
-  type: 'state'; seq: number; serverNow: number; demo: boolean; unauditedDemo: boolean; rehearsal: boolean; side: OverlayView; commandPrefix: string;
+  type: 'state'; seq: number; serverNow: number; demo: boolean; sandbox: boolean; unauditedDemo: boolean; rehearsal: boolean; side: OverlayView; commandPrefix: string;
   roundStatus: 'idle' | 'active' | 'won' | 'timed-out' | 'unscored'; category: string | null; half: string | null; startedAt: number | null; endsAt: number | null;
   leading: string | null; voters: number; buckets: VoteBucket[]; otherVotes: number; recentVotes: Array<{ user: string; label: string }>;
   scoreboard: Scoreboard;
   /** This side's hint vote. The text is present only once this side has unlocked it. */
   hint: { available: boolean; asks: number; needed: number; text: string | null };
+  /** The swap moment, in server time: both overlays show the banner from `at` until `until`. */
+  swapCue: { at: number; until: number } | null;
   reveal?: { answer: string; halfA: string; halfB: string; alsoFitsA: string[]; alsoFitsB: string[]; setSizeA: number; setSizeB: number;
     sideA: { topAnswer: string | null; correct: boolean; voters: number }; sideB: { topAnswer: string | null; correct: boolean; voters: number };
-    solveTimeMs: number | null; finishReason: string | null; unscoredReason: string | null; hintsUsed: number };
+    solveTimeMs: number | null; finishReason: string | null; unscoredReason: string | null; hintsUsed: number;
+    /** Server time the round ended. Both overlays start the celebration from it, so they fire together. */
+    revealAt: number | null };
 }
 export interface HintStatus { available: boolean; asks: number; needed: number; unlocked: boolean }
 export interface PanelState {
-  type: 'panel-state'; demo: boolean; rehearsal: boolean; health: Health; scoreboard: Session['scoreboard']; roundStatus: string; endsAt: number | null;
+  type: 'panel-state'; demo: boolean; rehearsal: boolean; videoSafe: boolean; health: Health; scoreboard: Session['scoreboard']; roundStatus: string; endsAt: number | null;
   roundLengthSeconds: number; category: string; difficulty: string; options: { categories: string[]; difficultiesByCategory: Record<string, string[]> };
   recentVotes: { a: Array<{ user: string; label: string }>; b: Array<{ user: string; label: string }> }; leading: { a: string | null; b: string | null };
   voters: { a: number; b: number }; packSize: number; startedAt: number | null; serverNow: number;
@@ -41,6 +46,11 @@ export interface ControllerOptions {
   cooldownMs?: number; consensus?: Partial<ConsensusRule>; minVotersToWin?: number; hintThreshold?: number; frameIntervalMs?: number; commandPrefix?: string;
   /** Above this many votes per second the ticker stops sampling; votes and transitions are never shed. */
   shedTickerAboveRate?: number;
+  /** Only puzzles from non-trademark tables (VIDEO_SAFE=1, the demo and the sandbox). */
+  videoSafe?: boolean;
+  /** When the swap banner shows if the two chats have not already disagreed. Default 15 seconds. */
+  swapCueAfterMs?: number;
+  sandbox?: boolean;
   onRoundEvent?: (event: RoundEvent) => void;
 }
 
@@ -56,6 +66,7 @@ export class GameController {
   category = 'general';
   difficulty = 'medium';
   rehearsal = false;
+  videoSafe: boolean;
   readonly health: Health = {
     a: { configured: false, connected: false, subscribed: false, error: null, reauthorize: false },
     b: { configured: false, connected: false, subscribed: false, error: null, reauthorize: false },
@@ -69,6 +80,7 @@ export class GameController {
   private timer?: ReturnType<typeof setTimeout>;
   private consensusTimer?: ReturnType<typeof setTimeout>;
   private consensusDue?: number;
+  private swapTimer?: ReturnType<typeof setTimeout>;
   private readonly listeners = new Map<View, Set<FrameListener>>();
   private flushTimer?: ReturnType<typeof setTimeout>;
   private lastFlushAt = -Infinity;
@@ -83,6 +95,7 @@ export class GameController {
 
   constructor(readonly session: Session, private readonly pack: Puzzle[], private readonly options: ControllerOptions = {}) {
     this.demo = options.demo ?? false;
+    this.videoSafe = options.videoSafe ?? false;
     this.now = options.now ?? Date.now;
     this.frameIntervalMs = options.frameIntervalMs ?? 100;
     this.roundOptions = makeRoundOptions(options);
@@ -102,7 +115,11 @@ export class GameController {
     round.refreshConsensus(this.now());
     this.scheduleTimeout(Math.max(0, round.endsAt - this.now()));
     this.scheduleConsensus();
+    this.scheduleSwapCue(round);
   }
+
+  /** The puzzles a new round may use. */
+  get playable(): Puzzle[] { return this.videoSafe ? this.pack.filter(isVideoSafe) : this.pack; }
 
   subscribe(view: View, listener: FrameListener): () => void {
     let set = this.listeners.get(view);
@@ -126,7 +143,7 @@ export class GameController {
     const alsoA = puzzle ? puzzle.alsoFitsA ?? puzzle.halfAAlsoFits : [];
     const alsoB = puzzle ? puzzle.alsoFitsB ?? puzzle.halfBAlsoFits : [];
     return {
-      type: 'state', seq: this.ingested, serverNow: this.now(), demo: this.demo, unauditedDemo: Boolean(this.demo && puzzle?.id.startsWith('demo-')),
+      type: 'state', seq: this.ingested, serverNow: this.now(), demo: this.demo, sandbox: this.options.sandbox ?? false, unauditedDemo: Boolean(this.demo && puzzle?.id.startsWith('demo-')),
       // A live round is labelled by what it is, so a real round never wears the REHEARSAL tag.
       rehearsal: round?.status === 'active' ? round.rehearsal : this.rehearsal || Boolean(round?.rehearsal), side: view, commandPrefix: this.commandPrefix, roundStatus: status,
       category: puzzle?.category ?? null, half: status === 'active' ? (view === 'a' ? puzzle!.halfA : puzzle!.halfB) : null,
@@ -135,12 +152,13 @@ export class GameController {
       recentVotes: (round?.recentSamples(side, 3) ?? []).map(sample => ({ user: sample.user, label: sample.label })),
       scoreboard: this.session.scoreboard,
       hint: this.hintStatus(round, side, true),
+      swapCue: status === 'active' && round!.swapCueAt !== undefined ? { at: round!.swapCueAt, until: round!.swapCueAt + 4_000 } : null,
       ...(reveal ? { reveal: {
         answer: puzzle!.answer, halfA: puzzle!.halfA, halfB: puzzle!.halfB, alsoFitsA: alsoA, alsoFitsB: alsoB,
         setSizeA: puzzle!.predicates?.setSizeA ?? alsoA.length + 1, setSizeB: puzzle!.predicates?.setSizeB ?? alsoB.length + 1,
         sideA: round!.result?.A ?? { topAnswer: null, correct: false, voters: round!.voterCount('A') },
         sideB: round!.result?.B ?? { topAnswer: null, correct: false, voters: round!.voterCount('B') },
-        solveTimeMs: round!.solveTimeMs ?? null, finishReason: round!.finishReason ?? null, unscoredReason: round!.unscoredReason ?? null, hintsUsed: round!.hintsUsed,
+        solveTimeMs: round!.solveTimeMs ?? null, finishReason: round!.finishReason ?? null, unscoredReason: round!.unscoredReason ?? null, hintsUsed: round!.hintsUsed, revealAt: round!.endedAt ?? null,
       } } : {}),
     };
   }
@@ -159,23 +177,25 @@ export class GameController {
   /** The panel never receives either clue half: the streamer running it plays on one side. */
   panelState(): PanelState {
     const round = this.session.current;
-    const categories = [...new Set(this.pack.map(p => p.category))];
-    const difficultiesByCategory = Object.fromEntries(categories.map(category => [category, [...new Set(this.pack.filter(p => p.category === category).map(p => p.difficulty))]]));
+    const playable = this.playable;
+    const categories = [...new Set(playable.map(p => p.category))];
+    const difficultiesByCategory = Object.fromEntries(categories.map(category => [category, [...new Set(playable.filter(p => p.category === category).map(p => p.difficulty))]]));
     const recent = (side: Community) => (round?.recentSamples(side, 8) ?? []).reverse().map(sample => ({ user: sample.user, label: sample.label }));
     return {
-      type: 'panel-state', demo: this.demo, rehearsal: this.rehearsal, health: structuredClone(this.health), scoreboard: this.session.scoreboard,
+      type: 'panel-state', demo: this.demo, rehearsal: this.rehearsal, videoSafe: this.videoSafe, health: structuredClone(this.health), scoreboard: this.session.scoreboard,
       roundStatus: round?.status ?? 'idle', endsAt: round?.status === 'active' ? round.endsAt ?? null : null, roundLengthSeconds: this.roundLengthSeconds,
       category: this.category, difficulty: this.difficulty, options: { categories, difficultiesByCategory },
       recentVotes: { a: recent('A'), b: recent('B') }, leading: { a: round?.leaderLabel('A') ?? null, b: round?.leaderLabel('B') ?? null },
-      voters: { a: round?.voterCount('A') ?? 0, b: round?.voterCount('B') ?? 0 }, packSize: this.pack.length, startedAt: round?.status === 'active' ? round.startedAt ?? null : null, serverNow: this.now(),
+      voters: { a: round?.voterCount('A') ?? 0, b: round?.voterCount('B') ?? 0 }, packSize: this.playable.length, startedAt: round?.status === 'active' ? round.startedAt ?? null : null, serverNow: this.now(),
       hints: { a: this.hintStatus(round, 'A', false), b: this.hintStatus(round, 'B', false) },
     };
   }
 
   startRound(): Round {
     if (this.session.current?.status === 'active') throw new Error('A round is already active.');
-    const available = this.pack.filter(p => p.category === this.category && p.difficulty === this.difficulty);
-    const pool = available.length ? available : this.pack;
+    const playable = this.playable;
+    const available = playable.filter(p => p.category === this.category && p.difficulty === this.difficulty);
+    const pool = available.length ? available : playable;
     if (!pool.length) throw new Error('No audited puzzles are available yet. Run the Puzzle Forge first.');
     const puzzle = pool[this.puzzleIndex++ % pool.length]!;
     const round = new Round(puzzle, { ...this.roundOptions(puzzle), rehearsal: this.rehearsal });
@@ -183,6 +203,7 @@ export class GameController {
     this.clearRoundTimers();
     this.session.addRound(round);
     this.scheduleTimeout(this.roundLengthSeconds * 1000);
+    this.scheduleSwapCue(round);
     void this.options.store?.now(this.session);
     this.flush(true);
     this.options.onRoundEvent?.({ type: 'started', round });
@@ -204,6 +225,9 @@ export class GameController {
     metrics?.votes.inc({ result: result.replace('-', '_') });
     if (result === 'voted') {
       this.scheduleConsensus();
+      // Both chats have a leader and they differ: the streamers need to talk now.
+      const a = round.leaderLabel('A'), b = round.leaderLabel('B');
+      if (a && b && a !== b) this.triggerSwapCue();
       this.options.store?.request(this.session);
       this.markDirty(opts.receivedAt);
     } else if (result === 'unchanged') {
@@ -222,6 +246,25 @@ export class GameController {
     if (result === 'unlocked') { void this.options.store?.now(this.session); this.flush(true); }
     else if (result === 'asked') { this.options.store?.request(this.session); this.markDirty(); }
     return result;
+  }
+
+  setVideoSafe(enabled: boolean): void { this.videoSafe = enabled; this.markDirty(); }
+
+  /** The swap moment fires once per round, stamped with server time so both overlays show it together. */
+  triggerSwapCue(): void {
+    const round = this.session.current;
+    if (!round || round.status !== 'active' || round.swapCueAt !== undefined) return;
+    round.swapCueAt = this.now();
+    if (this.swapTimer) clearTimeout(this.swapTimer);
+    this.swapTimer = undefined;
+    this.flush(true);
+  }
+
+  private scheduleSwapCue(round: Round): void {
+    if (this.swapTimer) clearTimeout(this.swapTimer);
+    if (round.swapCueAt !== undefined || round.startedAt === undefined) return;
+    const due = round.startedAt + (this.options.swapCueAfterMs ?? 15_000) - this.now();
+    this.swapTimer = setTimeout(() => { this.swapTimer = undefined; if (this.session.current === round) this.triggerSwapCue(); }, Math.max(0, due));
   }
 
   setRehearsal(enabled: boolean): void { this.rehearsal = enabled; this.markDirty(); }
@@ -337,6 +380,8 @@ export class GameController {
   private clearRoundTimers(): void {
     if (this.timer) clearTimeout(this.timer);
     if (this.consensusTimer) clearTimeout(this.consensusTimer);
+    if (this.swapTimer) clearTimeout(this.swapTimer);
+    this.swapTimer = undefined;
     this.timer = undefined;
     this.consensusTimer = undefined;
     this.consensusDue = undefined;

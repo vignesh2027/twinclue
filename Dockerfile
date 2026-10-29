@@ -1,5 +1,6 @@
 # Twinclue server. Build: docker build -t twinclue .
 # Run:  docker run --env-file .env -p 127.0.0.1:3000:3000 -v twinclue-data:/app/data twinclue
+# Sandbox (no Twitch, one game per visitor): docker run -e SANDBOX=1 -e PUBLIC_URL=https://your-host -p 127.0.0.1:3000:3000 twinclue
 # Inside the container the server listens on all interfaces (PUBLIC=1) so the port mapping works; the -p flag
 # above keeps it on the host's loopback, and a Cloudflare Tunnel publishes it over HTTPS.
 FROM node:22-alpine AS build

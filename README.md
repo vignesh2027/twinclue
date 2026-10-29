@@ -6,6 +6,37 @@ Twinclue is a cooperative puzzle show for Twitch collabs. Each stream's overlay 
 clue. Viewers vote in their own chat with `!g answer`, and the streamers have to talk to each other on stream to put
 the halves together. A round is won only when both communities lock in the right answer.
 
+![Both overlays during one round: each side sees only its half, the streamers are told to swap clues, and both chats lock in Japan](docs/img/sandbox-round.gif)
+
+## Try it in 60 seconds
+
+```sh
+npm ci && npm run demo
+```
+
+Open the panel link it prints. The demo plays scripted rounds on both overlays: a win with a hint, the swap moment, a
+timeout and a round that does not count. To play both chats yourself, run `npm run sandbox` and open
+<http://127.0.0.1:3000/>, then press **Watch a sample round** or **Start round**.
+
+## What is real versus simulated
+
+| Part | Status |
+| --- | --- |
+| Twitch chat in, bot messages out (EventSub WebSocket, Helix Send Chat Message, Shared Chat events, OAuth) | Real. Tested live on two Twitch channels. |
+| Votes in `npm run demo` | Simulated: a script plays both chats. Overlays say DEMO. |
+| Votes in the sandbox (`SANDBOX=1`) | Simulated by you: each vote you type is a new viewer. Overlays say SANDBOX. |
+| Throughput numbers in [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | Our real pipeline, fed by a local fake EventSub server. It measures our code, not Twitch delivery. |
+| Puzzle audit | Real model calls: a blind solver panel and a two-model fact check ([docs/PUZZLE_AUDIT.md](docs/PUZZLE_AUDIT.md)). The 35 shipped puzzles passed it. |
+| Puzzle facts | Curated tables in `facts/`, with sources in each table header. |
+| Hints, recap pages, sound cues | Real features; the sound is synthesised in the browser, with no audio files. |
+
+## Built with OpenAI Codex
+
+Codex built slices 1 to 5c in session `01a173c5-a449-71a1-abff-67e5a794156b`, following [AGENTS.md](AGENTS.md) as
+its constitution. After the Codex plan's usage limit was reached, another AI coding assistant built the later slices
+under the same rules. [CODEX.md](CODEX.md) lists every commit and who built it, and [DECISIONS.md](DECISIONS.md) records
+why. Licensed under [MIT](LICENSE).
+
 A Puzzle Forge builds the clues from curated fact tables, then a blind solver panel and a fact check decide which
 ones enter the pack.
 
@@ -60,6 +91,27 @@ browser, click the page once to allow audio.
 
 No partner yet? Turn on **Rehearsal mode** in the panel and type community B's votes yourself. Both overlays and the
 panel say "REHEARSAL", and rehearsal rounds never change the score or post in chat.
+
+### Hosted sandbox
+
+`SANDBOX=1` runs a public "try it now" page with no Twitch connection and no admin token. Each browser gets its own
+in-memory game (a random cookie, at most `SANDBOX_MAX_GAMES` games, default 200, forgotten after 30 idle minutes),
+both overlays side by side with a vote box and a `!hint` button under each, and only audited video-safe puzzles. Every
+action is rate limited, and one address can open 20 games per ten minutes.
+
+```sh
+npm run sandbox                                   # http://127.0.0.1:3000/
+docker run -e SANDBOX=1 -e PUBLIC_URL=https://your-host -p 127.0.0.1:3000:3000 twinclue
+```
+
+Set `PUBLIC_URL` to the public address so the browser's Origin is accepted, and `TRUST_PROXY=1` behind a proxy so rate
+limits see the visitor's address.
+
+### Video-safe puzzles
+
+`VIDEO_SAFE=1` (or the switch in the panel's settings) deals only audited puzzles from countries, animals, food,
+musical instruments, space and sports, so a recorded stream never shows a game character or a brand. The demo and the
+sandbox always do this, and the demo plays eight hand-picked showcase puzzles (`src/puzzle/showcase.ts`).
 
 ### Docker
 

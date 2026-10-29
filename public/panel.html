@@ -19,8 +19,8 @@
     <section class="card actions" aria-label="Round controls">
       <button id="start" class="btn btn-start" type="button"><span>Start round</span><kbd>S</kbd></button>
       <button id="lock" class="btn btn-lock" type="button"><span>Lock votes</span><kbd>L</kbd></button>
-      <button id="skip" class="btn btn-skip" type="button"><span>Skip round</span><kbd>K</kbd></button>
-      <div class="actions-note"><b id="next-up">Next: games, medium, 90 seconds</b><span>Skip does not count. Lock reveals now and scores both chats' current leaders.</span></div>
+      <button id="skip" class="btn btn-skip" type="button" title="Hold to skip, or press K twice"><span>Hold to skip</span><kbd>K</kbd><i class="hold-fill"></i></button>
+      <div class="actions-note"><b id="next-up">Next: games, medium, 90 seconds</b><span>Lock reveals now and scores both chats' current leaders. Skip voids the round: hold it, or press K twice.</span></div>
     </section>
 
     <section class="card round" aria-label="Live round">
@@ -86,12 +86,13 @@
   <label>Category<select id="category"></select></label>
   <label>Difficulty<select id="difficulty"></select></label>
   <label>Round length <b id="duration-label">90 seconds</b><input id="duration" type="range" min="30" max="300" step="15" value="90"></label>
+  <label class="switch"><input id="video-safe" type="checkbox"><span>Video-safe puzzles only (no game characters or brands)</span></label>
   <p class="fine">Changes apply to the next round.</p>
 </aside>
 
 <div id="help" class="help" role="dialog" aria-label="Keyboard shortcuts" hidden>
   <div class="card"><h2>Keyboard shortcuts</h2>
-    <dl><dt><kbd>S</kbd></dt><dd>Start round</dd><dt><kbd>L</kbd></dt><dd>Lock votes</dd><dt><kbd>K</kbd></dt><dd>Skip round</dd><dt><kbd>,</kbd></dt><dd>Round settings</dd><dt><kbd>?</kbd></dt><dd>This help</dd><dt><kbd>Esc</kbd></dt><dd>Close</dd></dl>
+    <dl><dt><kbd>S</kbd></dt><dd>Start round</dd><dt><kbd>L</kbd></dt><dd>Lock votes</dd><dt><kbd>K</kbd> <kbd>K</kbd></dt><dd>Skip round (press twice)</dd><dt><kbd>,</kbd></dt><dd>Round settings</dd><dt><kbd>?</kbd></dt><dd>This help</dd><dt><kbd>Esc</kbd></dt><dd>Close</dd></dl>
     <button id="close-help" class="ghost small" type="button">Close</button></div>
 </div>
 <p id="message" class="toast" role="status"></p>

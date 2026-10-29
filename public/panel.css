@@ -44,7 +44,11 @@ h2{margin:0;font-size:13px;font-weight:900;letter-spacing:.16em;text-transform:u
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn-start{background:linear-gradient(135deg,#5eead4,var(--a))}
 .btn-lock{background:linear-gradient(135deg,#fde68a,#fbbf24)}
-.btn-skip{background:rgba(255,255,255,.1);color:#fff}
+.btn-skip{position:relative;overflow:hidden;background:transparent;color:#fecaca;box-shadow:inset 0 0 0 2px rgba(248,113,113,.65)}
+.btn-skip>span,.btn-skip>kbd{position:relative;z-index:1}
+.btn-skip kbd{background:rgba(248,113,113,.2)}
+.hold-fill{position:absolute;inset:0;transform-origin:left center;transform:scaleX(0);background:rgba(248,113,113,.35)}
+.btn-skip.holding .hold-fill{transform:scaleX(1);transition:transform .9s linear}
 .btn-recap{width:100%;min-height:48px;font-size:16px;margin-top:14px;background:linear-gradient(90deg,var(--a),var(--b))}
 .btn-small{min-height:42px;font-size:15px;background:var(--violet);color:#1a1033}
 .ghost{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
@@ -104,7 +108,7 @@ h2{margin:0;font-size:13px;font-weight:900;letter-spacing:.16em;text-transform:u
 
 /* Overlay links */
 .preview{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#0b0f16 repeating-conic-gradient(#121924 0 25%,#0d131c 0 50%) 0 0/24px 24px;border:1px solid var(--line)}
-.preview iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.preview iframe{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0}
 .preview span{position:absolute;left:10px;top:8px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.6);font-size:12px;font-weight:800;color:#fff}
 .link-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
@@ -130,5 +134,26 @@ h2{margin:0;font-size:13px;font-weight:900;letter-spacing:.16em;text-transform:u
 .toast:empty{display:none}
 @keyframes slide{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
 @media(max-width:1100px){.layout{grid-template-columns:1fr}.round{grid-row:auto}.actions{grid-template-columns:repeat(3,1fr)}.actions-note{grid-column:1/-1}}
-@media(max-width:640px){.actions{grid-template-columns:1fr}.sides{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.top{flex-wrap:wrap}.title,.divider{display:none}}
+@media(max-width:640px){.sides{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.title,.divider{display:none}}
+/* OBS dock width: one column, the live round and its timer first, compact controls under it, nothing wider than the dock. */
+@media(max-width:480px){
+  html,body{font-size:14px}
+  .top{padding:10px 12px;gap:8px}.wordmark{font-size:13px}.summary span{display:none}.summary{padding:6px}
+  main{padding:10px 10px 30px}
+  .layout{gap:10px}
+  .round{order:-2}.actions{order:-1}
+  .card{padding:12px;border-radius:14px}
+  .actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .btn{min-height:52px;padding:0 8px;font-size:15px;gap:6px}
+  .btn kbd{display:none}
+  .actions-note{grid-column:1/-1;padding-left:0}
+  .timer strong{font-size:34px}
+  .sides{grid-template-columns:1fr 1fr;gap:8px}
+  .side{padding:10px}
+  .leader strong{font-size:16px}
+  .votes{max-height:110px}
+  .stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.stats strong{font-size:20px}.stats span{font-size:10.5px;letter-spacing:.02em}
+  .link-buttons .ghost{flex:1 1 100%;justify-content:center}
+  .drawer{width:100vw}
+}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

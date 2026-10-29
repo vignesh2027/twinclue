@@ -24,7 +24,7 @@ const RoundSchema = z.object({
   votesB: z.array(z.tuple([z.string(), z.number().int()])),
   samples: z.array(z.object({ community: z.enum(['A', 'B']), user: z.string(), label: z.string(), at: z.number() })),
   result: z.object({ A: SideRevealSchema, B: SideRevealSchema }).nullable(), finishReason: z.string().optional(), unscoredReason: z.enum(['not-enough-voters', 'skipped']).optional(),
-  hintAsks: z.object({ A: z.array(z.string()), B: z.array(z.string()) }).optional(), hintUnlocked: z.object({ A: z.boolean(), B: z.boolean() }).optional(),
+  hintAsks: z.object({ A: z.array(z.string()), B: z.array(z.string()) }).optional(), hintUnlocked: z.object({ A: z.boolean(), B: z.boolean() }).optional(), swapCueAt: z.number().optional(),
 });
 const SessionFileSchema = z.object({
   version: z.literal(2),

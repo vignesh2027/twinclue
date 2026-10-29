@@ -6,11 +6,13 @@ import { z } from 'zod';
 import { Session, SessionStore } from './game/session.js';
 import { puzzlePack } from './puzzle/pack.js';
 import { demoPuzzlePack } from './puzzle/demo-pack.js';
+import { isVideoSafe, showcasePuzzles } from './puzzle/showcase.js';
 import { loadFactVocabularies } from './puzzle/vocabulary-source.js';
 import type { Puzzle } from './puzzle/types.js';
 import { GameController, makeRoundOptions, type RoundEvent } from './app/controller.js';
 import { registerWebRoutes, type Readiness } from './app/web.js';
 import { recapSummary } from './app/recap.js';
+import { registerSandbox } from './app/sandbox.js';
 import { createChatRouter } from './app/router.js';
 import { sideHealth } from './app/health.js';
 import { registerAuthRoutes, TokenStore } from './twitch/auth.js';
@@ -28,6 +30,7 @@ const EnvSchema = z.object({
   PORT: optional, PUBLIC: optional, COMMAND_PREFIX: z.string().min(1).max(20).default('!g'),
   MIN_VOTERS_TO_WIN: z.coerce.number().int().min(1).max(1000).default(2),
   HINT_THRESHOLD: z.coerce.number().int().min(1).max(1000).default(3),
+  VIDEO_SAFE: optional,
 });
 
 export interface ServerOverrides { logStream?: NodeJS.WritableStream; sessionPath?: string; tokenPath?: string; fetcher?: typeof fetch; eventsubUrl?: string; socketFactory?: SocketFactory; pack?: Puzzle[] }
@@ -53,7 +56,10 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
   const store = new SessionStore(overrides.sessionPath ?? 'data/session.json', app.log.child({ component: 'session' }), metrics);
   const session = demo ? new Session() : await store.load(roundOptions);
   const prefix = config?.COMMAND_PREFIX ?? (env.COMMAND_PREFIX?.trim() || '!g');
-  const pack = overrides.pack ?? (demo ? [...puzzlePack, ...demoPuzzlePack] : puzzlePack);
+  // The demo plays the eight audited showcase puzzles; the unaudited sample is only a fallback for an empty pack.
+  const showcase = showcasePuzzles(puzzlePack);
+  const pack = overrides.pack ?? (demo ? (showcase.length ? showcase : demoPuzzlePack) : puzzlePack);
+  const videoSafe = demo || config?.VIDEO_SAFE === '1';
 
   let chat: ChatSender | undefined;
   let eventsub: EventSubClient | undefined;
@@ -71,7 +77,7 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
       : `Round over. The answer was ${round.puzzle.answer}. Community A chose ${result?.A.topAnswer ?? 'nothing'}, community B chose ${result?.B.topAnswer ?? 'nothing'}.`;
     void chat.send('both', text);
   };
-  const controller = new GameController(session, pack, { demo, store: demo ? undefined : store, metrics, vocabularies, minVotersToWin, hintThreshold, commandPrefix: prefix, onRoundEvent });
+  const controller = new GameController(session, pack, { demo, store: demo ? undefined : store, metrics, vocabularies, minVotersToWin, hintThreshold, videoSafe: videoSafe && pack.some(isVideoSafe), commandPrefix: prefix, onRoundEvent });
 
   let readiness: () => Readiness = () => ({ ready: true, reasons: [], detail: { mode: 'demo' } });
   if (config) {
@@ -171,6 +177,21 @@ async function createServer(demo: boolean, env: NodeJS.ProcessEnv, overrides: Se
 export function buildServer(env: NodeJS.ProcessEnv = process.env, overrides?: ServerOverrides) { return createServer(false, env, overrides); }
 export function buildDemoServer(env: NodeJS.ProcessEnv = process.env, overrides?: ServerOverrides) { return createServer(true, env, overrides); }
 
+/**
+ * SANDBOX=1: the hosted "try it now" mode. No Twitch, no admin token, one isolated in-memory game per browser,
+ * only audited video-safe puzzles. Binds to 127.0.0.1 unless PUBLIC=1.
+ */
+export async function buildSandboxServer(env: NodeJS.ProcessEnv = process.env, overrides: { pack?: Puzzle[]; logStream?: NodeJS.WritableStream } = {}) {
+  const app = Fastify({ logger: loggerOptions(overrides.logStream), trustProxy: env.TRUST_PROXY === '1' });
+  // Showcase puzzles come first, then every other audited video-safe puzzle.
+  const showcase = showcasePuzzles(puzzlePack);
+  const ordered = [...showcase, ...puzzlePack.filter(puzzle => !showcase.includes(puzzle))];
+  const manager = registerSandbox(app, { pack: overrides.pack ?? ordered, vocabularies: loadFactVocabularies(), publicUrl: env.PUBLIC_URL?.trim() || undefined,
+    maxSessions: Number(env.SANDBOX_MAX_GAMES ?? 200) });
+  const host = env.PUBLIC === '1' ? '0.0.0.0' : '127.0.0.1';
+  return { app, manager, listen: () => app.listen({ host, port: Number(env.PORT ?? 3000) }), shutdown: () => app.close() };
+}
+
 export function installShutdown(server: BuiltServer): void {
   let closing = false;
   const stop = (signal: string) => {
@@ -185,7 +206,16 @@ export function installShutdown(server: BuiltServer): void {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const server = await buildServer();
-  installShutdown(server);
-  await server.listen();
+  if (process.env.SANDBOX === '1') {
+    const sandbox = await buildSandboxServer();
+    const stop = () => { void sandbox.shutdown().then(() => process.exit(0)); };
+    process.on('SIGINT', stop);
+    process.on('SIGTERM', stop);
+    const address = await sandbox.listen();
+    console.log(`Twinclue sandbox is running at ${address}`);
+  } else {
+    const server = await buildServer();
+    installShutdown(server);
+    await server.listen();
+  }
 }

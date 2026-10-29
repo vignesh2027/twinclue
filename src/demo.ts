@@ -12,7 +12,8 @@ console.log('Copy the overlay links (each with its own key) from the panel.');
 
 const { controller } = server;
 const vote = (side: 'A' | 'B', user: string, text: string) => controller.vote(side, user, text, { displayName: user });
-controller.setSettings({ category: 'games', difficulty: 'medium', roundLengthSeconds: 40 });
+// The demo rotates through the eight audited, video-safe showcase puzzles.
+controller.setSettings({ roundLengthSeconds: 40 });
 while (true) {
   await pause(5000);
   const round = controller.startRound();
@@ -20,7 +21,8 @@ while (true) {
   const [a1, a2] = round.puzzle.alsoFitsA ?? round.puzzle.halfAAlsoFits;
   const [b1] = round.puzzle.alsoFitsB ?? round.puzzle.halfBAlsoFits;
   await pause(2500); vote('A', 'DemoA1', a1 ?? 'a guess'); vote('A', 'DemoA2', a2 ?? 'another guess'); vote('B', 'DemoB1', b1 ?? 'a guess');
-  await pause(3500); vote('A', 'DemoA3', a1 ?? 'a guess'); vote('B', 'DemoB2', 'maybe a console game');
+  await pause(3500); vote('A', 'DemoA3', a1 ?? 'a guess'); vote('B', 'DemoB2', 'not sure yet');
+  // By now the two chats lead with different answers, so both overlays show the swap banner.
   // Community A is stuck: three viewers ask for the hint, which unlocks A's extra line.
   await pause(1500); for (const viewer of ['DemoA1', 'DemoA2', 'DemoA3']) controller.requestHint('A', viewer);
   await pause(4500); vote('A', 'DemoA1', answer); vote('A', 'DemoA2', answer);
@@ -28,7 +30,6 @@ while (true) {
   await pause(6000); if (round.status === 'active') controller.lockRound();
   await pause(10_000); controller.clearRoundDisplay();
   await pause(5000);
-  controller.setSettings({ category: 'food', difficulty: 'medium', roundLengthSeconds: 40 });
   const timeout = controller.startRound();
   const wrong = [...(timeout.puzzle.alsoFitsA ?? timeout.puzzle.halfAAlsoFits)];
   for (const [index, delay] of [4000, 6000, 7000, 6000].entries()) {
@@ -42,10 +43,10 @@ while (true) {
   controller.clearRoundDisplay();
   // A round with one voter per side ends as "not enough voters" and does not count.
   await pause(5000);
-  controller.setSettings({ category: 'games', difficulty: 'medium', roundLengthSeconds: 30 });
+  controller.setSettings({ roundLengthSeconds: 30 });
   const thin = controller.startRound();
   await pause(4000); vote('A', 'DemoSoloA', thin.puzzle.answer); vote('B', 'DemoSoloB', thin.puzzle.answer);
   await pause(5000); controller.timeout();
   await pause(10_000); controller.clearRoundDisplay();
-  controller.setSettings({ category: 'games', difficulty: 'medium', roundLengthSeconds: 40 });
+  controller.setSettings({ roundLengthSeconds: 40 });
 }

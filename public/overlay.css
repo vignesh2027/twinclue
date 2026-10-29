@@ -179,6 +179,16 @@ html,body{width:100%;height:100%;margin:0;background:transparent;color:var(--pap
 .is-centered .result-answer{font-size:1.5rem}
 .is-centered .solve-time{text-align:center}
 
+/* The swap moment: a bold banner on both overlays at the same server time. */
+.swap-banner{position:fixed;left:50%;top:7rem;transform:translate(-50%,-1.5rem) scale(.96);opacity:0;visibility:hidden;z-index:7;display:grid;justify-items:center;gap:.15rem;
+  padding:1rem 2.4rem 1.05rem;border-radius:1.4rem;text-align:center;background:linear-gradient(100deg,rgba(13,40,44,.96),rgba(22,26,46,.96) 50%,rgba(52,22,26,.96)) padding-box,linear-gradient(90deg,var(--a),var(--gold),var(--b)) border-box;
+  border:2px solid transparent;box-shadow:0 1.4rem 3.4rem rgba(0,0,0,.55),0 0 4rem rgba(253,230,138,.18);transition:opacity .35s var(--ease),transform .5s var(--ease),visibility 0s .5s}
+.swap-banner span{font-size:.95rem;font-weight:900;letter-spacing:.3em;color:var(--gold)}
+.swap-banner strong{font-size:3.4rem;line-height:1;font-weight:900;letter-spacing:.04em;background:linear-gradient(90deg,#99f6e4,#fff 50%,#fecaca);-webkit-background-clip:text;background-clip:text;color:transparent}
+.swap-banner small{font-size:1.05rem;font-weight:700;color:var(--text)}
+.is-swapping .swap-banner{opacity:1;visibility:visible;transform:translate(-50%,0) scale(1);transition:opacity .35s var(--ease),transform .5s var(--ease),visibility 0s;animation:swap-pulse 1s ease-in-out .5s 3}
+@keyframes swap-pulse{50%{box-shadow:0 1.4rem 3.4rem rgba(0,0,0,.55),0 0 6rem rgba(253,230,138,.38)}}
+
 /* A CSS-only confetti burst from behind the centred card on a win. */
 .burst{position:fixed;left:50%;top:50%;width:0;height:0;z-index:4;display:none}
 .is-won.is-centered .burst{display:block}

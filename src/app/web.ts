@@ -172,6 +172,12 @@ export function registerWebRoutes(app: FastifyInstance, controller: GameControll
     controller.setSettings(parsed.data);
     return controller.panelState();
   });
+  app.post('/api/video-safe', { preHandler: requireAdmin }, async (request, reply) => {
+    const parsed = RehearsalSchema.safeParse(request.body);
+    if (!parsed.success) return reply.code(400).send({ error: 'Send {"enabled": true or false}.' });
+    controller.setVideoSafe(parsed.data.enabled);
+    return controller.panelState();
+  });
   app.post('/api/rehearsal', { preHandler: requireAdmin }, async (request, reply) => {
     const parsed = RehearsalSchema.safeParse(request.body);
     if (!parsed.success) return reply.code(400).send({ error: 'Send {"enabled": true or false}.' });

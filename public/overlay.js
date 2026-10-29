@@ -23,6 +23,7 @@
   const STATUS = { active: 'VOTING LIVE', won: 'BOTH LOCKED IN', 'timed-out': 'TIME UP', unscored: 'NOT SCORED', idle: 'NEXT ROUND SOON' };
   const RING = 131.95;
   const CENTRE_STAGE_MS = 8000;
+  const REVEAL_BEAT_MS = 400;
   let state;
   let clockOffset = 0;
   let revealKey = '';
@@ -133,12 +134,21 @@
     const hints = reveal.hintsUsed ? ` · ${plural(reveal.hintsUsed, 'hint')} used` : '';
     $('#solve-time').textContent = `${how}Round time: ${fmtTime(reveal.solveTimeMs)}${hints}`;
     // Centre stage once per finished round, then the card settles back into its corner.
+    // Both overlays start from the server's end time (plus a short beat), so the two celebrations fire together.
     const id = `${s.roundStatus}|${reveal.answer}|${reveal.solveTimeMs}`;
     if (id !== revealKey) {
       revealKey = id;
-      root.classList.add('is-centered');
       clearTimeout(centreTimer);
-      centreTimer = setTimeout(() => root.classList.remove('is-centered'), CENTRE_STAGE_MS);
+      const serverNow = Date.now() + clockOffset;
+      const startAt = (reveal.revealAt ?? serverNow) + REVEAL_BEAT_MS;
+      const endAt = startAt + CENTRE_STAGE_MS;
+      if (serverNow >= endAt) return;
+      const begin = () => {
+        root.classList.add('is-centered');
+        cue(s.roundStatus === 'won' ? 'win' : 'reveal');
+        centreTimer = setTimeout(() => root.classList.remove('is-centered'), Math.max(0, endAt - (Date.now() + clockOffset)));
+      };
+      if (startAt > serverNow) centreTimer = setTimeout(begin, startAt - serverNow); else begin();
     }
   }
 
@@ -174,6 +184,7 @@
     start: () => { tone(523.25, 0, 0.18, 'triangle'); tone(783.99, 0.12, 0.28, 'triangle'); },
     tenSeconds: () => { tone(880, 0, 0.08, 'square', 0.03); tone(880, 0.16, 0.08, 'square', 0.03); },
     hint: () => { tone(739.99, 0, 0.14, 'sine', 0.06); tone(987.77, 0.1, 0.24, 'sine', 0.06); },
+    swap: () => { tone(392, 0, 0.12, 'sawtooth', 0.04); tone(587.33, 0.1, 0.12, 'sawtooth', 0.04); tone(392, 0.22, 0.12, 'sawtooth', 0.04); tone(587.33, 0.32, 0.22, 'sawtooth', 0.04); },
     reveal: () => { [659.25, 880, 1318.5].forEach((f, i) => tone(f, i * 0.07, 0.35, 'triangle', 0.05)); },
     win: () => { [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, i * 0.09, 0.5, 'triangle', 0.07)); },
   };
@@ -200,13 +211,12 @@
     state = s;
     if (s.roundStatus !== lastStatus) {
       if (s.roundStatus === 'active' && lastStatus) { cue('start'); tenSecondCue = false; lastHintUnlocked = false; }
-      if (s.roundStatus === 'won') cue('win');
-      else if ((s.roundStatus === 'timed-out' || s.roundStatus === 'unscored') && lastStatus === 'active') cue('reveal');
       lastStatus = s.roundStatus;
     }
     if (typeof s.serverNow === 'number') clockOffset = s.serverNow - Date.now();
     const tags = [];
     if (s.demo) tags.push(s.unauditedDemo ? 'DEMO MODE, UNAUDITED PUZZLE' : 'DEMO');
+    if (s.sandbox) tags.push('SANDBOX');
     if (s.rehearsal) tags.push('REHEARSAL');
     el.demo.hidden = tags.length === 0;
     el.demo.textContent = tags.join(' · ');
@@ -236,7 +246,17 @@
   }
 
   // The ring drains as time runs out.
+  // The swap banner shows during the same server-time window on both overlays.
+  let swapCueSeen = 0;
+  function renderSwap() {
+    const cueWindow = state?.roundStatus === 'active' ? state.swapCue : null;
+    const now = Date.now() + clockOffset;
+    const show = Boolean(cueWindow && now >= cueWindow.at && now < cueWindow.until);
+    if (show && cueWindow.at !== swapCueSeen) { swapCueSeen = cueWindow.at; cue('swap'); }
+    root.classList.toggle('is-swapping', show);
+  }
   function tick() {
+    renderSwap();
     if (state?.roundStatus === 'active' && state.endsAt && state.startedAt) {
       const now = Date.now() + clockOffset;
       const remaining = Math.max(0, state.endsAt - now);
@@ -249,7 +269,9 @@
     requestAnimationFrame(tick);
   }
   function connect() {
-    const ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/overlay/ws/${side}${key ? `?k=${encodeURIComponent(key)}` : ''}`);
+    // The sandbox gives each visitor their own game, found by a cookie on its own socket path.
+    const path = params.get('sandbox') === '1' ? `/sandbox/ws/${side}` : `/overlay/ws/${side}${key ? `?k=${encodeURIComponent(key)}` : ''}`;
+    const ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}${path}`);
     ws.onmessage = event => render(JSON.parse(event.data));
     ws.onclose = () => setTimeout(connect, 1500);
   }

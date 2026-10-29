@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Twinclue Sandbox</title><link rel="icon" href="/logo.svg"><link rel="stylesheet" href="/sandbox.css"></head>
+<body>
+<header class="top">
+  <div class="brand"><img src="/logo.svg" alt=""><span class="wordmark">TWIN<em>CLUE</em></span></div>
+  <p class="banner"><b>Sandbox:</b> no Twitch connection, both chats simulated by you.</p>
+</header>
+<main>
+  <section class="intro">
+    <h1>Two communities. Each holds half of every clue.</h1>
+    <p>On a real collab stream, each streamer's overlay shows a different half and each chat votes for its answer. Here you play both chats: read both halves, then vote the same answer on both sides.</p>
+  </section>
+  <section class="controls" aria-label="Round controls">
+    <button id="start" class="btn btn-start" type="button">Start round</button>
+    <button id="lock" class="btn btn-lock" type="button" disabled>Lock votes</button>
+    <button id="watch" class="btn btn-watch" type="button">Watch a sample round</button>
+    <div class="status"><span id="status" class="pill">NEXT ROUND SOON</span><strong id="time">0:00</strong><span id="score">0 wins · 0 points</span></div>
+  </section>
+  <section class="stage">
+    <article class="side side-a">
+      <div class="screen"><div class="scene"></div><iframe title="Community A overlay" src="/overlay/a?sandbox=1&amp;preview=0"></iframe></div>
+      <form class="chat" data-side="A"><label>Community A chat <span>as viewer, votes for A</span></label><div class="row"><input maxlength="80" placeholder="Type an answer" aria-label="Vote for community A"><button class="btn btn-vote" type="submit">Vote</button><button class="btn btn-hint" type="button" data-hint="A">!hint</button></div></form>
+    </article>
+    <article class="side side-b">
+      <div class="screen"><div class="scene"></div><iframe title="Community B overlay" src="/overlay/b?sandbox=1&amp;preview=0"></iframe></div>
+      <form class="chat" data-side="B"><label>Community B chat <span>as viewer, votes for B</span></label><div class="row"><input maxlength="80" placeholder="Type an answer" aria-label="Vote for community B"><button class="btn btn-vote" type="submit">Vote</button><button class="btn btn-hint" type="button" data-hint="B">!hint</button></div></form>
+    </article>
+  </section>
+  <p class="fine">Each vote you send is a new simulated viewer. A round is won when both communities lead with the right answer. Games last 60 seconds and are forgotten after 30 idle minutes.</p>
+  <p id="message" class="toast" role="status"></p>
+</main>
+<script src="/sandbox.js"></script>
+</body>
+</html>

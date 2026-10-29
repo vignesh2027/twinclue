@@ -8,7 +8,10 @@ const css = readFileSync('public/panel.css', 'utf8');
 describe('control panel assets', () => {
   it('has big Start, Lock and Skip controls with S, L and K shortcuts that ignore typing in fields', () => {
     for (const [id, key] of [['start', 'S'], ['lock', 'L'], ['skip', 'K']]) expect(html).toMatch(new RegExp(`id="${id}"[^>]*>.*?<kbd>${key}</kbd>`));
-    expect(script).toContain("{ s: '#start', l: '#lock', k: '#skip' }");
+    expect(script).toContain("{ s: '#start', l: '#lock' }");
+    // Skip voids the round, so it needs a press and hold or K twice.
+    expect(script).toMatch(/SKIP_HOLD_MS = 900/);
+    expect(script).toMatch(/function keyboardSkip\(\)/);
     expect(script).toMatch(/closest\('input, select, textarea'\)/);
   });
 
@@ -26,5 +29,14 @@ describe('control panel assets', () => {
   it('keeps every text colour readable: no grey below the muted token on the dark card', () => {
     expect(css).toMatch(/--muted:#a9b8c5/);
     expect(html).not.toMatch(/—|->(?!\s*$)/m);
+  });
+
+  it('does not rebuild dropdowns on every state push, scales the preview into a true 16:9 box, and stacks at OBS dock width', () => {
+    expect(script).toMatch(/if \(document\.activeElement === element\) return;/);
+    expect(script).toMatch(/element\.dataset\.options !== signature/);
+    expect(css).toMatch(/\.preview iframe\{[^}]*width:1920px;height:1080px/);
+    expect(script).toContain('box.clientWidth / 1920');
+    expect(css).toMatch(/@media\(max-width:480px\)\{/);
+    expect(css).toMatch(/\.btn-skip\{[^}]*rgba\(248,113,113/);
   });
 });

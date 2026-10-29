@@ -16,6 +16,7 @@ Deadline: 2 Nov 2026, 2:00 PM PST (3 Nov, 3:30 AM IST). Submit by 2 Nov evening 
 2. Every puzzle passes a blind test: a model given one half alone must not name the answer, and given both halves must. We publish the pass rate.
 3. A real session with real numbers in the write-up.
 4. All code written in the main Codex session (ID in DECISIONS.md and the submission); Claude designs, reviews and tests.
+   *Update, 27 Oct: the Codex plan hit its usage limit after slice 5c, so later slices were built with another AI coding assistant. [CODEX.md](CODEX.md) lists who built each commit.*
 5. Writing: professional, human, no em dashes, no arrows.
 
 ## Schedule (IST)

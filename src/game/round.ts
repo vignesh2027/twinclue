@@ -75,7 +75,7 @@ export interface SerializedRound {
   puzzle: Puzzle; status: RoundStatus; startedAt?: number; endedAt?: number; endsAt?: number; rehearsal: boolean;
   buckets: string[]; votesA: Array<[string, number]>; votesB: Array<[string, number]>;
   samples: VoteSample[]; result: Record<Community, SideReveal> | null; finishReason?: string; unscoredReason?: UnscoredReason;
-  hintAsks?: Record<Community, string[]>; hintUnlocked?: Record<Community, boolean>;
+  hintAsks?: Record<Community, string[]>; hintUnlocked?: Record<Community, boolean>; swapCueAt?: number;
 }
 
 export class Round {
@@ -84,6 +84,8 @@ export class Round {
   endedAt?: number;
   endsAt?: number;
   consensusSince?: number;
+  /** Server time the swap banner fired this round, if it has. */
+  swapCueAt?: number;
   private consensusLeaders?: string;
   finishReason?: 'timeout' | 'lock' | 'consensus' | 'skip';
   unscoredReason?: UnscoredReason;
@@ -272,7 +274,7 @@ export class Round {
     const votesB = pack('B');
     return { puzzle: this.puzzle, status: this.status, startedAt: this.startedAt, endedAt: this.endedAt, endsAt: this.endsAt, rehearsal: this.rehearsal,
       buckets, votesA, votesB, samples: this.recentSamples(), result: this.result, finishReason: this.finishReason, unscoredReason: this.unscoredReason,
-      hintAsks: { A: [...this.hintAsks.A], B: [...this.hintAsks.B] }, hintUnlocked: { ...this.hintUnlocked } };
+      hintAsks: { A: [...this.hintAsks.A], B: [...this.hintAsks.B] }, hintUnlocked: { ...this.hintUnlocked }, swapCueAt: this.swapCueAt };
   }
 
   static restore(saved: SerializedRound, options: RoundOptions = {}): Round {
@@ -284,6 +286,7 @@ export class Round {
     round.result = saved.result;
     round.finishReason = saved.finishReason as Round['finishReason'];
     round.unscoredReason = saved.unscoredReason;
+    round.swapCueAt = saved.swapCueAt;
     for (const community of ['A', 'B'] as const) {
       for (const user of saved.hintAsks?.[community] ?? []) round.hintAsks[community].add(user);
       round.hintUnlocked[community] = Boolean(saved.hintUnlocked?.[community]);

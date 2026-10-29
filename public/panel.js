@@ -27,9 +27,16 @@
   const plural = (count, word) => `${count} ${count === 1 ? word : `${word}s`}`;
 
   function showLogin(text) { $('#login').hidden = false; $('#app').hidden = true; if (text) say(text); }
+  // Options are rebuilt only when the list changes, and never while the select is focused, so an open dropdown
+  // stays open while votes stream in.
   function setOptions(element, values, selected) {
-    element.replaceChildren(...values.map(value => { const option = document.createElement('option'); option.value = value; option.textContent = value; return option; }));
-    element.value = selected;
+    if (document.activeElement === element) return;
+    const signature = values.join('\u0000');
+    if (element.dataset.options !== signature) {
+      element.replaceChildren(...values.map(value => { const option = document.createElement('option'); option.value = value; option.textContent = value; return option; }));
+      element.dataset.options = signature;
+    }
+    if (element.value !== selected) element.value = selected;
   }
   function fillVotes(target, rows) {
     const list = $(target);
@@ -79,7 +86,8 @@
     $('#login').hidden = true; $('#app').hidden = false;
     setOptions($('#category'), s.options.categories, s.category);
     setOptions($('#difficulty'), s.options.difficultiesByCategory[s.category] ?? ['medium'], s.difficulty);
-    $('#duration').value = s.roundLengthSeconds;
+    if (document.activeElement !== $('#duration')) $('#duration').value = s.roundLengthSeconds;
+    $('#video-safe').checked = s.videoSafe;
     $('#duration-label').textContent = `${s.roundLengthSeconds} seconds`;
     $('#next-up').textContent = `Next: ${s.category}, ${s.difficulty}, ${s.roundLengthSeconds} seconds`;
     $('#demo').hidden = !s.demo;
@@ -143,6 +151,7 @@
     render(await api('GET', '/api/state'));
     links = await api('GET', '/api/overlay-links');
     $('#preview-a').src = links.a;
+    fitPreview();
     connect();
   }
 
@@ -150,14 +159,43 @@
     start: run(async () => { await api('POST', '/api/round/start', {}); say('Round started.'); }),
     lock: run(async () => { await api('POST', '/api/round/lock', {}); say('Votes locked.'); }),
     skip: run(async () => { await api('POST', '/api/round/skip', {}); say('Round skipped. It does not count.'); }),
+
   };
   const openDrawer = open => { $('#drawer').hidden = !open; };
+  // The preview renders the real 1920 x 1080 canvas and scales it into a true 16:9 box.
+  function fitPreview() {
+    const box = $('.preview');
+    const frame = $('#preview-a');
+    const apply = () => { frame.style.transform = `scale(${box.clientWidth / 1920})`; };
+    apply();
+    if ('ResizeObserver' in window) new ResizeObserver(apply).observe(box); else addEventListener('resize', apply);
+  }
   const openHelp = open => { $('#help').hidden = !open; };
 
   $('#login-form').onsubmit = event => { event.preventDefault(); token = $('#token').value.trim(); store.set(token); start().catch(error => say(error.message)); };
   $('#start').onclick = actions.start;
   $('#lock').onclick = actions.lock;
-  $('#skip').onclick = actions.skip;
+  // Skip voids the round for both chats, so it needs a deliberate press and hold (or K twice).
+  const SKIP_HOLD_MS = 900;
+  let holdTimer;
+  const skip = $('#skip');
+  const cancelHold = () => { clearTimeout(holdTimer); skip.classList.remove('holding'); };
+  skip.addEventListener('pointerdown', event => {
+    if (skip.disabled) return;
+    event.preventDefault();
+    skip.classList.add('holding');
+    holdTimer = setTimeout(() => { skip.classList.remove('holding'); actions.skip(); }, SKIP_HOLD_MS);
+  });
+  for (const type of ['pointerup', 'pointerleave', 'pointercancel']) skip.addEventListener(type, cancelHold);
+  skip.addEventListener('click', event => { if (event.detail === 0) say('Hold Skip for a second, or press K twice.'); });
+  let skipArmedUntil = 0;
+  function keyboardSkip() {
+    if (skip.disabled) return;
+    if (Date.now() < skipArmedUntil) { skipArmedUntil = 0; actions.skip(); return; }
+    skipArmedUntil = Date.now() + 2000;
+    say('Press K again within 2 seconds to skip. A skipped round does not count.');
+  }
+  $('#video-safe').onchange = run(() => api('POST', '/api/video-safe', { enabled: $('#video-safe').checked }));
   $('#recap').onclick = run(async () => {
     const result = await api('POST', '/api/recap', {});
     const link = document.createElement('a');
@@ -189,7 +227,8 @@
     if ($('#app').hidden) return;
     const key = event.key.toLowerCase();
     if (key === 'escape') { openDrawer(false); openHelp(false); return; }
-    const button = { s: '#start', l: '#lock', k: '#skip' }[key];
+    if (key === 'k') { event.preventDefault(); keyboardSkip(); return; }
+    const button = { s: '#start', l: '#lock' }[key];
     if (button) { event.preventDefault(); if (!$(button).disabled) $(button).click(); return; }
     if (key === ',') { event.preventDefault(); openDrawer($('#drawer').hidden); return; }
     if (key === '?') { event.preventDefault(); openHelp($('#help').hidden); }
