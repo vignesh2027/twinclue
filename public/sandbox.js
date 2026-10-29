@@ -22,7 +22,12 @@
     $('#start').disabled = active;
     $('#lock').disabled = !active;
     $('#watch').disabled = active;
-    for (const button of document.querySelectorAll('[data-hint]')) button.disabled = !active || s.hints[button.dataset.hint.toLowerCase()].unlocked || !s.hints[button.dataset.hint.toLowerCase()].available;
+    for (const button of document.querySelectorAll('[data-hint]')) {
+      const hint = s.hints[button.dataset.hint.toLowerCase()];
+      button.disabled = !active || hint.unlocked || !hint.available;
+      // The threshold rises with that side's voters, so the live count is shown rather than a fixed number.
+      $(`#hint-${button.dataset.hint.toLowerCase()}`).textContent = hint.unlocked ? 'Hint unlocked' : !active ? '' : !hint.available ? 'No hint this round' : `Hint: ${hint.asks} of ${hint.needed} asked`;
+    }
     $('#score').textContent = `${s.scoreboard.wins} ${s.scoreboard.wins === 1 ? 'win' : 'wins'} · ${s.scoreboard.points ?? 0} points`;
   }
   // The overlays are drawn on a 1920 x 1080 canvas and scaled into each 16:9 screen.

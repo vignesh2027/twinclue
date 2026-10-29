@@ -178,11 +178,21 @@ export function buildServer(env: NodeJS.ProcessEnv = process.env, overrides?: Se
 export function buildDemoServer(env: NodeJS.ProcessEnv = process.env, overrides?: ServerOverrides) { return createServer(true, env, overrides); }
 
 /**
+ * TRUST_PROXY=N trusts N proxies in front of the server, so the client is the Nth X-Forwarded-For entry from the
+ * right: the address the outermost trusted proxy saw. `trustProxy: true` would take the leftmost entry, which a client
+ * can forge behind any proxy that appends to the header, and Fastify ignores plain hop counts, so this is a function.
+ */
+export function trustedProxies(value: string | undefined): ((address: string, hop: number) => boolean) | false {
+  const hops = Math.min(10, Math.floor(Number(value?.trim() || 0)) || 0);
+  return hops > 0 ? (_address, hop) => hop < hops : false;
+}
+
+/**
  * SANDBOX=1: the hosted "try it now" mode. No Twitch, no admin token, one isolated in-memory game per browser,
  * only audited video-safe puzzles. Binds to 127.0.0.1 unless PUBLIC=1.
  */
 export async function buildSandboxServer(env: NodeJS.ProcessEnv = process.env, overrides: { pack?: Puzzle[]; logStream?: NodeJS.WritableStream } = {}) {
-  const app = Fastify({ logger: loggerOptions(overrides.logStream), trustProxy: env.TRUST_PROXY === '1' });
+  const app = Fastify({ logger: loggerOptions(overrides.logStream), trustProxy: trustedProxies(env.TRUST_PROXY) });
   // Showcase puzzles come first, then every other audited video-safe puzzle.
   const showcase = showcasePuzzles(puzzlePack);
   const ordered = [...showcase, ...puzzlePack.filter(puzzle => !showcase.includes(puzzle))];

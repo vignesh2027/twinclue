@@ -8,7 +8,7 @@ Deadline: 2 Nov 2026, 2:00 PM PST (3 Nov, 3:30 AM IST). Submit by 2 Nov evening 
 | --- | --- |
 | Innovation | The only entry built for streamer collaboration: two communities, each holding half of every clue. Research found no other entry in this lane. |
 | Potential impact | Collab streams are common, but the two audiences rarely talk. A measured live session: rounds played, solve times, and how many viewers from each side took part. |
-| Technical implementation and use of Codex | Real Twitch integration (EventSub WebSocket, Helix chat, Shared Chat events, Channel Points), tests on every module, and one Codex session that built it slice by slice with AGENTS.md as its constitution. |
+| Technical implementation and use of Codex | Real Twitch integration (EventSub WebSocket, Helix chat, Shared Chat events, Channel Points), tests on every module, and one Codex session that built slices 1 to 5c with AGENTS.md as its constitution (later slices by another AI coding assistant, see [CODEX.md](CODEX.md)). |
 | Design | Two overlays that are fun to watch at a glance, a reveal that shows what each half alone could have meant, and a control panel a streamer can run while live. |
 
 ## Quality bars (no shortcuts)

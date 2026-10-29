@@ -130,8 +130,9 @@ export class Round {
     if (!clean || isBlockedGuess(clean)) return 'blocked';
     const normalised = normaliseGuess(clean);
     if (!normalised) return 'blocked';
-    // One person, one side: a viewer who voted for one community cannot also vote for the other this round.
-    if (this.tallies[community === 'A' ? 'B' : 'A'].votes.has(userId)) return 'wrong-side';
+    // One person, one side: a viewer who voted for, or asked for the hint of, one community cannot vote for the other.
+    const other = community === 'A' ? 'B' : 'A';
+    if (this.tallies[other].votes.has(userId) || this.hintAsks[other].has(userId)) return 'wrong-side';
     const tally = this.tallies[community];
     const current = tally.votes.get(userId);
     const bucket = this.vocabulary.match(normalised) ?? `t:${normalised}`;
@@ -301,7 +302,8 @@ export class Round {
       const tally = round.tallies[community];
       for (const [user, index] of votes) {
         const bucket = buckets[index];
-        if (bucket === undefined || tally.votes.has(user) || round.tallies[community === 'A' ? 'B' : 'A'].votes.has(user)) continue;
+        const other = community === 'A' ? 'B' : 'A';
+        if (bucket === undefined || tally.votes.has(user) || round.tallies[other].votes.has(user) || round.hintAsks[other].has(user)) continue;
         tally.votes.set(user, bucket);
         tally.add(bucket);
       }

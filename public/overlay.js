@@ -233,11 +233,13 @@
     if (active) {
       el.category.textContent = s.category ?? '';
       el.clue.textContent = s.half ?? '';
-      el.phase.textContent = s.leading ? 'YOUR CHAT IS CONVERGING' : 'YOUR CLUE';
+      // One voter is not a chat converging; the line waits for at least two on this side.
+      const converging = Boolean(s.leading) && (s.voters ?? 0) >= 2;
+      el.phase.textContent = converging ? 'YOUR CHAT IS CONVERGING' : 'YOUR CLUE';
       el.hook.textContent = `Community ${side === 'a' ? 'B' : 'A'} has the other half. Ask your streamer to swap clues.`;
       el.cta.textContent = `Type ${s.commandPrefix || '!g'} and your answer in chat`;
-      el.wait.hidden = !s.leading;
-      if (s.leading) el.wait.textContent = 'Chat is converging on a leading answer';
+      el.wait.hidden = !converging;
+      if (converging) el.wait.textContent = 'Chat is converging on a leading answer';
       renderVotes(s);
       renderTicker(s.recentVotes ?? []);
       renderHint(s.hint);

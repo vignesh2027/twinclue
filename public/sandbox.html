@@ -20,14 +20,14 @@
   <section class="stage">
     <article class="side side-a">
       <div class="screen"><div class="scene"></div><iframe title="Community A overlay" src="/overlay/a?sandbox=1&amp;preview=0"></iframe></div>
-      <form class="chat" data-side="A"><label>Community A chat <span>as viewer, votes for A</span></label><div class="row"><input maxlength="80" placeholder="Type an answer" aria-label="Vote for community A"><button class="btn btn-vote" type="submit">Vote</button><button class="btn btn-hint" type="button" data-hint="A">!hint</button></div></form>
+      <form class="chat" data-side="A"><label>Community A chat <span>as viewer, votes for A</span><output id="hint-a" class="hint-progress" aria-live="polite"></output></label><div class="row"><input maxlength="80" placeholder="Type an answer" aria-label="Vote for community A"><button class="btn btn-vote" type="submit">Vote</button><button class="btn btn-hint" type="button" data-hint="A">!hint</button></div></form>
     </article>
     <article class="side side-b">
       <div class="screen"><div class="scene"></div><iframe title="Community B overlay" src="/overlay/b?sandbox=1&amp;preview=0"></iframe></div>
-      <form class="chat" data-side="B"><label>Community B chat <span>as viewer, votes for B</span></label><div class="row"><input maxlength="80" placeholder="Type an answer" aria-label="Vote for community B"><button class="btn btn-vote" type="submit">Vote</button><button class="btn btn-hint" type="button" data-hint="B">!hint</button></div></form>
+      <form class="chat" data-side="B"><label>Community B chat <span>as viewer, votes for B</span><output id="hint-b" class="hint-progress" aria-live="polite"></output></label><div class="row"><input maxlength="80" placeholder="Type an answer" aria-label="Vote for community B"><button class="btn btn-vote" type="submit">Vote</button><button class="btn btn-hint" type="button" data-hint="B">!hint</button></div></form>
     </article>
   </section>
-  <p class="fine">Each vote you send is a new simulated viewer. A round is won when both communities lead with the right answer. Games last 60 seconds and are forgotten after 30 idle minutes.</p>
+  <p class="fine">Each vote you send is a new simulated viewer, and so is each !hint press. A side's hint unlocks once enough viewers ask; more voters on that side means more asks are needed. A round is won when both communities lead with the right answer. Games last 60 seconds and are forgotten after 30 idle minutes.</p>
   <p id="message" class="toast" role="status"></p>
 </main>
 <script src="/sandbox.js"></script>

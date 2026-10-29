@@ -23,6 +23,7 @@
       <div class="actions-note"><b id="next-up">Next: games, medium, 90 seconds</b><span>Lock reveals now and scores both chats' current leaders. Skip voids the round: hold it, or press K twice.</span></div>
     </section>
 
+    <div class="col col-main">
     <section class="card round" aria-label="Live round">
       <div class="card-head"><h2>Live round</h2><span id="round-status" class="pill" data-state="idle">NEXT ROUND SOON</span></div>
       <div class="timer"><strong id="time-left">0:00</strong><div class="bar"><i id="time-bar"></i></div><small id="round-meta">No round running</small></div>
@@ -40,8 +41,18 @@
           <ul id="votes-b" class="votes"></ul>
         </article>
       </div>
-      <p class="fine">Neither clue is ever shown here, so the host can play fairly.</p>
+      <p class="fine">This card never shows a clue. The overlay preview is your own overlay A; overlay B's clue never appears in the panel.</p>
     </section>
+
+    <section class="card links" aria-label="Overlay links">
+      <div class="card-head"><h2>Overlays</h2></div>
+      <div class="preview"><iframe id="preview-a" title="Community A overlay preview"></iframe><span>Your overlay (community A)</span></div>
+      <div class="link-buttons"><button id="copy-a" class="ghost" type="button">Copy overlay A link</button><button id="copy-b" class="ghost" type="button">Copy overlay B link for streamer B</button></div>
+      <p class="fine"><b>In OBS:</b> add a Browser source, paste the link, set 1920 x 1080. Add <code>&amp;sound=1</code> to the link for sound cues. Overlay B's clue never appears here.</p>
+    </section>
+    </div>
+
+    <div class="col col-side">
 
     <section class="card health" aria-label="Connection health">
       <div class="card-head"><h2>Connections</h2><button id="connect-bot" class="ghost small" type="button">Connect bot account</button></div>
@@ -66,18 +77,12 @@
       <p id="recap-link" class="fine" hidden></p>
     </section>
 
-    <section class="card links" aria-label="Overlay links">
-      <div class="card-head"><h2>Overlays</h2></div>
-      <div class="preview"><iframe id="preview-a" title="Community A overlay preview"></iframe><span>Your overlay (community A)</span></div>
-      <div class="link-buttons"><button id="copy-a" class="ghost" type="button">Copy overlay A link</button><button id="copy-b" class="ghost" type="button">Copy overlay B link for streamer B</button></div>
-      <p class="fine"><b>In OBS:</b> add a Browser source, paste the link, set 1920 x 1080. Add <code>&amp;sound=1</code> to the link for sound cues. Overlay B's clue never appears here.</p>
-    </section>
-
     <section class="card rehearsal-box" aria-label="Rehearsal">
       <div class="card-head"><h2>Rehearsal</h2><label class="switch"><input id="rehearsal" type="checkbox"><span>Rehearsal mode</span></label></div>
       <p class="fine">No partner yet? Turn this on and play community B from here. Rehearsal rounds never score and the bot stays quiet.</p>
       <form id="rehearsal-form" hidden><input id="rehearsal-text" maxlength="80" placeholder="Type a vote as a community B viewer" aria-label="Rehearsal vote for community B"><button class="btn btn-small" type="submit">Send as B</button></form>
     </section>
+    </div>
   </div>
 </main>
 

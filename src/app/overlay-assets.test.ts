@@ -42,4 +42,9 @@ describe('overlay sound cues', () => {
     expect(script).toContain('HINT UNLOCKED');
     expect(css).toMatch(/\.hint\.unlocked\{[^}]*animation:hint-in/);
   });
+
+  it('says the chat is converging only once its side has at least two voters', () => {
+    expect(script).toContain("const converging = Boolean(s.leading) && (s.voters ?? 0) >= 2;");
+    expect(script).toMatch(/el\.wait\.hidden = !converging;/);
+  });
 });

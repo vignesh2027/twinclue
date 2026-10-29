@@ -3,7 +3,9 @@
 Twinclue was built slice by slice with AI coding assistants, under the rules in [AGENTS.md](AGENTS.md) and the
 product brief in [SPEC.md](SPEC.md). Every decision is recorded in [DECISIONS.md](DECISIONS.md).
 
-- **OpenAI Codex** built slices 1 to 5c, in session `01a173c5-a449-71a1-abff-67e5a794156b`.
+- **OpenAI Codex** built slices 1 to 5c, in session `01a173c5-a449-71a1-abff-67e5a794156b`. The maintainer committed
+  each slice after review. Codex's slice 5c turn stopped at the usage limit just after a green test run, and `d47fdde`
+  was committed five minutes later.
 - When the Codex plan reached its usage limit, **another AI coding assistant** continued from commit `d47fdde`. It
   built the later slices, and separate review passes (also AI-assisted) found and fixed bugs. The hackathon FAQ
   allows other AI coding assistants.
@@ -28,7 +30,7 @@ Not all of the code was written by Codex. The table below says which assistant b
 | `94b5ae0` | 27 Oct | Overlay | Preview stage, premium card, centre-stage reveal | Another AI coding assistant |
 | `d2e2ba5` | 28 Oct | Overlay review | Readable ticker, confetti behind the reveal, icon | Another AI coding assistant (review pass) |
 | `36bca05` | 28 Oct | 7 | Live control panel, hint vote, session recap and sound cues | Another AI coding assistant |
-| (next) | 28 Oct | 8 | Swap moment, video-safe showcase, OBS dock panel, the hosted sandbox, LICENSE and these docs | Another AI coding assistant |
+| `46fcaba` | 29 Oct | 8 | Swap moment, video-safe showcase, OBS dock panel, the hosted sandbox, LICENSE and these docs | Another AI coding assistant |
 
 ## How Codex was used
 

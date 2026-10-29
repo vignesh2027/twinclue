@@ -4,7 +4,7 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import { registerSandbox, readCookie } from './sandbox.js';
 import { forgedPack } from '../puzzle/forged-pack.js';
 import { isVideoSafe } from '../puzzle/showcase.js';
-import { buildSandboxServer } from '../server.js';
+import { buildSandboxServer, trustedProxies } from '../server.js';
 
 const apps: FastifyInstance[] = [];
 afterEach(async () => { for (const app of apps.splice(0)) await app.close(); });
@@ -110,4 +110,72 @@ describe('sandbox mode', () => {
     await new Promise(resolve => setTimeout(resolve, 8_600));
     expect(controller.activeRound?.status).toBe('won');
   }, 15_000);
+
+  it('believes only TRUST_PROXY hops of X-Forwarded-For, so a forged leftmost entry cannot dodge the per-address limit', async () => {
+    expect(trustedProxies(undefined)).toBe(false);
+    expect(trustedProxies('0')).toBe(false);
+    const server = await buildSandboxServer({ TRUST_PROXY: '1' });
+    try {
+      const codes: number[] = [];
+      for (let i = 0; i < 22; i++) {
+        const cookie = `tc_sandbox=${(i + 1).toString(16).padStart(32, 'c')}`;
+        codes.push((await server.app.inject({ url: '/sandbox/api/state', headers: { cookie, 'x-forwarded-for': `6.6.${i}.1, 203.0.113.7` } })).statusCode);
+      }
+      expect(codes.filter(code => code === 200)).toHaveLength(20);
+      expect(codes.slice(20)).toEqual([503, 503]);
+      // A different real visitor behind the same proxy still gets a game.
+      expect((await server.app.inject({ url: '/sandbox/api/state', headers: { cookie: `tc_sandbox=${'d'.repeat(32)}`, 'x-forwarded-for': '198.51.100.9' } })).statusCode).toBe(200);
+    } finally { await server.shutdown(); }
+  });
+
+  it('never creates a game from a socket upgrade; the overlay page creates it with the client address', async () => {
+    const { app, manager } = sandbox();
+    const cookie = await visit(app);
+    const address = await app.listen({ host: '127.0.0.1', port: 0 });
+    const refused = await new Promise<number>(resolve => {
+      const ws = new WebSocket(`${address.replace('http', 'ws')}/sandbox/ws/a`, { headers: { cookie, origin: address } });
+      ws.on('unexpected-response', (_request, response) => resolve(response.statusCode ?? 0));
+      ws.on('error', () => undefined);
+    });
+    expect(refused).toBe(503);
+    expect(manager.size).toBe(0);
+    expect((await app.inject({ url: '/overlay/a?sandbox=1', headers: { cookie } })).statusCode).toBe(200);
+    expect(manager.size).toBe(1);
+  });
+
+  it('caps overlay sockets per visitor and closes them when the game is forgotten', async () => {
+    let now = 0;
+    const { app, manager } = sandbox({ maxSocketsPerVisitor: 3, idleMs: 1_000, now: () => now });
+    const cookie = await visit(app);
+    await app.inject({ url: '/sandbox/api/state', headers: { cookie } });
+    const address = await app.listen({ host: '127.0.0.1', port: 0 });
+    const open = await Promise.all(Array.from({ length: 5 }, () => new Promise<WebSocket>((resolve, reject) => {
+      const ws = new WebSocket(`${address.replace('http', 'ws')}/sandbox/ws/a`, { headers: { cookie, origin: address } });
+      ws.on('open', () => resolve(ws));
+      ws.on('error', reject);
+    })));
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(open.filter(ws => ws.readyState === WebSocket.OPEN)).toHaveLength(3);
+    now += 5_000;
+    manager.sweep();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(open.filter(ws => ws.readyState === WebSocket.OPEN)).toHaveLength(0);
+  });
+
+  it('shows the live hint progress beside each chat, since the threshold rises with voters', async () => {
+    const { readFileSync } = await import('node:fs');
+    const page = readFileSync('public/sandbox.html', 'utf8');
+    const script = readFileSync('public/sandbox.js', 'utf8');
+    for (const side of ['a', 'b']) expect(page).toContain(`id="hint-${side}"`);
+    expect(page).toContain('unlocks once enough viewers ask');
+    expect(script).toContain('`Hint: ${hint.asks} of ${hint.needed} asked`');
+    const { app, manager } = sandbox();
+    const cookie = await visit(app);
+    await post(app, cookie, '/sandbox/api/start');
+    const round = manager.visitors.get(readCookie(cookie, 'tc_sandbox')!)!.controller.activeRound!;
+    if (!round.hintText('A')) return;
+    for (let i = 0; i < 10; i++) await post(app, cookie, '/sandbox/api/vote', { side: 'A', text: `guess ${i}` });
+    const hints = (await post(app, cookie, '/sandbox/api/hint', { side: 'A' })).json().state.hints.a;
+    expect(hints).toMatchObject({ asks: 1, needed: 2, unlocked: false });
+  });
 });

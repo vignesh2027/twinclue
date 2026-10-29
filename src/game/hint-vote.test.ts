@@ -4,6 +4,7 @@ import { Session } from './session.js';
 import { GameController } from '../app/controller.js';
 import { parseCommand } from '../app/commands.js';
 import { puzzleFixture } from '../test/puzzle-fixture.js';
+import { Metrics } from '../obs/metrics.js';
 
 const puzzle = { ...puzzleFixture, hintA: 'A city with a famous iron tower.', hintB: 'A city that hosted the 2024 Summer Olympics.' };
 const round = (options = {}) => { const r = new Round(puzzle, { minVotersToWin: 1, ...options }); r.start(0, 90_000); return r; };
@@ -79,5 +80,19 @@ describe('!hint vote', () => {
     const panel = controller.panelState();
     expect(panel.hints.a).toEqual({ available: true, asks: 3, needed: 3, unlocked: true });
     expect(JSON.stringify(panel)).not.toContain(puzzle.hintA);
+  });
+
+  it('binds a viewer who asked for one side\'s hint to that side, counted as wrong_side, and keeps the binding across a restart', () => {
+    const metrics = new Metrics();
+    const controller = new GameController(new Session(), [puzzle], { minVotersToWin: 1, metrics });
+    controllers.push(controller);
+    controller.startRound();
+    expect(controller.requestHint('A', 'asker')).toBe('asked');
+    expect(controller.vote('B', 'asker', 'Paris')).toBe('wrong-side');
+    expect(controller.activeRound!.voterCount('B')).toBe(0);
+    expect(controller.vote('A', 'asker', 'Paris')).toBe('voted');
+    expect(metrics.render()).toMatch(/twinclue_votes_total\{result="wrong_side"\} 1/);
+    const restored = Round.restore({ ...controller.activeRound!.serialize(), votesB: [['asker', 0]] });
+    expect(restored.voterCount('B')).toBe(0);
   });
 });

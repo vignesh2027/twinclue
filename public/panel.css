@@ -29,7 +29,8 @@ code{font:600 .9em ui-monospace,SFMono-Regular,Menlo,monospace;color:#fff;backgr
 main{max-width:1280px;margin:0 auto;padding:16px 22px 40px}
 .layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:14px;align-items:start}
 .actions{grid-column:1/-1}
-.round{grid-row:span 2}
+/* Two independent columns, so a short live round card never leaves a gap above the overlay preview. */
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
 .card{background:linear-gradient(160deg,var(--card-2),var(--card));border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 h2{margin:0;font-size:13px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
@@ -133,7 +134,7 @@ h2{margin:0;font-size:13px;font-weight:900;letter-spacing:.16em;text-transform:u
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);margin:0;padding:10px 16px;border-radius:12px;background:#1d2a40;border:1px solid var(--line);color:#fff;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:12}
 .toast:empty{display:none}
 @keyframes slide{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
-@media(max-width:1100px){.layout{grid-template-columns:1fr}.round{grid-row:auto}.actions{grid-template-columns:repeat(3,1fr)}.actions-note{grid-column:1/-1}}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.col{display:contents}.round{order:1}.health{order:2}.score{order:3}.links{order:4}.rehearsal-box{order:5}.actions{grid-template-columns:repeat(3,1fr)}.actions-note{grid-column:1/-1}}
 @media(max-width:640px){.sides{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.title,.divider{display:none}}
 /* OBS dock width: one column, the live round and its timer first, compact controls under it, nothing wider than the dock. */
 @media(max-width:480px){

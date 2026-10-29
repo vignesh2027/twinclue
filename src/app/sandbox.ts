@@ -1,6 +1,5 @@
 import { randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import type { IncomingMessage } from 'node:http';
 import { resolve } from 'node:path';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { WebSocketServer, WebSocket } from 'ws';
@@ -25,10 +24,12 @@ export interface SandboxOptions {
   /** New games one IP address may open per ten minutes. */
   sessionsPerIpPer10Min?: number;
   roundLengthSeconds?: number;
+  /** Overlay sockets one visitor may hold; the oldest is closed when a new one would go over. */
+  maxSocketsPerVisitor?: number;
 }
 
 interface Bucket { tokens: number; at: number }
-interface Visitor { controller: GameController; lastSeen: number; bucket: Bucket; voters: number }
+interface Visitor { controller: GameController; lastSeen: number; bucket: Bucket; voters: number; sockets: Set<WebSocket> }
 
 const COOKIE = 'tc_sandbox';
 const ID_PATTERN = /^[a-f0-9]{32}$/;
@@ -73,11 +74,11 @@ export class SandboxManager {
     this.ipStarts.set(ip, window);
     const controller = new GameController(new Session(), this.pack, {
       sandbox: true, videoSafe: true, vocabularies: this.options.vocabularies,
-      // One person plays both chats, so one voter per side counts and one ask unlocks a hint.
+      // One person plays both chats, so one voter per side counts and a hint needs one ask at first (more as voters grow).
       minVotersToWin: 1, hintThreshold: 1,
     });
     controller.setSettings({ roundLengthSeconds: this.options.roundLengthSeconds ?? 60 });
-    const visitor: Visitor = { controller, lastSeen: this.now(), bucket: { tokens: this.options.actionBurst ?? 12, at: this.now() }, voters: 0 };
+    const visitor: Visitor = { controller, lastSeen: this.now(), bucket: { tokens: this.options.actionBurst ?? 12, at: this.now() }, voters: 0, sockets: new Set() };
     this.visitors.set(id, visitor);
     return visitor;
   }
@@ -94,16 +95,41 @@ export class SandboxManager {
     return true;
   }
 
+  /** The visitor's game if it already exists. Overlay sockets never create games: an upgrade has no trusted client address. */
+  find(id: string): Visitor | undefined {
+    const visitor = this.visitors.get(id);
+    if (visitor) visitor.lastSeen = this.now();
+    return visitor;
+  }
+
+  /** Adds an overlay socket to a visitor's game, closing the oldest ones beyond the cap. */
+  attach(visitor: Visitor, socket: WebSocket): void {
+    visitor.sockets.add(socket);
+    socket.once('close', () => visitor.sockets.delete(socket));
+    const cap = this.options.maxSocketsPerVisitor ?? 6;
+    for (const old of visitor.sockets) {
+      if (visitor.sockets.size <= cap) break;
+      visitor.sockets.delete(old);
+      old.terminate();
+    }
+  }
+
+  private forget(id: string, visitor: Visitor): void {
+    visitor.controller.close();
+    for (const socket of visitor.sockets) socket.terminate();
+    visitor.sockets.clear();
+    this.visitors.delete(id);
+  }
+
   sweep(): void {
     const idle = this.options.idleMs ?? 30 * 60_000;
-    for (const [id, visitor] of this.visitors) if (this.now() - visitor.lastSeen > idle) { visitor.controller.close(); this.visitors.delete(id); }
+    for (const [id, visitor] of this.visitors) if (this.now() - visitor.lastSeen > idle) this.forget(id, visitor);
     for (const [ip, starts] of this.ipStarts) if (starts.every(at => this.now() - at >= 10 * 60_000)) this.ipStarts.delete(ip);
   }
 
   close(): void {
     if (this.sweeper) clearInterval(this.sweeper);
-    for (const visitor of this.visitors.values()) visitor.controller.close();
-    this.visitors.clear();
+    for (const [id, visitor] of this.visitors) this.forget(id, visitor);
   }
 }
 
@@ -122,7 +148,8 @@ export function registerSandbox(app: FastifyInstance, options: SandboxOptions): 
   const secure = Boolean(options.publicUrl?.startsWith('https://'));
   const extra = options.publicUrl ? [options.publicUrl] : [];
   const allowed = () => { const address = app.server.address(); return allowedOrigins(extra, address && typeof address === 'object' ? address.port : undefined); };
-  const ipOf = (request: IncomingMessage | FastifyRequest) => ('ip' in request && typeof request.ip === 'string' ? request.ip : (request as IncomingMessage).socket.remoteAddress) ?? 'unknown';
+  // Games are only created from HTTP requests, whose request.ip honours TRUST_PROXY.
+  const ipOf = (request: FastifyRequest) => request.ip || 'unknown';
 
   /** Every page load carries a cookie; the game behind it is created on first use. */
   function cookieId(request: FastifyRequest, reply: FastifyReply): string {
@@ -142,6 +169,9 @@ export function registerSandbox(app: FastifyInstance, options: SandboxOptions): 
   app.get('/overlay/:side', async (request, reply) => {
     const side = (request.params as { side: string }).side;
     if (side !== 'a' && side !== 'b') return reply.code(404).send({ error: 'Not found' });
+    // The overlay page always loads before its socket opens, so the game is created here with the real client address.
+    const id = readCookie(request.headers.cookie, COOKIE);
+    if (id && ID_PATTERN.test(id)) manager.visitor(id, ipOf(request));
     return reply.type('text/html; charset=utf-8').header('cache-control', 'no-store').send(await readFile(resolve('public/overlay.html'), 'utf8'));
   });
   app.get('/healthz', async () => ({ ok: true, sandbox: true, games: manager.size }));
@@ -204,9 +234,10 @@ export function registerSandbox(app: FastifyInstance, options: SandboxOptions): 
     if (!originAllowed(request.headers.origin, allowed())) return reject(403, 'Forbidden');
     const id = readCookie(request.headers.cookie, COOKIE);
     if (!id || !ID_PATTERN.test(id)) return reject(400, 'Bad Request');
-    const visitor = manager.visitor(id, ipOf(request));
+    const visitor = manager.find(id);
     if (!visitor) return reject(503, 'Service Unavailable');
     wss.handleUpgrade(request, socket, head, ws => {
+      manager.attach(visitor, ws);
       const stop = visitor.controller.subscribe(view, frame => { if (ws.readyState === WebSocket.OPEN) ws.send(frame); });
       ws.on('close', stop);
       ws.on('error', () => ws.terminate());

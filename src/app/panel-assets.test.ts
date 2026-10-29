@@ -39,4 +39,13 @@ describe('control panel assets', () => {
     expect(css).toMatch(/@media\(max-width:480px\)\{/);
     expect(css).toMatch(/\.btn-skip\{[^}]*rgba\(248,113,113/);
   });
+
+  it('lays the wide panel out as two independent columns, so the overlay preview sits right under the live round', () => {
+    const main = html.slice(html.indexOf('class="col col-main"'), html.indexOf('class="col col-side"'));
+    expect(main).toContain('class="card round"');
+    expect(main).toContain('class="card links"');
+    expect(css).toMatch(/\.col\{display:flex;flex-direction:column/);
+    expect(css).not.toMatch(/grid-row:span/);
+    expect(css).toMatch(/@media\(max-width:1100px\)\{[^\n]*\.col\{display:contents\}/);
+  });
 });

@@ -22,7 +22,7 @@ timeout and a round that does not count. To play both chats yourself, run `npm r
 
 | Part | Status |
 | --- | --- |
-| Twitch chat in, bot messages out (EventSub WebSocket, Helix Send Chat Message, Shared Chat events, OAuth) | Real. Tested live on two Twitch channels. |
+| Twitch chat in, bot messages out (EventSub WebSocket, Helix Send Chat Message, Shared Chat events, OAuth) | Real. Run live on two real Twitch channels (27 Oct 2026): both channels streamed at once, real chat messages on each channel became votes on the right overlay, and the bot posted in both chats. No scored win yet, because a round needs at least two voters per side. |
 | Votes in `npm run demo` | Simulated: a script plays both chats. Overlays say DEMO. |
 | Votes in the sandbox (`SANDBOX=1`) | Simulated by you: each vote you type is a new viewer. Overlays say SANDBOX. |
 | Throughput numbers in [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | Our real pipeline, fed by a local fake EventSub server. It measures our code, not Twitch delivery. |
@@ -85,8 +85,8 @@ and an overlay link from you.
 
 ### Sound cues
 
-Add `&sound=1` to an overlay link for short synthesised cues: round start, the last 10 seconds, a hint unlock, the
-reveal and a win. Sound is off by default, so an OBS source never plays anything you did not ask for. In a normal
+Add `&sound=1` to an overlay link for short synthesised cues: round start, the swap moment, the last 10 seconds, a hint
+unlock, the reveal and a win. Sound is off by default, so an OBS source never plays anything you did not ask for. In a normal
 browser, click the page once to allow audio.
 
 No partner yet? Turn on **Rehearsal mode** in the panel and type community B's votes yourself. Both overlays and the
@@ -104,8 +104,9 @@ npm run sandbox                                   # http://127.0.0.1:3000/
 docker run -e SANDBOX=1 -e PUBLIC_URL=https://your-host -p 127.0.0.1:3000:3000 twinclue
 ```
 
-Set `PUBLIC_URL` to the public address so the browser's Origin is accepted, and `TRUST_PROXY=1` behind a proxy so rate
-limits see the visitor's address.
+Set `PUBLIC_URL` to the public address so the browser's Origin is accepted. Behind one proxy, set `TRUST_PROXY=1` so
+rate limits see the visitor's address (the right-most `X-Forwarded-For` entry, the one your proxy added); use the
+number of proxies if there are more. Leave it empty when nothing sits in front, or anyone could forge an address.
 
 ### Video-safe puzzles
 

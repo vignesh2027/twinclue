@@ -36,7 +36,7 @@ export function pickHint(puzzle: Puzzle, table: FactTable, side: 'A' | 'B', excl
 export function withHints(puzzle: Puzzle, tables: FactTable[]): Puzzle {
   const table = tables.find(row => row.category === puzzle.sourceTable);
   if (!table) return puzzle;
-  // The two communities get different facts, so neither hint repeats the other.
+  // The two communities get different facts when the table allows; otherwise B may get the same fact as A.
   const a = pickHint(puzzle, table, 'A');
   const hintA = a?.text;
   const hintB = (pickHint(puzzle, table, 'B', new Set(a ? [a.predicate.attribute] : [])) ?? pickHint(puzzle, table, 'B'))?.text;
