@@ -33,6 +33,10 @@ logs. The `/codex` page on any Twinclue server replays them.
 | `d2e2ba5` | 28 Oct | Overlay review | Readable ticker, confetti behind the reveal, icon | Another AI coding assistant (review pass) |
 | `36bca05` | 28 Oct | 7 | Live control panel, hint vote, session recap and sound cues | Another AI coding assistant |
 | `46fcaba` | 29 Oct | 8 | Swap moment, video-safe showcase, OBS dock panel, the hosted sandbox, LICENSE and these docs | Another AI coding assistant |
+| `1d9882a` | 29 Oct | 8 review | Sandbox hardening and honest wording | Another AI coding assistant (review pass) |
+| `fc78c6c` | 29 Oct | Deploy | Hosting the sandbox on Modal, with a scripted smoke round | Another AI coding assistant |
+| `3506b38` | 30 Oct | Replay | The Codex build replay: sanitised session timeline, `/codex` page and session notes | Another AI coding assistant |
+| `523d934` | 30 Oct | Deploy fix | README included in the sandbox image so the replay link test runs there | Maintainer |
 
 ## How Codex was used
 
