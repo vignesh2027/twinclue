@@ -6,6 +6,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest, preHandlerHookHandl
 import { WebSocketServer, WebSocket } from 'ws';
 import { z } from 'zod';
 import type { Metrics } from '../obs/metrics.js';
+import { registerCodexReplay } from './codex-page.js';
 import type { GameController, View } from './controller.js';
 import { RecapStore, buildRecap, newRecapId, renderRecapPage, type Recap } from './recap.js';
 
@@ -140,6 +141,7 @@ export function registerWebRoutes(app: FastifyInstance, controller: GameControll
     return reply.type('text/html; charset=utf-8').header('cache-control', 'no-store').send(await readFile(resolve('public/overlay.html'), 'utf8'));
   });
   for (const [route, file] of Object.entries(files)) app.get(route, async (_request, reply) => reply.type(file.type).send(await readFile(resolve(file.path), 'utf8')));
+  registerCodexReplay(app);
 
   app.get('/healthz', async () => ({ ok: true }));
   app.get('/health', async () => ({ ok: true }));

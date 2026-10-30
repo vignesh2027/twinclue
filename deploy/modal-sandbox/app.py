@@ -59,6 +59,8 @@ image = (
     .add_local_dir(ROOT / "src", "/app/src", copy=True, ignore=_skip)
     .add_local_dir(ROOT / "public", "/app/public", copy=True, ignore=_skip)
     .add_local_dir(ROOT / "facts", "/app/facts", copy=True, ignore=_skip)
+    # The sanitised Codex replay served at /codex (and checked for secrets by the test suite below).
+    .add_local_dir(ROOT / "docs" / "codex", "/app/docs/codex", copy=True, ignore=_skip)
     # Same steps as the Dockerfile, plus the tests, so a red suite never ships.
     .run_commands(
         "cd /app && npm ci && npm test && npm run build && npm prune --omit=dev && rm -rf src tsconfig.json"

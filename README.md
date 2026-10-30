@@ -37,6 +37,11 @@ its constitution. After the Codex plan's usage limit was reached, another AI cod
 under the same rules. [CODEX.md](CODEX.md) lists every commit and who built it, and [DECISIONS.md](DECISIONS.md) records
 why. Licensed under [MIT](LICENSE).
 
+You can replay the Codex session yourself. Open `/codex` on any Twinclue server (the sandbox, the demo or your own),
+or read [docs/CODEX-SESSION.md](docs/CODEX-SESSION.md). The replay shows every message Codex wrote, every command with
+its exit code and every test run, taken from the raw `codex exec --json` logs. It is sanitised before it is published,
+and a test keeps secrets out of it. `npm run codex:replay` rebuilds it.
+
 A Puzzle Forge builds the clues from curated fact tables, then a blind solver panel and a fact check decide which
 ones enter the pack.
 

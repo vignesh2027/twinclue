@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "forge": "tsx src/puzzle/forge-pack.ts",
     "bench": "tsx src/bench/bench.ts",
-    "sandbox": "SANDBOX=1 tsx src/server.ts"
+    "sandbox": "SANDBOX=1 tsx src/server.ts",
+    "codex:replay": "tsx scripts/codex-replay.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

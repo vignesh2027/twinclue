@@ -9,6 +9,7 @@ import type { VocabEntry } from '../game/vocabulary.js';
 import { isVideoSafe } from '../puzzle/showcase.js';
 import type { Puzzle } from '../puzzle/types.js';
 import { GameController, type OverlayView } from './controller.js';
+import { registerCodexReplay } from './codex-page.js';
 import { allowedOrigins, originAllowed } from './web.js';
 
 /**
@@ -175,6 +176,7 @@ export function registerSandbox(app: FastifyInstance, options: SandboxOptions): 
     return reply.type('text/html; charset=utf-8').header('cache-control', 'no-store').send(await readFile(resolve('public/overlay.html'), 'utf8'));
   });
   app.get('/healthz', async () => ({ ok: true, sandbox: true, games: manager.size }));
+  registerCodexReplay(app);
 
   // Every action goes through the same guard: a known cookie, a game slot, a same-site Origin and the rate limit.
   async function act(request: FastifyRequest, reply: FastifyReply, run: (controller: GameController, visitor: Visitor) => unknown) {

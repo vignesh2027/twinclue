@@ -11,6 +11,8 @@ product brief in [SPEC.md](SPEC.md). Every decision is recorded in [DECISIONS.md
   allows other AI coding assistants.
 
 Not all of the code was written by Codex. The table below says which assistant built each commit, from `git log`.
+[docs/CODEX-SESSION.md](docs/CODEX-SESSION.md) goes through the Codex turns one by one, with counts taken from the raw
+logs. The `/codex` page on any Twinclue server replays them.
 
 | Commit | Date | Slice | What it built | Built by |
 | --- | --- | --- | --- | --- |
