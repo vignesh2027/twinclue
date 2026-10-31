@@ -201,7 +201,7 @@
     if (box.hidden) return;
     box.classList.toggle('unlocked', unlocked);
     $('#hint-label').textContent = unlocked ? 'HINT UNLOCKED' : 'STUCK?';
-    $('#hint-text').textContent = unlocked ? hint.text : `Type !hint in chat. ${hint.asks} of ${hint.needed} viewers asked.`;
+    $('#hint-text').textContent = unlocked ? hint.text : `Type !hint in chat. ${hint.asks} of ${hint.needed} ${hint.needed === 1 ? 'viewer' : 'viewers'} asked.`;
     if (unlocked && !lastHintUnlocked) cue('hint');
     lastHintUnlocked = unlocked;
   }

@@ -75,7 +75,7 @@
     if (hint.unlocked) return ['unlocked', 'Hint unlocked for this community'];
     if (!active) return ['', 'Hint: not used'];
     if (!hint.available) return ['', 'Hint: not available this round'];
-    return ['', `Hint: ${hint.asks} of ${hint.needed} viewers asked (!hint)`];
+    return ['', `Hint: ${hint.asks} of ${hint.needed} ${hint.needed === 1 ? 'viewer' : 'viewers'} asked (!hint)`];
   }
 
   const STATUS = { active: 'VOTING LIVE', won: 'BOTH LOCKED IN', 'timed-out': 'TIME UP', unscored: 'NOT SCORED', idle: 'NEXT ROUND SOON', pending: 'NEXT ROUND SOON' };
