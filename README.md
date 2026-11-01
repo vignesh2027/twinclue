@@ -10,6 +10,12 @@ the halves together. A round is won only when both communities lock in the right
 
 ## Try it in 60 seconds
 
+**Hosted, no install, no Twitch login:** <https://applemacbook6sep2004--twinclue-sandbox.us-east.modal.run>. Type votes
+for both communities in one tab. The real Codex build replay is at
+[/codex](https://applemacbook6sep2004--twinclue-sandbox.us-east.modal.run/codex).
+
+Or run it locally:
+
 ```sh
 npm ci && npm run demo
 ```
@@ -22,7 +28,7 @@ timeout and a round that does not count. To play both chats yourself, run `npm r
 
 | Part | Status |
 | --- | --- |
-| Twitch chat in, bot messages out (EventSub WebSocket, Helix Send Chat Message, Shared Chat events, OAuth) | Real. Run live on two real Twitch channels (27 Oct 2026): both channels streamed at once, real chat messages on each channel became votes on the right overlay, and the bot posted in both chats. No scored win yet, because a round needs at least two voters per side. |
+| Twitch chat in, bot messages out (EventSub WebSocket, Helix Send Chat Message, Shared Chat events, OAuth) | Real. Run live on two real Twitch channels (27 and 31 Oct 2026): both channels streamed at once, real chat messages on each channel became votes on the right overlay inside the Twitch player, and the bot posted the round start and result in both chats. Those runs used the maintainer's two accounts, one voter a side. No scored win yet, because a round needs at least two voters per side. |
 | Votes in `npm run demo` | Simulated: a script plays both chats. Overlays say DEMO. |
 | Votes in the sandbox (`SANDBOX=1`) | Simulated by you: each vote you type is a new viewer. Overlays say SANDBOX. |
 | Throughput numbers in [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | Our real pipeline, fed by a local fake EventSub server. It measures our code, not Twitch delivery. |
